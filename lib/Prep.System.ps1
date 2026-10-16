@@ -54,6 +54,95 @@ function New-SRPrepItem {
 }
 
 # -------------------------------------------------------------------------------------------------
+# Generic Product Keys
+# Microsoft's public generic installation keys for edition switching.
+# These keys install the specified Windows edition but never activate it.
+# -------------------------------------------------------------------------------------------------
+$script:GENERIC_KEY_HOME = 'YTMG3-N6DKC-DKB77-7M9GH-8HVX7' # target EditionID Core
+$script:GENERIC_KEY_PRO  = 'VK7JG-NPHTM-C97JM-9MPGT-3V66T' # target EditionID Professional
+$GENERIC_KEY_HOME = $script:GENERIC_KEY_HOME
+$GENERIC_KEY_PRO  = $script:GENERIC_KEY_PRO
+
+# -------------------------------------------------------------------------------------------------
+# Helpers: Edition ID, Admin Check, Target Editions
+# -------------------------------------------------------------------------------------------------
+function Get-SRPrepEditionId {
+    [CmdletBinding()]
+    param()
+
+    try {
+        $cv = Get-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion' -ErrorAction SilentlyContinue
+        if ($cv -and $cv.EditionID) { return [string]$cv.EditionID }
+    } catch { }
+    return ''
+}
+
+function Test-SRPrepIsAdmin {
+    [CmdletBinding()]
+    param()
+
+    try {
+        $winId = [Security.Principal.WindowsIdentity]::GetCurrent()
+        $principal = [Security.Principal.WindowsPrincipal]$winId
+        return [bool]$principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+    } catch {
+        return $false
+    }
+}
+
+function Get-SRPrepTargetEditions {
+    [CmdletBinding()]
+    param()
+
+    try {
+        if (-not (Test-SRPrepIsAdmin)) {
+            return $null
+        }
+
+        $dismPath = Join-Path $env:SystemRoot 'System32\dism.exe'
+        if (-not (Test-Path $dismPath)) {
+            $dismPath = 'dism.exe'
+        }
+
+        $pinfo = New-Object System.Diagnostics.ProcessStartInfo
+        $pinfo.FileName = $dismPath
+        $pinfo.Arguments = '/Online /Get-TargetEditions /English'
+        $pinfo.RedirectStandardOutput = $true
+        $pinfo.RedirectStandardError = $true
+        $pinfo.UseShellExecute = $false
+        $pinfo.CreateNoWindow = $true
+        $pinfo.WorkingDirectory = $env:TEMP
+
+        $proc = [System.Diagnostics.Process]::Start($pinfo)
+        $stdout = $proc.StandardOutput.ReadToEnd()
+        $stderr = $proc.StandardError.ReadToEnd()
+        $proc.WaitForExit()
+
+        if ($proc.ExitCode -ne 0) {
+            return $null
+        }
+
+        $editions = [System.Collections.Generic.List[string]]::new()
+        foreach ($line in ($stdout -split "`r?`n")) {
+            if ($line -match '(?i)^\s*Target\s+Edition\s*:\s*(\w+)') {
+                $ed = $matches[1].Trim()
+                if ($ed -ne '' -and -not $editions.Contains($ed)) {
+                    $editions.Add($ed)
+                }
+            }
+        }
+
+        if ($editions.Count -eq 0) {
+            return $null
+        }
+
+        return ,$editions.ToArray()
+    } catch {
+        return $null
+    }
+}
+
+# -------------------------------------------------------------------------------------------------
 # Helper: Safe Config Value Extractor
 # -------------------------------------------------------------------------------------------------
 function Get-SRSetting {
@@ -264,16 +353,117 @@ function Get-SRPrepSystemPlan {
     }
 
     # =============================================================================================
-    # 2. sys_language (section 'language')
+    # 2. sys_edition (section 'language') - Only when EditionID is CoreSingleLanguage
+    # =============================================================================================
+    $editionId = Get-SRPrepEditionId
+    if ($editionId -eq 'CoreSingleLanguage') {
+        if ($Log) { & $Log "Checking Windows edition upgrade targets for Home Single Language..." }
+        try {
+            $isAdmin = Test-SRPrepIsAdmin
+            if (-not $isAdmin) {
+                $items.Add((New-SRPrepItem `
+                    -Id 'sys_edition' `
+                    -Section 'language' `
+                    -Title 'Windows edition' `
+                    -Status 'MANUAL' `
+                    -Current 'Home Single Language (activated)' `
+                    -Target 'Windows Home (NOT activated) - allows English' `
+                    -Detail 'Run Prep as administrator to check possible Windows edition upgrade targets.' `
+                    -Risk 'medium' `
+                    -NeedsReboot $false `
+                    -NeedsAdmin $true `
+                    -DefaultApply $false `
+                    -Commands @() `
+                    -Undo $null))
+            } else {
+                $targets = Get-SRPrepTargetEditions
+                $hasCore = $false
+                $hasPro = $false
+                if ($null -ne $targets) {
+                    foreach ($t in $targets) {
+                        if ([string]$t -eq 'Core') { $hasCore = $true }
+                        if ([string]$t -eq 'Professional') { $hasPro = $true }
+                    }
+                }
+
+                if ($null -ne $targets -and -not $hasCore -and -not $hasPro) {
+                    $items.Add((New-SRPrepItem `
+                        -Id 'sys_edition' `
+                        -Section 'language' `
+                        -Title 'Windows edition' `
+                        -Status 'MANUAL' `
+                        -Current 'Home Single Language (activated)' `
+                        -Target 'Windows Home or Pro (paid upgrade)' `
+                        -Detail 'This PC cannot switch directly to Windows Home or Pro. Needs a paid upgrade (Settings > System > Activation) or a Windows reinstall.' `
+                        -Risk 'medium' `
+                        -NeedsReboot $false `
+                        -NeedsAdmin $true `
+                        -DefaultApply $false `
+                        -Commands @() `
+                        -Undo $null))
+                } else {
+                    $targetEdition = 'Core'
+                    $targetKey = $script:GENERIC_KEY_HOME
+                    $targetTitle = 'Windows Home (NOT activated) - allows English'
+                    $refuseNote = ''
+
+                    if ($hasCore) {
+                        $targetEdition = 'Core'
+                        $targetKey = $script:GENERIC_KEY_HOME
+                        $targetTitle = 'Windows Home (NOT activated) - allows English'
+                    } elseif ($hasPro) {
+                        $targetEdition = 'Professional'
+                        $targetKey = $script:GENERIC_KEY_PRO
+                        $targetTitle = 'Windows Pro (NOT activated) - allows English'
+                    } else {
+                        # $targets is $null: still offer Core with Home key
+                        $targetEdition = 'Core'
+                        $targetKey = $script:GENERIC_KEY_HOME
+                        $targetTitle = 'Windows Home (NOT activated) - allows English'
+                        $refuseNote = ' (Windows may refuse; if it does, nothing changes.)'
+                    }
+
+                    $detailMsg = "An edition switch is needed before English can be installed. Windows will be NOT activated: an 'Activate Windows' watermark in the corner, which shows in full-screen/desktop captures. There is NO undo, and getting activated Windows back means buying a licence or reinstalling. It keeps apps and files. The PC restarts, then run Run-Prep.cmd again for English.$refuseNote"
+
+                    $items.Add((New-SRPrepItem `
+                        -Id 'sys_edition' `
+                        -Section 'language' `
+                        -Title 'Windows edition' `
+                        -Status 'CHANGE' `
+                        -Current 'Home Single Language (activated)' `
+                        -Target $targetTitle `
+                        -Detail $detailMsg `
+                        -Risk 'medium' `
+                        -NeedsReboot $true `
+                        -NeedsAdmin $true `
+                        -DefaultApply $false `
+                        -Commands @("changepk.exe /ProductKey $targetKey") `
+                        -Undo $null))
+                }
+            }
+        } catch {
+            $items.Add((New-SRPrepItem `
+                -Id 'sys_edition' `
+                -Section 'language' `
+                -Title 'Windows edition' `
+                -Status 'ERROR' `
+                -Current 'Home Single Language (activated)' `
+                -Target 'Windows Home (NOT activated) - allows English' `
+                -Detail ("Edition probe failed: $($_.Exception.Message)") `
+                -Risk 'medium' `
+                -NeedsReboot $false `
+                -NeedsAdmin $true `
+                -DefaultApply $false `
+                -Commands @() `
+                -Undo $null))
+        }
+    }
+
+    # =============================================================================================
+    # 2b. sys_language (section 'language')
     # =============================================================================================
     if ($Log) { & $Log "Inspecting Windows display language and international settings..." }
     try {
-        $editionId = ''
-        try {
-            $cv = Get-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion' -ErrorAction SilentlyContinue
-            if ($cv -and $cv.EditionID) { $editionId = [string]$cv.EditionID }
-        } catch { }
-
         $wsusConfigured = $false
         try {
             $wuPol = Get-ItemProperty -Path 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate' -ErrorAction SilentlyContinue
@@ -342,7 +532,7 @@ function Get-SRPrepSystemPlan {
                 -Status 'MANUAL' `
                 -Current ("$currentCulture (Windows Home Single Language)") `
                 -Target "$targetLang display language" `
-                -Detail "This PC has Windows Home Single Language, which cannot show any language except the one it shipped with. Options: upgrade to Windows Pro (Settings > System > Activation), or run the show with the Korean UI." `
+                -Detail "This PC has Windows Home Single Language, which cannot show English. Switch the edition first (the 'Windows edition' item above), restart, then run Prep again. The other option is to run the show with the Korean UI." `
                 -Risk 'low' `
                 -NeedsReboot $false `
                 -NeedsAdmin $false `
@@ -800,14 +990,20 @@ function Get-SRPrepSystemPlan {
     # 5. sys_wu_drivers (section 'drivers')
     # =============================================================================================
     try {
-        if ($Log) { & $Log "Searching Windows Update for drivers (can take a few minutes)..." }
-        $s = New-Object -ComObject Microsoft.Update.Session
-        $searcher = $s.CreateUpdateSearcher()
-        $r = $searcher.Search("IsInstalled=0 and Type='Driver' and IsHidden=0")
+        if ($null -eq $script:CachedWUDriverUpdates -or $null -eq $script:CachedWUDriverSearchTime -or ([DateTime]::UtcNow - $script:CachedWUDriverSearchTime).TotalMinutes -gt 5) {
+            if ($Log) { & $Log "Searching Windows Update for drivers (can take a few minutes)..." }
+            $s = New-Object -ComObject Microsoft.Update.Session
+            $searcher = $s.CreateUpdateSearcher()
+            $r = $searcher.Search("IsInstalled=0 and Type='Driver' and IsHidden=0")
 
-        $wuUpdates = @()
-        if ($r -and $r.Updates) {
-            $wuUpdates = @($r.Updates)
+            $wuUpdates = @()
+            if ($r -and $r.Updates) {
+                $wuUpdates = @($r.Updates)
+            }
+            $script:CachedWUDriverUpdates = $wuUpdates
+            $script:CachedWUDriverSearchTime = [DateTime]::UtcNow
+        } else {
+            $wuUpdates = $script:CachedWUDriverUpdates
         }
 
         if ($wuUpdates.Count -eq 0) {
@@ -1247,6 +1443,142 @@ function Save-SRPrepSystemUndoEntry {
 }
 
 # -------------------------------------------------------------------------------------------------
+# Invoke-SRPrepEditionSwitch
+# -------------------------------------------------------------------------------------------------
+function Invoke-SRPrepEditionSwitch {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory = $true)]
+        $Item,
+
+        [Parameter(Mandatory = $false)]
+        [string]$BackupDir = '',
+
+        [Parameter(Mandatory = $false)]
+        [switch]$DryRun,
+
+        [Parameter(Mandatory = $false)]
+        [scriptblock]$Log
+    )
+
+    if ($null -eq $Item) { return $null }
+
+    # Extract product key from item commands: "changepk.exe /ProductKey <key>"
+    $key = ''
+    if ($Item.commands) {
+        foreach ($c in $Item.commands) {
+            if ($c -match '(?i)/ProductKey\s+([A-Z0-9-]+)') {
+                $key = $matches[1].Trim()
+                break
+            }
+        }
+    }
+    if ([string]::IsNullOrEmpty($key)) {
+        $key = $script:GENERIC_KEY_HOME
+    }
+
+    # ---------------------------------------------------------------------------------------------
+    # DRYRUN: only prints "DRYRUN: changepk.exe /ProductKey <key>" and returns SKIPPED
+    # ---------------------------------------------------------------------------------------------
+    if ($DryRun) {
+        $dryCmd = "changepk.exe /ProductKey $key"
+        if ($Log) {
+            & $Log "DRYRUN: $dryCmd"
+        } else {
+            Write-Host "DRYRUN: $dryCmd"
+        }
+
+        return (New-SRPrepItem `
+            -Id $Item.id `
+            -Section $Item.section `
+            -Title $Item.title `
+            -Status 'SKIPPED' `
+            -Current $Item.current `
+            -Target $Item.target `
+            -Detail 'dry run' `
+            -Risk $Item.risk `
+            -NeedsReboot $Item.needs_reboot `
+            -NeedsAdmin $Item.needs_admin `
+            -DefaultApply $Item.default_apply `
+            -Commands $Item.commands `
+            -Undo $Item.undo)
+    }
+
+    # ---------------------------------------------------------------------------------------------
+    # REAL SWITCH PATH
+    # ---------------------------------------------------------------------------------------------
+    # 1. Record before state in backup folder: backup\sys_edition.json
+    $origEdition = Get-SRPrepEditionId
+    if (-not [string]::IsNullOrEmpty($BackupDir)) {
+        try {
+            if (-not (Test-Path $BackupDir)) {
+                $null = New-Item -ItemType Directory -Path $BackupDir -Force -ErrorAction SilentlyContinue
+            }
+            $hasOem = $false
+            try {
+                $lic = Get-CimInstance SoftwareLicensingService -ErrorAction SilentlyContinue
+                if ($lic -and -not [string]::IsNullOrEmpty($lic.OA3xOriginalProductKey)) {
+                    $hasOem = $true
+                }
+            } catch { }
+
+            $backupData = [ordered]@{
+                id                  = 'sys_edition'
+                original_edition_id = $origEdition
+                has_oem_key         = [bool]$hasOem
+                timestamp           = [DateTime]::UtcNow.ToString('o')
+            }
+            $json = ConvertTo-Json -InputObject $backupData -Depth 5
+            Set-Content -Path (Join-Path $BackupDir 'sys_edition.json') -Value $json -Encoding ASCII -Force -ErrorAction SilentlyContinue
+        } catch { }
+    }
+
+    # 2. Print notification and wait for Enter
+    $msg = "Switching Windows edition now. The PC may restart by itself. After the restart, run Run-Prep.cmd again to switch to English."
+    if ($Log) { & $Log $msg }
+    Write-Host $msg -ForegroundColor Yellow
+    [void](Read-Host 'Press Enter to start')
+
+    # 3. Start changepk.exe /ProductKey <key>
+    $changepk = Join-Path $env:SystemRoot 'System32\changepk.exe'
+    if (-not (Test-Path $changepk)) { $changepk = 'changepk.exe' }
+
+    $exitCode = -1
+    try {
+        $p = Start-Process -FilePath $changepk -ArgumentList '/ProductKey', $key -Wait -PassThru
+        if ($p) { $exitCode = $p.ExitCode }
+    } catch {
+        if ($Log) { & $Log ("changepk execution error: " + $_.Exception.Message) }
+    }
+
+    # 4. Check EditionID again
+    $afterEdition = Get-SRPrepEditionId
+    $isDone = ($afterEdition -ne 'CoreSingleLanguage' -and $afterEdition -ne '') -or ($exitCode -eq 0)
+
+    $status = if ($isDone) { 'DONE' } else { 'FAILED' }
+    $detail = if ($isDone) {
+        'Edition switch started (Windows accepted the key). Windows finishes it and restarts by itself; then run Run-Prep.cmd again for English.'
+    } else {
+        "Edition switch failed (exit code $exitCode). Manual fallback: Settings > System > Activation > Change product key, enter $key"
+    }
+
+    return (New-SRPrepItem `
+        -Id $Item.id `
+        -Section $Item.section `
+        -Title $Item.title `
+        -Status $status `
+        -Current $Item.current `
+        -Target $Item.target `
+        -Detail $detail `
+        -Risk $Item.risk `
+        -NeedsReboot $Item.needs_reboot `
+        -NeedsAdmin $Item.needs_admin `
+        -DefaultApply $Item.default_apply `
+        -Commands $Item.commands `
+        -Undo $Item.undo)
+}
+
+# -------------------------------------------------------------------------------------------------
 # Invoke-SRPrepSystemApply
 # -------------------------------------------------------------------------------------------------
 function Invoke-SRPrepSystemApply {
@@ -1512,6 +1844,25 @@ function Undo-SRPrepSystem {
     $undoneItems = [System.Collections.Generic.List[object]]::new()
     if ([string]::IsNullOrEmpty($BackupDir)) { return ,$undoneItems.ToArray() }
 
+    # Check if backup contains sys_edition.json
+    $editionBackupFile = Join-Path $BackupDir 'sys_edition.json'
+    if (Test-Path $editionBackupFile) {
+        $undoneItems.Add((New-SRPrepItem `
+            -Id 'sys_edition' `
+            -Section 'language' `
+            -Title 'Windows edition' `
+            -Status 'MANUAL' `
+            -Current 'Windows Home/Pro (unactivated)' `
+            -Target 'Windows Home Single Language (activated)' `
+            -Detail "The Windows edition switch cannot be undone automatically. To get activated Windows back: buy Windows Home (or Pro) in Settings > System > Activation, or reinstall Windows 11 Home Single Language from the PC maker's recovery." `
+            -Risk 'low' `
+            -NeedsReboot $false `
+            -NeedsAdmin $false `
+            -DefaultApply $false `
+            -Commands @() `
+            -Undo $null))
+    }
+
     $undoFile = Join-Path $BackupDir 'system-undo.json'
     if (-not (Test-Path $undoFile)) {
         if ($Log) { & $Log "No system-undo.json found in $BackupDir" }
@@ -1547,6 +1898,30 @@ function Undo-SRPrepSystem {
         $section = [string]$entry.section
         $undoData = $entry.undo
         $commands = [System.Collections.Generic.List[string]]::new()
+
+        if ($id -eq 'sys_edition') {
+            $alreadyHas = $false
+            foreach ($u in $undoneItems) {
+                if ($u.id -eq 'sys_edition') { $alreadyHas = $true; break }
+            }
+            if (-not $alreadyHas) {
+                $undoneItems.Add((New-SRPrepItem `
+                    -Id 'sys_edition' `
+                    -Section 'language' `
+                    -Title 'Windows edition' `
+                    -Status 'MANUAL' `
+                    -Current 'Windows Home/Pro (unactivated)' `
+                    -Target 'Windows Home Single Language (activated)' `
+                    -Detail "The Windows edition switch cannot be undone automatically. To get activated Windows back: buy Windows Home (or Pro) in Settings > System > Activation, or reinstall Windows 11 Home Single Language from the PC maker's recovery." `
+                    -Risk 'low' `
+                    -NeedsReboot $false `
+                    -NeedsAdmin $false `
+                    -DefaultApply $false `
+                    -Commands @() `
+                    -Undo $null))
+            }
+            continue
+        }
 
         # Build human-readable restore commands
         if ($id -eq 'sys_wu_pause') {

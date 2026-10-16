@@ -1,5 +1,5 @@
-ShowReady 1.3 - can these PCs and this line run the show?
-==========================================================
+ShowReady 1.3.1 - can these PCs and this line run the show?
+===========================================================
 
 Show: 2 x OMT/NDI 1080p60 in; 3 x 1080p60 out (SRT to France, YouTube, Twitch).
 Three PCs, one kit: the prod PC (vMix/OBS, sends the 3 outputs) and the 2 observer PCs
@@ -29,8 +29,10 @@ STEP 0: PREP EACH PC (as administrator, once, NOT on show day)
 Double-click Run-Prep.cmd and say Yes to the administrator prompt. It asks whether this is
 the PROD PC or an OBSERVER PC, shows everything it would change, then asks per section:
   - language   switches Windows to English (keeps the Korean keyboard). Downloading English
-               takes 5-30 minutes. Windows Home "Single Language" PCs can't switch at all;
-               it tells you if that's the case.
+               takes 5-30 minutes. Windows Home "Single Language" PCs first need an edition
+               switch: prep offers it (type HOME to confirm). Windows is then NOT activated
+               (watermark, no undo), and you run Run-Prep.cmd again after the restart to get
+               English.
   - drivers    installs the driver updates Windows Update offers, and tells you if the
                graphics driver is too old (NVIDIA needs 570 or newer) with the download link
   - disk       warns if the system drive has less than 50 GB free (under 20 GB is serious)

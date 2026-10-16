@@ -51,7 +51,7 @@ Every plan/apply function returns an array of items (PSCustomObject):
 
 | field | type | meaning |
 |---|---|---|
-| id | string | e.g. `sys_language`, `tune_startup:Steam` (sub-items use `id:name`) |
+| id | string | e.g. `sys_edition`, `sys_language`, `tune_startup:Steam` (sub-items use `id:name`) |
 | section | string | `language`, `drivers`, `disk`, `updates`, `reboot`, `power`, `startup`, `background`, `network`, `capture`, `notifications` |
 | title | string | short, plain English, for the operator |
 | status | string | plan: `OK` (nothing to do), `CHANGE` (will change if applied), `MANUAL` (operator must act; see detail), `INFO`, `ERROR`; after apply: `DONE`, `FAILED`, `SKIPPED` |
@@ -65,12 +65,23 @@ Every plan/apply function returns an array of items (PSCustomObject):
 | commands | string[] | human-readable exact commands the apply step will run (shown by `-DryRun`) |
 | undo | object or $null | data needed to restore (written to the backup file on apply) |
 
+### Windows edition switch (`sys_edition`)
+
+- Planned only on Windows Home Single Language (`EditionID = CoreSingleLanguage`), in section `language` before `sys_language`.
+- Target: `Windows Home (NOT activated) - allows English` (or Pro) via Microsoft public generic key.
+- Risk: `medium`, `default_apply = $false` (`-Yes` never applies it), `needs_reboot = $true`, `needs_admin = $true`.
+- **HOME confirmation**: requires typing `HOME` (or `PRO` for Pro target) to confirm; Enter skips.
+- **Run-last rule**: `changepk.exe` may restart the PC; `sys_edition` is removed from phase 1 and runs last after all other changes, report writing, results upload, and summary, in place of the normal restart prompt.
+- **No undo**: cannot be undone automatically; returning to activated Windows requires buying a licence or reinstalling factory Windows. `Undo-SRPrepSystem` outputs a `MANUAL` item.
+
+
 ## Function signatures
 
 ```powershell
 # lib\Prep.System.ps1
 Get-SRPrepSystemPlan   -Settings <obj> -Role <prod|observer> -Log <sb>        # read-only, works without admin
 Invoke-SRPrepSystemApply -Items <obj[]> -Settings <obj> -BackupDir <path> -DryRun:<bool> -Log <sb>
+Invoke-SRPrepEditionSwitch -Item <obj> -BackupDir <path> -DryRun:<bool> -Log <sb>
 Undo-SRPrepSystem      -BackupDir <path> -DryRun:<bool> -Log <sb>
 
 # lib\Prep.Tune.ps1
@@ -105,12 +116,15 @@ Prep.ps1 [-Role prod|observer] [-Yes] [-PlanOnly] [-DryRun] [-Only <sections>] [
   Items with risk `medium` are asked one by one with default No. MANUAL items are listed at the end
   as a checklist.
 - Order of apply: language, drivers (both slow; say so), then the tune sections, then
-  `updates` (Windows Update pause) last, so driver updates happen first.
+  `updates` (Windows Update pause) last, so driver updates happen first. `sys_edition` is
+  excluded from phase 1 and runs last after all other items, upload, and summary.
 - Write `results\<stamp>-prep\prep.json` (meta + all items before/after), `prep.log`, `backup\`.
 - Upload the folder with `Send-SRResults -Kind prep` unless `-NoUpload` (if lib\Upload.ps1 exists).
-- End with a summary: changed / failed / manual counts, "Reboot needed" if any item needs it, then
-  ask "Restart now? [y/N]". Never restart without a yes.
-- `-Undo latest` restores from the newest `results\*-prep\backup` (both Undo functions).
+- End with a summary: changed / failed / manual counts, "Reboot needed" if any item needs it.
+  If `sys_edition` was selected, run `Invoke-SRPrepEditionSwitch` here (after upload; do not upload again).
+  Then ask "Restart now? [y/N]". Never restart without a yes.
+- `-Undo latest` restores from the newest `results\*-prep\backup` (both Undo functions). If the backup
+  contains `sys_edition`, a MANUAL item is added since the edition switch cannot be undone automatically.
 
 ## Elevation and the per-user gotcha
 

@@ -24,7 +24,7 @@ param(
 
 $ErrorActionPreference = 'Continue'
 $ProgressPreference = 'SilentlyContinue'
-$ToolVersion = '1.2-prep'
+$ToolVersion = '1.3.1-prep'
 $Inv = [System.Globalization.CultureInfo]::InvariantCulture
 
 $Root = $PSScriptRoot
@@ -363,7 +363,7 @@ try {
         $undoJsonPath = Join-Path $undoRunDir 'undo.json'
 
         $undoMeta = [ordered]@{
-            tool_version = '1.2-prep'
+            tool_version = $ToolVersion
             computer     = [string]$env:COMPUTERNAME
             user         = [string][Security.Principal.WindowsIdentity]::GetCurrent().Name
             elevated     = [bool]$isAdmin
@@ -563,7 +563,7 @@ try {
         $selectedItems = New-Object System.Collections.ArrayList
         if ($Yes) {
             foreach ($it in $filteredPlan) {
-                if ($it.status -eq 'CHANGE' -and [bool]$it.default_apply -eq $true) {
+                if ($it.status -eq 'CHANGE' -and [bool]$it.default_apply -eq $true -and $it.id -ne 'sys_edition') {
                     [void]$selectedItems.Add($it)
                 }
             }
@@ -596,14 +596,43 @@ try {
                 }
 
                 foreach ($m in $medItems) {
-                    $prompt = [string]$m.title
-                    if ([string]$m.detail -ne '') { $prompt += ' - ' + [string]$m.detail }
-                    $prompt += ' [y/N]'
-                    $ans = ''
-                    try { $ans = Read-Host $prompt } catch { $ans = 'n' }
-                    $ans = ([string]$ans).Trim().ToLowerInvariant()
-                    if ($ans -eq 'y' -or $ans -eq 'yes') {
-                        [void]$selectedItems.Add($m)
+                    if ($m.id -eq 'sys_edition') {
+                        Write-SRLine ''
+                        Write-SRLine '  ========================================================================' 'Red'
+                        Write-SRLine '  WARNING: WINDOWS EDITION SWITCH (NO UNDO)' 'Red'
+                        Write-SRLine '  ========================================================================' 'Red'
+                        Write-SRLine '  - Needed before English display language can be installed.' 'Yellow'
+                        Write-SRLine '  - Windows will be NOT ACTIVATED: "Activate Windows" watermark in the' 'Yellow'
+                        Write-SRLine '    corner (shows in desktop captures); personalisation settings locked.' 'Yellow'
+                        Write-SRLine '  - THERE IS NO UNDO: getting activated Windows back requires buying a' 'Yellow'
+                        Write-SRLine '    licence or reinstalling factory Windows 11 Home Single Language.' 'Yellow'
+                        Write-SRLine '  - Keeps installed applications and personal files.' 'Yellow'
+                        Write-SRLine '  - The PC restarts, then run Run-Prep.cmd again for English.' 'Yellow'
+                        Write-SRLine '  ========================================================================' 'Red'
+
+                        $isPro = ([string]$m.target -match '(?i)\bPro\b')
+                        $word = if ($isPro) { 'PRO' } else { 'HOME' }
+                        $prompt = if ($isPro) {
+                            'Type PRO to switch this PC to Windows Pro (not activated), or press Enter to skip'
+                        } else {
+                            'Type HOME to switch this PC to Windows Home (not activated), or press Enter to skip'
+                        }
+
+                        $ans = ''
+                        try { $ans = Read-Host $prompt } catch { $ans = '' }
+                        if (([string]$ans).Trim().ToUpperInvariant() -eq $word) {
+                            [void]$selectedItems.Add($m)
+                        }
+                    } else {
+                        $prompt = [string]$m.title
+                        if ([string]$m.detail -ne '') { $prompt += ' - ' + [string]$m.detail }
+                        $prompt += ' [y/N]'
+                        $ans = ''
+                        try { $ans = Read-Host $prompt } catch { $ans = 'n' }
+                        $ans = ([string]$ans).Trim().ToLowerInvariant()
+                        if ($ans -eq 'y' -or $ans -eq 'yes') {
+                            [void]$selectedItems.Add($m)
+                        }
                     }
                 }
             }
@@ -621,8 +650,17 @@ try {
         Write-SRLogLine '  APPLYING CHANGES' 'Cyan'
         Write-SRLogLine '--------------------------------------------------------------------------' 'Cyan'
 
+        # Separate sys_edition from phase 1 to run last
+        $editionItem = $null
+        foreach ($it in $selectedItems) {
+            if ($it.id -eq 'sys_edition') {
+                $editionItem = $it
+                break
+            }
+        }
+
         # Phase 1: language
-        $langItems = @($selectedItems | Where-Object { ([string]$_.section).ToLowerInvariant() -eq 'language' })
+        $langItems = @($selectedItems | Where-Object { ([string]$_.section).ToLowerInvariant() -eq 'language' -and $_.id -ne 'sys_edition' })
         if ($langItems.Count -gt 0) {
             Write-SRLogLine 'Downloading English can take 5-30 minutes' 'Yellow'
             Write-SRLogLine ('Applying language (' + $langItems.Count + ' item(s))...') 'Cyan'
@@ -755,7 +793,7 @@ try {
     $prepLogPath = Join-Path $runDir 'prep.log'
 
     $prepMeta = [ordered]@{
-        tool_version = '1.2-prep'
+        tool_version = $ToolVersion
         computer     = [string]$env:COMPUTERNAME
         user         = [string][Security.Principal.WindowsIdentity]::GetCurrent().Name
         elevated     = [bool]$isAdmin
@@ -812,7 +850,7 @@ try {
     $manualCount = $manualItems.Count
 
     $appliedIds = @($appliedItems | ForEach-Object { [string]$_.id })
-    $skippedPlanCount = @($filteredPlan | Where-Object { [string]$_.status -eq 'CHANGE' -and $appliedIds -notcontains [string]$_.id }).Count
+    $skippedPlanCount = @($filteredPlan | Where-Object { [string]$_.status -eq 'CHANGE' -and $appliedIds -notcontains [string]$_.id -and -not ($null -ne $editionItem -and [string]$_.id -eq 'sys_edition') }).Count
     $skippedApplyCount = @($appliedItems | Where-Object { [string]$_.status -eq 'SKIPPED' }).Count
     $skippedCount = $skippedPlanCount + $skippedApplyCount
 
@@ -841,6 +879,28 @@ try {
         }
     }
 
+    # Edition switch (runs last in place of normal restart prompt)
+    $editionLaunched = $false
+    if ($null -ne $editionItem) {
+        Write-SRLogLine 'Starting Windows edition switch...' 'Yellow'
+        if ($hasSysLib) {
+            try {
+                $editionResult = Invoke-SRPrepEditionSwitch -Item $editionItem -BackupDir $backupDir -DryRun:$DryRun -Log $LogBlock
+                if ($null -ne $editionResult) {
+                    [void]$appliedItems.Add($editionResult)
+                    $tag = ('[' + [string]$editionResult.status + ']').PadRight(9)
+                    $resMsg = [string]$editionResult.title
+                    if ([string]$editionResult.detail -ne '') { $resMsg += ': ' + [string]$editionResult.detail }
+                    Write-SRLogLine ('  ' + $tag + ' ' + $resMsg) (Get-SRPrepColor $editionResult.status)
+                    if ([string]$editionResult.status -eq 'DONE') { $editionLaunched = $true }
+                }
+            }
+            catch {
+                Write-SRLogLine ('Error during edition switch: ' + $_.Exception.Message) 'Red'
+            }
+        }
+    }
+
     # Restart check
     $rebootNeeded = $false
     if (@($appliedItems | Where-Object { [bool]$_.needs_reboot -eq $true }).Count -gt 0) {
@@ -849,8 +909,18 @@ try {
     if (@($filteredPlan | Where-Object { ([string]$_.section).ToLowerInvariant() -eq 'reboot' -and [string]$_.status -eq 'MANUAL' }).Count -gt 0) {
         $rebootNeeded = $true
     }
+    if ($null -ne $editionItem) {
+        $rebootNeeded = $true
+    }
 
-    if ($rebootNeeded) {
+    if ($editionLaunched) {
+        # changepk may still be upgrading in its own window: never restart from here.
+        Write-SRLogLine ''
+        Write-SRLogLine '  Follow the Windows edition window. Windows restarts by itself when it is done.' 'Yellow'
+        Write-SRLogLine '  Do not restart the PC yourself while it is running.' 'Yellow'
+        Write-SRLogLine '  After the restart, run Run-Prep.cmd again to switch to English.' 'Yellow'
+    }
+    elseif ($rebootNeeded) {
         Write-SRLogLine ''
         Write-SRLogLine '  Restart needed.' 'Yellow'
         if (-not $DryRun -and -not $PlanOnly) {

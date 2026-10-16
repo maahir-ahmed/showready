@@ -1,4 +1,4 @@
-# ShowReady 1.3
+# ShowReady 1.3.1
 
 Pre-show checks for a 3-PC esports broadcast: 2 x OMT/NDI 1080p60 in, SRT to France plus YouTube and Twitch out, all 1080p60.
 
@@ -8,7 +8,7 @@ Pre-show checks for a 3-PC esports broadcast: 2 x OMT/NDI 1080p60 in, SRT to Fra
 
 Unzip it on every PC (right-click the zip > Properties > Unblock first), then follow `README.txt`:
 
-1. `Run-Prep.cmd` on each PC, as administrator (language, drivers, power, startup, network). `Undo-Prep.cmd` reverts it.
+1. `Run-Prep.cmd` on each PC, as administrator (language, drivers, power, startup, network). `Undo-Prep.cmd` reverts it. On Windows Home "Single Language" PCs, prep offers an edition switch so English can be installed. You confirm it by typing HOME. Windows is then **not activated** and the switch **cannot be undone**; run `Run-Prep.cmd` again after the restart.
 2. `Run-Observer.cmd` on both observer PCs.
 3. `Run-ShowReady.cmd -LanHosts <observer IPs>` on the prod PC.
 

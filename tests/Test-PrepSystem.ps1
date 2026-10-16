@@ -335,6 +335,142 @@ $fixtureContent = Get-Content -Path $fixtureFile -Raw -Encoding ASCII
 Assert-That '7.2: Fixture is non-empty valid JSON' ($fixtureContent.Length -gt 50 -and (-not [string]::IsNullOrEmpty((ConvertFrom-Json $fixtureContent))))
 
 # =============================================================================================
+# 8. Windows edition switch (sys_edition) tests
+# =============================================================================================
+Write-Host '8: Windows edition switch (sys_edition) tests' -ForegroundColor Cyan
+
+# Save original functions
+$origEditionIdFn = (Get-Item function:Get-SRPrepEditionId).ScriptBlock
+$origTargetEditionsFn = (Get-Item function:Get-SRPrepTargetEditions).ScriptBlock
+$origIsAdminFn = (Get-Item function:Test-SRPrepIsAdmin).ScriptBlock
+
+# (a) CoreSingleLanguage + targets @('Core','Professional') + admin
+function Get-SRPrepEditionId { return 'CoreSingleLanguage' }
+function Get-SRPrepTargetEditions { return @('Core', 'Professional') }
+function Test-SRPrepIsAdmin { return $true }
+
+$planA = Get-SRPrepSystemPlan -Settings $null -Role 'prod'
+$itemA = $planA | Where-Object { $_.id -eq 'sys_edition' }
+Assert-That '8.a.1: sys_edition item exists' ($null -ne $itemA)
+Assert-That '8.a.2: status is CHANGE' ($itemA.status -eq 'CHANGE')
+Assert-That '8.a.3: default_apply is false' ($itemA.default_apply -eq $false)
+Assert-That '8.a.4: risk is medium' ($itemA.risk -eq 'medium')
+Assert-That '8.a.5: needs_reboot is true' ($itemA.needs_reboot -eq $true)
+$cmdA = @($itemA.commands) -join ' '
+Assert-That '8.a.6: command contains changepk' ($cmdA -match 'changepk')
+Assert-That '8.a.7: command contains Home key YTMG3-N6DKC-DKB77-7M9GH-8HVX7' ($cmdA -match 'YTMG3-N6DKC-DKB77-7M9GH-8HVX7')
+Assert-That '8.a.8: target is Windows Home (NOT activated) - allows English' ($itemA.target -eq 'Windows Home (NOT activated) - allows English')
+
+# (b) targets @('Professional') gives the Pro key
+function Get-SRPrepTargetEditions { return @('Professional') }
+
+$planB = Get-SRPrepSystemPlan -Settings $null -Role 'prod'
+$itemB = $planB | Where-Object { $_.id -eq 'sys_edition' }
+Assert-That '8.b.1: sys_edition item exists for Pro target' ($null -ne $itemB)
+Assert-That '8.b.2: status is CHANGE' ($itemB.status -eq 'CHANGE')
+$cmdB = @($itemB.commands) -join ' '
+Assert-That '8.b.3: command contains Pro key VK7JG-NPHTM-C97JM-9MPGT-3V66T' ($cmdB -match 'VK7JG-NPHTM-C97JM-9MPGT-3V66T')
+Assert-That '8.b.4: target is Windows Pro (NOT activated) - allows English' ($itemB.target -eq 'Windows Pro (NOT activated) - allows English')
+
+# (c) targets $null gives CHANGE with the Home key
+function Get-SRPrepTargetEditions { return $null }
+
+$planC = Get-SRPrepSystemPlan -Settings $null -Role 'prod'
+$itemC = $planC | Where-Object { $_.id -eq 'sys_edition' }
+Assert-That '8.c.1: sys_edition item exists when targets is $null' ($null -ne $itemC)
+Assert-That '8.c.2: status is CHANGE' ($itemC.status -eq 'CHANGE')
+$cmdC = @($itemC.commands) -join ' '
+Assert-That '8.c.3: command contains Home key' ($cmdC -match 'YTMG3-N6DKC-DKB77-7M9GH-8HVX7')
+Assert-That '8.c.4: detail contains refuse note' ($itemC.detail -match 'Windows may refuse; if it does, nothing changes')
+
+# (d) targets @('Education') gives MANUAL
+function Get-SRPrepTargetEditions { return @('Education') }
+
+$planD = Get-SRPrepSystemPlan -Settings $null -Role 'prod'
+$itemD = $planD | Where-Object { $_.id -eq 'sys_edition' }
+Assert-That '8.d.1: sys_edition item exists for Education target' ($null -ne $itemD)
+Assert-That '8.d.2: status is MANUAL' ($itemD.status -eq 'MANUAL')
+Assert-That '8.d.3: detail mentions paid upgrade or reinstall' ($itemD.detail -match 'paid upgrade' -or $itemD.detail -match 'reinstall')
+
+# (e) not admin gives MANUAL
+function Get-SRPrepTargetEditions { return $null }
+function Test-SRPrepIsAdmin { return $false }
+
+$planE = Get-SRPrepSystemPlan -Settings $null -Role 'prod'
+$itemE = $planE | Where-Object { $_.id -eq 'sys_edition' }
+Assert-That '8.e.1: sys_edition item exists when not admin' ($null -ne $itemE)
+Assert-That '8.e.2: status is MANUAL when not admin' ($itemE.status -eq 'MANUAL')
+Assert-That '8.e.3: detail mentions run Prep as administrator to check' ($itemE.detail -match 'run Prep as administrator to check')
+
+# (f) EditionID 'Core' or 'Professional' gives no sys_edition item
+function Test-SRPrepIsAdmin { return $true }
+function Get-SRPrepEditionId { return 'Core' }
+$planF1 = Get-SRPrepSystemPlan -Settings $null -Role 'prod'
+$itemF1 = $planF1 | Where-Object { $_.id -eq 'sys_edition' }
+Assert-That '8.f.1: EditionID Core gives no sys_edition item' ($null -eq $itemF1)
+
+function Get-SRPrepEditionId { return 'Professional' }
+$planF2 = Get-SRPrepSystemPlan -Settings $null -Role 'prod'
+$itemF2 = $planF2 | Where-Object { $_.id -eq 'sys_edition' }
+Assert-That '8.f.2: EditionID Professional gives no sys_edition item' ($null -eq $itemF2)
+
+# (g) Invoke-SRPrepEditionSwitch -DryRun returns SKIPPED and never calls changepk
+$script:testStartProcessCalls = New-Object System.Collections.ArrayList
+function Start-Process {
+    param([Parameter(ValueFromRemainingArguments=$true)]$allArgs)
+    [void]$script:testStartProcessCalls.Add($allArgs)
+}
+
+$fakeSwitchItem = New-SRPrepItem `
+    -Id 'sys_edition' `
+    -Section 'language' `
+    -Title 'Windows edition' `
+    -Status 'CHANGE' `
+    -Current 'Home Single Language (activated)' `
+    -Target 'Windows Home (NOT activated) - allows English' `
+    -Risk 'medium' `
+    -NeedsReboot $true `
+    -NeedsAdmin $true `
+    -DefaultApply $false `
+    -Commands @('changepk.exe /ProductKey YTMG3-N6DKC-DKB77-7M9GH-8HVX7')
+
+$switchLog = [System.Collections.Generic.List[string]]::new()
+$switchLogSb = { param($msg) $switchLog.Add($msg) }
+
+$switchRes = Invoke-SRPrepEditionSwitch -Item $fakeSwitchItem -DryRun -Log $switchLogSb
+Assert-That '8.g.1: Invoke-SRPrepEditionSwitch -DryRun returns SKIPPED' ($switchRes.status -eq 'SKIPPED')
+Assert-That '8.g.2: Start-Process was never called in DryRun' ($script:testStartProcessCalls.Count -eq 0)
+Assert-That '8.g.3: DryRun logged DRYRUN: changepk' (@($switchLog | Where-Object { $_ -match 'DRYRUN:\s+changepk' }).Count -gt 0)
+
+Remove-Item function:Start-Process -ErrorAction SilentlyContinue
+
+# (h) the sys_language detail for CoreSingleLanguage mentions the edition switch
+function Get-SRPrepEditionId { return 'CoreSingleLanguage' }
+function Test-SRPrepIsAdmin { return $true }
+$planH = Get-SRPrepSystemPlan -Settings $null -Role 'prod'
+$langItemH = $planH | Where-Object { $_.id -eq 'sys_language' }
+Assert-That '8.h.1: sys_language exists for CoreSingleLanguage' ($null -ne $langItemH)
+Assert-That '8.h.2: sys_language detail mentions edition switch' ($langItemH.detail -match 'edition')
+
+# Undo with sys_edition backup
+$tempEditionUndoDir = Join-Path $env:TEMP ("sr-prep-test-edition-undo-" + [Guid]::NewGuid().ToString('N'))
+$null = New-Item -ItemType Directory -Path $tempEditionUndoDir -Force -ErrorAction SilentlyContinue
+Set-Content -Path (Join-Path $tempEditionUndoDir 'sys_edition.json') -Value '{"id":"sys_edition","original_edition_id":"CoreSingleLanguage","has_oem_key":true,"timestamp":"2026-10-16T14:00:00Z"}' -Encoding ASCII -Force
+
+$undoneEdition = Undo-SRPrepSystem -BackupDir $tempEditionUndoDir -DryRun
+$editionUndoItem = $undoneEdition | Where-Object { $_.id -eq 'sys_edition' }
+Assert-That '8.i.1: Undo with sys_edition backup returns MANUAL item' ($null -ne $editionUndoItem -and $editionUndoItem.status -eq 'MANUAL')
+Assert-That '8.i.2: Undo item detail explains manual restore' ($editionUndoItem.detail -match 'reinstall' -and $editionUndoItem.detail -match 'Settings > System > Activation')
+Assert-That '8.i.3: Undo item has no commands' (@($editionUndoItem.commands).Count -eq 0)
+
+Remove-Item -Path $tempEditionUndoDir -Recurse -Force -ErrorAction SilentlyContinue
+
+# Restore original functions
+Set-Item function:Get-SRPrepEditionId $origEditionIdFn
+Set-Item function:Get-SRPrepTargetEditions $origTargetEditionsFn
+Set-Item function:Test-SRPrepIsAdmin $origIsAdminFn
+
+# =============================================================================================
 # Test Summary
 # =============================================================================================
 Write-Host ''

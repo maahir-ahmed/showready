@@ -63,10 +63,21 @@ function Get-ParsedJsonArray {
     return @($parsed)
 }
 
+# The real libs return their arrays as ',$arr'. If Prep.ps1 forgets '| ForEach-Object { $_ }' on a
+# call, a whole plan or result list arrives as ONE nested array item. Fail on any such item.
+function Assert-FlatItems {
+    param($Items, [string]$Label)
+    foreach ($x in $Items) {
+        if ($x -is [System.Array]) {
+            throw ($Label + ': an item is a nested array (missing | ForEach-Object { $_ } unroll in Prep.ps1?)')
+        }
+    }
+}
+
 function Run-SuiteOnEngine {
     param([string]$EngineExe)
 
-    Write-Host ('`n[Test-Prep] Running test suite using: ' + $EngineExe) -ForegroundColor Cyan
+    Write-Host ("`n[Test-Prep] Running test suite using: " + $EngineExe) -ForegroundColor Cyan
 
     # Record files in real kit results before running
     $realResultsDir = Join-Path $KitRoot 'results'
@@ -90,7 +101,7 @@ function Run-SuiteOnEngine {
 function Get-SRPrepSystemPlan {
     param($Settings, [string]$Role, $Log)
     if ($null -ne $Log) { & $Log "Stub System: Plan for $Role" }
-    return @(
+    return ,@(
         [pscustomobject]@{
             id = 'sys_language'
             section = 'language'
@@ -207,7 +218,7 @@ function Invoke-SRPrepSystemApply {
         $cp.status = 'DONE'
         $ret += $cp
     }
-    return $ret
+    return ,$ret
 }
 
 function Undo-SRPrepSystem {
@@ -235,7 +246,7 @@ function Undo-SRPrepSystem {
     [void]$list.Add($record)
     [System.IO.File]::WriteAllText($logPath, (ConvertTo-Json $list -Depth 5), [System.Text.Encoding]::UTF8)
 
-    return @(
+    return ,@(
         [pscustomobject]@{
             id     = 'sys_language'
             title  = 'Display language restore'
@@ -252,7 +263,7 @@ function Undo-SRPrepSystem {
 function Get-SRPrepTunePlan {
     param($Settings, [string]$Role, $Log)
     if ($null -ne $Log) { & $Log "Stub Tune: Plan for $Role" }
-    return @(
+    return ,@(
         [pscustomobject]@{
             id = 'tune_power'
             section = 'power'
@@ -399,7 +410,7 @@ function Invoke-SRPrepTuneApply {
         $cp.status = 'DONE'
         $ret += $cp
     }
-    return $ret
+    return ,$ret
 }
 
 function Undo-SRPrepTune {
@@ -427,7 +438,7 @@ function Undo-SRPrepTune {
     [void]$list.Add($record)
     [System.IO.File]::WriteAllText($logPath, (ConvertTo-Json $list -Depth 5), [System.Text.Encoding]::UTF8)
 
-    return @(
+    return ,@(
         [pscustomobject]@{
             id     = 'tune_power'
             title  = 'Power scheme restore'
@@ -486,7 +497,7 @@ function Send-SRPendingResults {
         $jsonA = ConvertFrom-Json ([System.IO.File]::ReadAllText($jsonPathA, [System.Text.Encoding]::UTF8))
         if (-not $jsonA.meta.plan_only) { throw "Test (a): meta.plan_only is not true" }
         if ($jsonA.meta.role -ne 'prod') { throw "Test (a): meta.role is not prod" }
-        if ($jsonA.meta.tool_version -ne '1.2-prep') { throw "Test (a): meta.tool_version is not 1.2-prep" }
+        if ($jsonA.meta.tool_version -ne '1.3.1-prep') { throw "Test (a): meta.tool_version is not 1.3.1-prep" }
         if ($jsonA.plan.Count -ne 12) { throw ("Test (a): plan count was " + $jsonA.plan.Count + ", expected 12") }
         if ($jsonA.applied.Count -ne 0) { throw ("Test (a): applied count was " + $jsonA.applied.Count + ", expected 0") }
         if (Test-Path -LiteralPath $callLogPath) { throw "Test (a): apply stubs should not have been called" }
@@ -517,6 +528,10 @@ function Send-SRPendingResults {
         if ($jsonB.meta.plan_only) { throw "Test (b): meta.plan_only should be false" }
         if ($jsonB.meta.role -ne 'observer') { throw "Test (b): meta.role is not observer" }
         if ($jsonB.applied.Count -eq 0) { throw "Test (b): applied items should not be empty" }
+        Assert-FlatItems -Items $jsonB.applied -Label 'Test (b): applied'
+        $appliedIdsB = @($jsonB.applied | ForEach-Object { [string]$_.id }) -join ','
+        $expectedIdsB = 'sys_language,sys_drivers,tune_power,tune_startup:Discord,tune_background:Chrome,tune_notifications,sys_updates'
+        if ($appliedIdsB -ne $expectedIdsB) { throw ("Test (b): applied ids were '$appliedIdsB', expected '$expectedIdsB'") }
 
         # Verify that apply calls occurred in the exact phase order:
         # Phase 1: language (Invoke-SRPrepSystemApply)
@@ -576,6 +591,12 @@ function Send-SRPendingResults {
         $jsonC = ConvertFrom-Json ([System.IO.File]::ReadAllText($undoJsonPath, [System.Text.Encoding]::UTF8))
         if (-not $jsonC.meta.dry_run) { throw "Test (c): meta.dry_run is not true" }
         if ($jsonC.meta.backup_dir -ne $backupDirB) { throw ("Test (c): backup_dir was " + $jsonC.meta.backup_dir + ", expected " + $backupDirB) }
+        Assert-FlatItems -Items $jsonC.tune -Label 'Test (c): undo tune'
+        Assert-FlatItems -Items $jsonC.system -Label 'Test (c): undo system'
+        $undoTuneIds = @($jsonC.tune | ForEach-Object { [string]$_.id }) -join ','
+        $undoSysIds = @($jsonC.system | ForEach-Object { [string]$_.id }) -join ','
+        if ($undoTuneIds -ne 'tune_power') { throw ("Test (c): undo tune ids were '$undoTuneIds', expected 'tune_power'") }
+        if ($undoSysIds -ne 'sys_language') { throw ("Test (c): undo system ids were '$undoSysIds', expected 'sys_language'") }
 
         # Verify calls 4 and 5 in call-log.json: Undo-SRPrepTune then Undo-SRPrepSystem
         $callsAfterUndo = Get-ParsedJsonArray -Path $callLogPath
@@ -664,7 +685,7 @@ foreach ($eng in $engines) {
 $realSys = Join-Path (Join-Path $KitRoot 'lib') 'Prep.System.ps1'
 $realTune = Join-Path (Join-Path $KitRoot 'lib') 'Prep.Tune.ps1'
 if ((Test-Path -LiteralPath $realSys) -and (Test-Path -LiteralPath $realTune)) {
-    Write-Host '`n[Test-Prep] Real libs detected in lib\. Running real kit plan/dryrun verification...' -ForegroundColor Cyan
+    Write-Host "`n[Test-Prep] Real libs detected in lib\. Running real kit plan/dryrun verification..." -ForegroundColor Cyan
     $realPrepScript = Join-Path $KitRoot 'Prep.ps1'
     $realPlan = Invoke-PrepProc -PsExe 'powershell.exe' -PrepFile $realPrepScript -ArgumentList @('-PlanOnly', '-Role', 'prod', '-NoElevate', '-NoUpload')
     if ($realPlan.ExitCode -ne 0) {
@@ -685,8 +706,8 @@ if ((Test-Path -LiteralPath $realSys) -and (Test-Path -LiteralPath $realTune)) {
     Write-Host '  Real kit -DryRun PASSED' -ForegroundColor Green
 }
 else {
-    Write-Host '`n[Test-Prep] Note: Real lib\Prep.System.ps1 or lib\Prep.Tune.ps1 not present yet. Skipping real kit dryrun.' -ForegroundColor Yellow
+    Write-Host "`n[Test-Prep] Note: Real lib\Prep.System.ps1 or lib\Prep.Tune.ps1 not present yet. Skipping real kit dryrun." -ForegroundColor Yellow
 }
 
-Write-Host '`nALL PREP ORCHESTRATOR TESTS PASSED' -ForegroundColor Green
+Write-Host "`nALL PREP ORCHESTRATOR TESTS PASSED" -ForegroundColor Green
 exit 0

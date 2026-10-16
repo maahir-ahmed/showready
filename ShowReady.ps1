@@ -26,7 +26,7 @@ param(
 
 $ErrorActionPreference = 'Continue'
 $ProgressPreference = 'SilentlyContinue'
-$ToolVersion = '1.3.0'
+$ToolVersion = '1.3.1'
 $IsObserver = (@('observer', 'source', 'obs') -contains ([string]$Role).Trim().ToLowerInvariant())
 $RoleName = 'prod'
 if ($IsObserver) { $RoleName = 'observer' }
