@@ -1,0 +1,304 @@
+﻿{
+    "ffmpeg":  {
+                   "found":  true,
+                   "path":  "C:\\Users\\ThomasFramework\\AppData\\Roaming\\Claude\\scratch-workspaces\\a453e5c7-ab7b-4a82-ad0c-6e6a481ec2c9\\3356ed3c-9700-4e08-97cc-afc7ca8cccab\\scratch-2026-10-15-a9c057\\ShowReady\\bin\\ffmpeg.exe",
+                   "version":  "n9.0.2-28-g669f5ab083-20261015"
+               },
+    "encoders":  {
+                     "available":  [
+                                       "libx264",
+                                       "libx264rgb",
+                                       "libopenh264",
+                                       "h264_amf",
+                                       "h264_d3d12va",
+                                       "h264_mf",
+                                       "h264_nvenc",
+                                       "h264_qsv",
+                                       "h264_vaapi",
+                                       "h264_vulkan"
+                                   ],
+                     "tested":  [
+                                    {
+                                        "name":  "h264_nvenc",
+                                        "ok":  false,
+                                        "error":  "[h264_nvenc @ 000001987a3b0a00] Cannot load nvcuda.dll"
+                                    },
+                                    {
+                                        "name":  "h264_amf",
+                                        "ok":  false,
+                                        "error":  "[AMF @ 000001e3f0e76840] DLL amfrt64.dll failed to open"
+                                    },
+                                    {
+                                        "name":  "h264_qsv",
+                                        "ok":  true,
+                                        "error":  null
+                                    }
+                                ],
+                     "chosen":  "h264_qsv"
+                 },
+    "source":  {
+                   "codec":  "speedhq",
+                   "pix_fmt":  "yuv422p",
+                   "width":  1920,
+                   "height":  1080,
+                   "fps":  60,
+                   "seconds":  4,
+                   "file_mb":  24.11
+               },
+    "seconds":  45,
+    "streams":  [
+                    {
+                        "role":  "in-1",
+                        "kind":  "decode",
+                        "codec":  "speedhq",
+                        "target_kbps":  null,
+                        "speed_min":  1,
+                        "speed_p50":  1.01,
+                        "fps_p50":  60.61,
+                        "ok":  true,
+                        "error":  null
+                    },
+                    {
+                        "role":  "in-2",
+                        "kind":  "decode",
+                        "codec":  "speedhq",
+                        "target_kbps":  null,
+                        "speed_min":  1,
+                        "speed_p50":  1.01,
+                        "fps_p50":  60.58,
+                        "ok":  true,
+                        "error":  null
+                    },
+                    {
+                        "role":  "out-srt",
+                        "kind":  "encode",
+                        "codec":  "h264_qsv",
+                        "target_kbps":  10000,
+                        "speed_min":  0.93,
+                        "speed_p50":  1,
+                        "fps_p50":  60.26,
+                        "ok":  false,
+                        "error":  "speed_min 0.93 \u003c threshold 0.97"
+                    },
+                    {
+                        "role":  "out-youtube",
+                        "kind":  "encode",
+                        "codec":  "h264_qsv",
+                        "target_kbps":  17000,
+                        "speed_min":  0.91,
+                        "speed_p50":  1,
+                        "fps_p50":  60.24,
+                        "ok":  false,
+                        "error":  "speed_min 0.91 \u003c threshold 0.97"
+                    },
+                    {
+                        "role":  "out-twitch",
+                        "kind":  "encode",
+                        "codec":  "h264_qsv",
+                        "target_kbps":  6000,
+                        "speed_min":  0.92,
+                        "speed_p50":  1,
+                        "fps_p50":  60.25,
+                        "ok":  false,
+                        "error":  "speed_min 0.92 \u003c threshold 0.97"
+                    }
+                ],
+    "system":  {
+                   "cpu_p50":  74,
+                   "cpu_p95":  86.65,
+                   "cpu_max":  118,
+                   "perf_start":  134,
+                   "perf_min":  65,
+                   "perf_p50":  108,
+                   "gpu_enc_p95":  0,
+                   "gpu_dec_p95":  93.15,
+                   "gpu_3d_p95":  93.25,
+                   "mem_used_pct_max":  80,
+                   "samples":  [
+                                   {
+                                       "t":  0,
+                                       "cpu":  54,
+                                       "perf":  134,
+                                       "gpu_enc":  0,
+                                       "gpu_dec":  93,
+                                       "gpu_3d":  98,
+                                       "mem":  78
+                                   },
+                                   {
+                                       "t":  1,
+                                       "cpu":  72,
+                                       "perf":  85,
+                                       "gpu_enc":  0,
+                                       "gpu_dec":  59,
+                                       "gpu_3d":  65,
+                                       "mem":  79
+                                   },
+                                   {
+                                       "t":  3,
+                                       "cpu":  118,
+                                       "perf":  132,
+                                       "gpu_enc":  0,
+                                       "gpu_dec":  92,
+                                       "gpu_3d":  93,
+                                       "mem":  79
+                                   },
+                                   {
+                                       "t":  4,
+                                       "cpu":  56,
+                                       "perf":  77,
+                                       "gpu_enc":  0,
+                                       "gpu_dec":  69,
+                                       "gpu_3d":  71,
+                                       "mem":  79
+                                   },
+                                   {
+                                       "t":  6,
+                                       "cpu":  59,
+                                       "perf":  78,
+                                       "gpu_enc":  0,
+                                       "gpu_dec":  73,
+                                       "gpu_3d":  78,
+                                       "mem":  80
+                                   },
+                                   {
+                                       "t":  9,
+                                       "cpu":  58,
+                                       "perf":  78,
+                                       "gpu_enc":  0,
+                                       "gpu_dec":  62,
+                                       "gpu_3d":  67,
+                                       "mem":  79
+                                   },
+                                   {
+                                       "t":  11,
+                                       "cpu":  84,
+                                       "perf":  112,
+                                       "gpu_enc":  0,
+                                       "gpu_dec":  96,
+                                       "gpu_3d":  92,
+                                       "mem":  79
+                                   },
+                                   {
+                                       "t":  12,
+                                       "cpu":  83,
+                                       "perf":  113,
+                                       "gpu_enc":  0,
+                                       "gpu_dec":  61,
+                                       "gpu_3d":  64,
+                                       "mem":  79
+                                   },
+                                   {
+                                       "t":  14,
+                                       "cpu":  74,
+                                       "perf":  102,
+                                       "gpu_enc":  0,
+                                       "gpu_dec":  79,
+                                       "gpu_3d":  75,
+                                       "mem":  79
+                                   },
+                                   {
+                                       "t":  16,
+                                       "cpu":  75,
+                                       "perf":  108,
+                                       "gpu_enc":  0,
+                                       "gpu_dec":  59,
+                                       "gpu_3d":  65,
+                                       "mem":  79
+                                   },
+                                   {
+                                       "t":  17,
+                                       "cpu":  69,
+                                       "perf":  101,
+                                       "gpu_enc":  0,
+                                       "gpu_dec":  55,
+                                       "gpu_3d":  62,
+                                       "mem":  79
+                                   },
+                                   {
+                                       "t":  19,
+                                       "cpu":  80,
+                                       "perf":  111,
+                                       "gpu_enc":  0,
+                                       "gpu_dec":  61,
+                                       "gpu_3d":  65,
+                                       "mem":  79
+                                   },
+                                   {
+                                       "t":  20,
+                                       "cpu":  85,
+                                       "perf":  114,
+                                       "gpu_enc":  0,
+                                       "gpu_dec":  47,
+                                       "gpu_3d":  48,
+                                       "mem":  79
+                                   },
+                                   {
+                                       "t":  22,
+                                       "cpu":  85,
+                                       "perf":  113,
+                                       "gpu_enc":  0,
+                                       "gpu_dec":  77,
+                                       "gpu_3d":  82,
+                                       "mem":  79
+                                   },
+                                   {
+                                       "t":  34,
+                                       "cpu":  45,
+                                       "perf":  65,
+                                       "gpu_enc":  0,
+                                       "gpu_dec":  63,
+                                       "gpu_3d":  69,
+                                       "mem":  80
+                                   },
+                                   {
+                                       "t":  36,
+                                       "cpu":  80,
+                                       "perf":  111,
+                                       "gpu_enc":  0,
+                                       "gpu_dec":  77,
+                                       "gpu_3d":  75,
+                                       "mem":  80
+                                   },
+                                   {
+                                       "t":  38,
+                                       "cpu":  85,
+                                       "perf":  114,
+                                       "gpu_enc":  0,
+                                       "gpu_dec":  60,
+                                       "gpu_3d":  65,
+                                       "mem":  80
+                                   },
+                                   {
+                                       "t":  39,
+                                       "cpu":  74,
+                                       "perf":  108,
+                                       "gpu_enc":  0,
+                                       "gpu_dec":  58,
+                                       "gpu_3d":  64,
+                                       "mem":  80
+                                   },
+                                   {
+                                       "t":  41,
+                                       "cpu":  58,
+                                       "perf":  78,
+                                       "gpu_enc":  0,
+                                       "gpu_dec":  59,
+                                       "gpu_3d":  65,
+                                       "mem":  80
+                                   },
+                                   {
+                                       "t":  43,
+                                       "cpu":  58,
+                                       "perf":  78,
+                                       "gpu_enc":  0,
+                                       "gpu_dec":  62,
+                                       "gpu_3d":  63,
+                                       "mem":  79
+                                   }
+                               ]
+               },
+    "note":  "SpeedHQ is the codec inside full-bandwidth NDI; OMT\u0027s VMX is the same class but not identical. vMix/OBS compositing load is NOT included — treat results as a lower bound.",
+    "errors":  [
+
+               ]
+}

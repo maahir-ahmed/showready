@@ -1,0 +1,127 @@
+{
+    "os":  {
+               "caption":  "Microsoft Windows 11 Pro",
+               "version":  "10.0.26200",
+               "build":  26200
+           },
+    "computer":  {
+                     "name":  "DEVLAPTOP",
+                     "manufacturer":  "LENOVO",
+                     "model":  "ThinkPad",
+                     "is_laptop":  true
+                 },
+    "cpu":  {
+                "name":  "Intel(R) Core(TM) i5-8250U CPU @ 1.60GHz",
+                "cores":  4,
+                "threads":  8,
+                "max_mhz":  1800
+            },
+    "ram_gb":  13.9,
+    "gpus":  [
+                 {
+                     "name":  "Intel(R) UHD Graphics 620",
+                     "vendor":  "Intel",
+                     "integrated":  true,
+                     "driver_version":  "31.0.101.2127",
+                     "nvidia_driver":  null,
+                     "driver_date":  "2024-03-02",
+                     "vram_gb":  0.1
+                 }
+             ],
+    "nics":  [
+                 {
+                     "name":  "Wi-Fi",
+                     "description":  "Intel(R) Wi-Fi 6 AX201 160MHz",
+                     "status":  "Up",
+                     "link_mbps":  866,
+                     "kind":  "wifi",
+                     "default_route":  true,
+                     "ipv4":  [
+                                  "192.168.1.23"
+                              ],
+                     "network_category":  "Public",
+                     "eee":  "unknown"
+                 },
+                 {
+                     "name":  "Ethernet",
+                     "description":  "Realtek PCIe GbE Family Controller",
+                     "status":  "Disconnected",
+                     "link_mbps":  null,
+                     "kind":  "wired",
+                     "default_route":  false,
+                     "ipv4":  [
+
+                              ],
+                     "network_category":  null,
+                     "eee":  "unknown"
+                 },
+                 {
+                     "name":  "vEthernet (Default Switch)",
+                     "description":  "Hyper-V Virtual Ethernet Adapter",
+                     "status":  "Up",
+                     "link_mbps":  10000,
+                     "kind":  "virtual",
+                     "default_route":  false,
+                     "ipv4":  [
+                                  "172.20.80.1"
+                              ],
+                     "network_category":  "Private",
+                     "eee":  "unknown"
+                 },
+                 {
+                     "name":  "vEthernet (WSL)",
+                     "description":  "Hyper-V Virtual Ethernet Adapter #2",
+                     "status":  "Up",
+                     "link_mbps":  10000,
+                     "kind":  "virtual",
+                     "default_route":  false,
+                     "ipv4":  [
+                                  "172.28.0.1"
+                              ],
+                     "network_category":  "Private",
+                     "eee":  "unknown"
+                 }
+             ],
+    "power":  {
+                  "plan_guid":  "381b4222-f694-41f0-9685-ff5bb260df2e",
+                  "plan":  "balanced",
+                  "on_battery":  false,
+                  "battery_pct":  100
+              },
+    "disk":  {
+                 "system_drive":  "C:",
+                 "free_gb":  38.2,
+                 "total_gb":  476
+             },
+    "software":  {
+                     "vmix":  null,
+                     "obs":  "30.2.2",
+                     "ndi_runtime":  null,
+                     "ndi_tools":  null,
+                     "distroav":  null,
+                     "omt":  null
+                 },
+    "windows":  {
+                    "hags":  "off",
+                    "game_mode":  "on",
+                    "pending_reboot":  true,
+                    "firewall_profiles":  [
+                                              {
+                                                  "name":  "Public",
+                                                  "enabled":  true
+                                              }
+                                          ]
+                },
+    "processes":  {
+                      "running":  [
+                                      "OneDrive",
+                                      "Teams",
+                                      "chrome",
+                                      "Discord",
+                                      "obs64"
+                                  ]
+                  },
+    "errors":  [
+
+               ]
+}

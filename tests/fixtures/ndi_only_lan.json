@@ -1,0 +1,122 @@
+{
+  "adapter": {
+    "name": "Ethernet",
+    "description": "Intel(R) Ethernet Connection I219-V",
+    "kind": "wired",
+    "chosen_because": "wired",
+    "ipv4": "192.168.0.50",
+    "prefix_length": 24,
+    "gateway": "192.168.0.1",
+    "link_mbps": 1000,
+    "local_ips": [
+      "192.168.0.50"
+    ]
+  },
+  "mdns": {
+    "query_ok": true,
+    "listen_ms": 3000,
+    "methods": [
+      {
+        "name": "unicast",
+        "ok": true,
+        "answers": 2,
+        "error": null
+      }
+    ],
+    "responders": [
+      "192.168.0.31",
+      "192.168.0.32"
+    ],
+    "service_types_seen": [
+      "_ndi._tcp"
+    ]
+  },
+  "sources": [
+    {
+      "protocol": "NDI",
+      "name": "CAM-1 (Camera 1)",
+      "machine": "CAM-1",
+      "source": "Camera 1",
+      "host": "cam-1.local",
+      "port": 5961,
+      "ip": "192.168.0.31",
+      "local": false,
+      "found_by": [
+        "unicast"
+      ]
+    },
+    {
+      "protocol": "NDI",
+      "name": "CAM-2 (Camera 2)",
+      "machine": "CAM-2",
+      "source": "Camera 2",
+      "host": "cam-2.local",
+      "port": 5961,
+      "ip": "192.168.0.32",
+      "local": false,
+      "found_by": [
+        "unicast"
+      ]
+    }
+  ],
+  "discovery_servers": {
+    "ndi": [],
+    "omt": [],
+    "ndi_config_path": null,
+    "omt_settings_path": null
+  },
+  "sweep": {
+    "cidr": "192.168.0.0/24",
+    "scanned": 254,
+    "alive": 3,
+    "seconds": 1.1,
+    "skipped_reason": null
+  },
+  "hosts": [
+    {
+      "ip": "192.168.0.1",
+      "mac": "00-11-22-33-44-01",
+      "vendor": "Cisco Systems",
+      "category": "network",
+      "randomized_mac": false,
+      "ping_ms": 0.5,
+      "is_self": false,
+      "is_gateway": true,
+      "sources": []
+    },
+    {
+      "ip": "192.168.0.31",
+      "mac": "00-14-22-01-02-31",
+      "vendor": "Dell Inc.",
+      "category": "pc",
+      "randomized_mac": false,
+      "ping_ms": 0.8,
+      "is_self": false,
+      "is_gateway": false,
+      "sources": [
+        "CAM-1 (Camera 1)"
+      ]
+    },
+    {
+      "ip": "192.168.0.32",
+      "mac": "00-14-22-01-02-32",
+      "vendor": "Dell Inc.",
+      "category": "pc",
+      "randomized_mac": false,
+      "ping_ms": 0.9,
+      "is_self": false,
+      "is_gateway": false,
+      "sources": [
+        "CAM-2 (Camera 2)"
+      ]
+    }
+  ],
+  "partners": [],
+  "test": {
+    "protocol": "OMT",
+    "per_feed_mbps": 200,
+    "target_mbps": 400,
+    "seconds": 10
+  },
+  "errors": []
+}

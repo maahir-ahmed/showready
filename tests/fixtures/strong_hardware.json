@@ -1,0 +1,84 @@
+{
+    "os":  {
+               "caption":  "Microsoft Windows 11 Pro",
+               "version":  "10.0.26100",
+               "build":  26100
+           },
+    "computer":  {
+                     "name":  "SHOWPC-01",
+                     "manufacturer":  "Custom",
+                     "model":  "Desktop",
+                     "is_laptop":  false
+                 },
+    "cpu":  {
+                "name":  "AMD Ryzen 9 7950X 16-Core Processor",
+                "cores":  16,
+                "threads":  32,
+                "max_mhz":  4501
+            },
+    "ram_gb":  63.7,
+    "gpus":  [
+                 {
+                     "name":  "NVIDIA GeForce RTX 4070",
+                     "vendor":  "NVIDIA",
+                     "integrated":  false,
+                     "driver_version":  "32.0.15.6636",
+                     "nvidia_driver":  566.36,
+                     "driver_date":  "2026-08-20",
+                     "vram_gb":  12
+                 }
+             ],
+    "nics":  [
+                 {
+                     "name":  "Ethernet",
+                     "description":  "Intel(R) Ethernet Controller I226-V",
+                     "status":  "Up",
+                     "link_mbps":  2500,
+                     "kind":  "wired",
+                     "default_route":  true,
+                     "ipv4":  [
+                                  "10.20.0.15"
+                              ],
+                     "network_category":  "Private",
+                     "eee":  "off"
+                 }
+             ],
+    "power":  {
+                  "plan_guid":  "8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c",
+                  "plan":  "high_performance",
+                  "on_battery":  false,
+                  "battery_pct":  null
+              },
+    "disk":  {
+                 "system_drive":  "C:",
+                 "free_gb":  812.4,
+                 "total_gb":  1862
+             },
+    "software":  {
+                     "vmix":  "28.0.0.58",
+                     "obs":  "31.0.0",
+                     "ndi_runtime":  "6.1.0",
+                     "ndi_tools":  "6.1.0",
+                     "distroav":  "6.0.0",
+                     "omt":  "1.0.3"
+                 },
+    "windows":  {
+                    "hags":  "on",
+                    "game_mode":  "off",
+                    "pending_reboot":  false,
+                    "firewall_profiles":  [
+                                              {
+                                                  "name":  "Private",
+                                                  "enabled":  true
+                                              }
+                                          ]
+                },
+    "processes":  {
+                      "running":  [
+                                      "vMix64"
+                                  ]
+                  },
+    "errors":  [
+
+               ]
+}

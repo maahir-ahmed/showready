@@ -1,0 +1,663 @@
+{
+  "schema": "showready/1",
+  "meta": {
+    "tool_version": "1.2.0",
+    "role": "observer",
+    "mode": "quick",
+    "started": "2026-10-16T14:41:09+09:00",
+    "finished": "2026-10-16T14:42:31+09:00",
+    "computer": "GAMEPC-A",
+    "duration_s": 82,
+    "observer_ip": "192.168.10.31",
+    "observer_ip_kind": "wired"
+  },
+  "profile": {
+    "name": "Gen.G Academy Seoul -> France",
+    "inputs": {
+      "count": 2,
+      "protocol": "OMT",
+      "resolution": "1920x1080",
+      "fps": 60,
+      "mbps_per_feed": {
+        "OMT": 200,
+        "NDI": 150,
+        "NDI-HX3": 62
+      }
+    },
+    "outputs": [
+      {
+        "id": "srt",
+        "label": "SRT to France",
+        "protocol": "SRT",
+        "video_kbps": 10000,
+        "audio_kbps": 192
+      },
+      {
+        "id": "youtube",
+        "label": "YouTube",
+        "protocol": "RTMP",
+        "video_kbps": 17000,
+        "audio_kbps": 128
+      },
+      {
+        "id": "twitch",
+        "label": "Twitch",
+        "protocol": "RTMP",
+        "video_kbps": 6000,
+        "audio_kbps": 160
+      }
+    ],
+    "srt_destination_host": ""
+  },
+  "hardware": {
+    "os": {
+      "caption": "Microsoft Windows 11 Pro",
+      "version": "10.0.26200",
+      "build": 26200
+    },
+    "computer": {
+      "name": "GAMEPC-A",
+      "manufacturer": "Micro-Star International Co., Ltd.",
+      "model": "MS-7D32",
+      "is_laptop": false
+    },
+    "cpu": {
+      "name": "Intel(R) Core(TM) i5-12400F",
+      "cores": 6,
+      "threads": 12,
+      "max_mhz": 2500
+    },
+    "ram_gb": 32,
+    "gpus": [
+      {
+        "name": "NVIDIA GeForce RTX 3060",
+        "vendor": "NVIDIA",
+        "integrated": false,
+        "driver_version": "32.0.15.7652",
+        "nvidia_driver": 576.52,
+        "driver_date": "2026-04-22",
+        "vram_gb": 12
+      }
+    ],
+    "nics": [
+      {
+        "name": "Ethernet",
+        "description": "Realtek PCIe GbE Family Controller",
+        "status": "Up",
+        "link_mbps": 1000,
+        "kind": "wired",
+        "default_route": true,
+        "ipv4": ["192.168.10.31"],
+        "network_category": "Private",
+        "eee": "off"
+      },
+      {
+        "name": "Wi-Fi",
+        "description": "Intel(R) Wi-Fi 6 AX200 160MHz",
+        "status": "Disconnected",
+        "link_mbps": null,
+        "kind": "wifi",
+        "default_route": false,
+        "ipv4": [],
+        "network_category": null,
+        "eee": "unknown"
+      }
+    ],
+    "power": {
+      "plan_guid": "8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c",
+      "plan": "high_performance",
+      "on_battery": false,
+      "battery_pct": null
+    },
+    "disk": {
+      "system_drive": "C:",
+      "free_gb": 286.4,
+      "total_gb": 931.5
+    },
+    "software": {
+      "vmix": null,
+      "obs": null,
+      "ndi_runtime": null,
+      "ndi_tools": null,
+      "distroav": null,
+      "omt": null
+    },
+    "windows": {
+      "hags": "on",
+      "game_mode": "on",
+      "pending_reboot": false,
+      "firewall_profiles": [
+        {
+          "name": "Domain",
+          "enabled": true
+        },
+        {
+          "name": "Private",
+          "enabled": true
+        },
+        {
+          "name": "Public",
+          "enabled": true
+        }
+      ]
+    },
+    "processes": {
+      "running": ["Discord", "chrome"]
+    },
+    "errors": []
+  },
+  "sender": {
+    "ffmpeg": {
+      "found": true,
+      "path": "bin\\ffmpeg.exe",
+      "version": "7.1.1-essentials_build"
+    },
+    "codec": "speedhq",
+    "pix_fmt": "yuv422p",
+    "width": 1920,
+    "height": 1080,
+    "fps": 60,
+    "seconds": 45,
+    "source": {
+      "codec": "speedhq",
+      "pix_fmt": "yuv422p",
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "seconds": 4,
+      "file_mb": 24.1
+    },
+    "max_speed": 1.99,
+    "stream": {
+      "speed_min": 1.01,
+      "speed_p50": 1,
+      "fps_p50": 60.2,
+      "ok": true,
+      "error": null
+    },
+    "system": {
+      "cpu_p50": 41.2,
+      "cpu_p95": 48.0,
+      "cpu_max": 55.4,
+      "perf_start": 104,
+      "perf_min": 96,
+      "perf_p50": 102,
+      "gpu_3d_p95": 72.5,
+      "mem_used_pct_max": 52.8,
+      "samples": [
+        {
+          "t": 1,
+          "cpu": 17.5,
+          "perf": 104,
+          "gpu_3d": 66.7,
+          "mem": 50.8
+        },
+        {
+          "t": 2,
+          "cpu": 33.0,
+          "perf": 100,
+          "gpu_3d": 66.1,
+          "mem": 51.1
+        },
+        {
+          "t": 3,
+          "cpu": 43.3,
+          "perf": 103,
+          "gpu_3d": 65.1,
+          "mem": 51.2
+        },
+        {
+          "t": 4,
+          "cpu": 42.8,
+          "perf": 103,
+          "gpu_3d": 71.2,
+          "mem": 51.3
+        },
+        {
+          "t": 5,
+          "cpu": 42.8,
+          "perf": 103,
+          "gpu_3d": 73.3,
+          "mem": 51.3
+        },
+        {
+          "t": 6,
+          "cpu": 42.6,
+          "perf": 103,
+          "gpu_3d": 67.4,
+          "mem": 51.0
+        },
+        {
+          "t": 7,
+          "cpu": 50.6,
+          "perf": 104,
+          "gpu_3d": 72.7,
+          "mem": 51.0
+        },
+        {
+          "t": 8,
+          "cpu": 55.4,
+          "perf": 104,
+          "gpu_3d": 72.5,
+          "mem": 51.1
+        },
+        {
+          "t": 9,
+          "cpu": 44.0,
+          "perf": 105,
+          "gpu_3d": 64.2,
+          "mem": 51.2
+        },
+        {
+          "t": 10,
+          "cpu": 43.6,
+          "perf": 103,
+          "gpu_3d": 58.4,
+          "mem": 51.4
+        },
+        {
+          "t": 11,
+          "cpu": 40.9,
+          "perf": 102,
+          "gpu_3d": 56.1,
+          "mem": 51.3
+        },
+        {
+          "t": 12,
+          "cpu": 43.2,
+          "perf": 102,
+          "gpu_3d": 61.6,
+          "mem": 51.5
+        },
+        {
+          "t": 13,
+          "cpu": 42.8,
+          "perf": 104,
+          "gpu_3d": 56.2,
+          "mem": 51.5
+        },
+        {
+          "t": 14,
+          "cpu": 41.2,
+          "perf": 101,
+          "gpu_3d": 52.0,
+          "mem": 51.5
+        },
+        {
+          "t": 15,
+          "cpu": 41.0,
+          "perf": 102,
+          "gpu_3d": 49.4,
+          "mem": 51.4
+        },
+        {
+          "t": 16,
+          "cpu": 39.8,
+          "perf": 102,
+          "gpu_3d": 55.1,
+          "mem": 51.6
+        },
+        {
+          "t": 17,
+          "cpu": 36.6,
+          "perf": 102,
+          "gpu_3d": 52.8,
+          "mem": 51.7
+        },
+        {
+          "t": 18,
+          "cpu": 36.0,
+          "perf": 96,
+          "gpu_3d": 54.2,
+          "mem": 51.5
+        },
+        {
+          "t": 19,
+          "cpu": 39.6,
+          "perf": 101,
+          "gpu_3d": 61.4,
+          "mem": 51.8
+        },
+        {
+          "t": 20,
+          "cpu": 37.7,
+          "perf": 98,
+          "gpu_3d": 66.8,
+          "mem": 52.0
+        },
+        {
+          "t": 21,
+          "cpu": 38.2,
+          "perf": 98,
+          "gpu_3d": 62.0,
+          "mem": 51.7
+        },
+        {
+          "t": 22,
+          "cpu": 39.0,
+          "perf": 99,
+          "gpu_3d": 63.1,
+          "mem": 51.6
+        },
+        {
+          "t": 23,
+          "cpu": 40.7,
+          "perf": 98,
+          "gpu_3d": 70.8,
+          "mem": 51.6
+        },
+        {
+          "t": 24,
+          "cpu": 38.8,
+          "perf": 98,
+          "gpu_3d": 66.8,
+          "mem": 52.2
+        },
+        {
+          "t": 25,
+          "cpu": 39.6,
+          "perf": 97,
+          "gpu_3d": 65.1,
+          "mem": 52.0
+        },
+        {
+          "t": 26,
+          "cpu": 39.2,
+          "perf": 99,
+          "gpu_3d": 66.7,
+          "mem": 51.9
+        },
+        {
+          "t": 27,
+          "cpu": 42.3,
+          "perf": 99,
+          "gpu_3d": 64.3,
+          "mem": 52.0
+        },
+        {
+          "t": 28,
+          "cpu": 41.8,
+          "perf": 99,
+          "gpu_3d": 67.3,
+          "mem": 52.1
+        },
+        {
+          "t": 29,
+          "cpu": 43.1,
+          "perf": 99,
+          "gpu_3d": 63.3,
+          "mem": 51.9
+        },
+        {
+          "t": 30,
+          "cpu": 42.5,
+          "perf": 100,
+          "gpu_3d": 64.3,
+          "mem": 52.2
+        },
+        {
+          "t": 31,
+          "cpu": 48.0,
+          "perf": 101,
+          "gpu_3d": 57.1,
+          "mem": 52.5
+        },
+        {
+          "t": 32,
+          "cpu": 44.1,
+          "perf": 99,
+          "gpu_3d": 51.4,
+          "mem": 52.2
+        },
+        {
+          "t": 33,
+          "cpu": 44.4,
+          "perf": 101,
+          "gpu_3d": 55.5,
+          "mem": 52.3
+        },
+        {
+          "t": 34,
+          "cpu": 43.1,
+          "perf": 100,
+          "gpu_3d": 50.4,
+          "mem": 52.2
+        },
+        {
+          "t": 35,
+          "cpu": 44.7,
+          "perf": 103,
+          "gpu_3d": 58.7,
+          "mem": 52.6
+        },
+        {
+          "t": 36,
+          "cpu": 44.2,
+          "perf": 101,
+          "gpu_3d": 59.0,
+          "mem": 52.1
+        },
+        {
+          "t": 37,
+          "cpu": 41.2,
+          "perf": 104,
+          "gpu_3d": 59.8,
+          "mem": 52.7
+        },
+        {
+          "t": 38,
+          "cpu": 43.1,
+          "perf": 104,
+          "gpu_3d": 63.8,
+          "mem": 52.4
+        },
+        {
+          "t": 39,
+          "cpu": 40.9,
+          "perf": 103,
+          "gpu_3d": 59.9,
+          "mem": 52.8
+        },
+        {
+          "t": 40,
+          "cpu": 41.2,
+          "perf": 105,
+          "gpu_3d": 61.4,
+          "mem": 52.6
+        },
+        {
+          "t": 41,
+          "cpu": 41.0,
+          "perf": 105,
+          "gpu_3d": 66.8,
+          "mem": 52.8
+        },
+        {
+          "t": 42,
+          "cpu": 39.8,
+          "perf": 105,
+          "gpu_3d": 66.1,
+          "mem": 52.4
+        },
+        {
+          "t": 43,
+          "cpu": 37.8,
+          "perf": 103,
+          "gpu_3d": 68.9,
+          "mem": 52.4
+        },
+        {
+          "t": 44,
+          "cpu": 37.8,
+          "perf": 104,
+          "gpu_3d": 65.9,
+          "mem": 52.8
+        },
+        {
+          "t": 45,
+          "cpu": 36.9,
+          "perf": 102,
+          "gpu_3d": 72.4,
+          "mem": 52.6
+        }
+      ]
+    },
+    "note": "SpeedHQ is the codec full NDI uses. OMT's VMX codec has no ffmpeg encoder, so SpeedHQ stands in for both. ffmpeg's SpeedHQ encoder is less optimised than the NDI SDK's, so this errs on the safe side.",
+    "errors": []
+  },
+  "verdict": {
+    "role": "observer",
+    "overall": "CAUTION",
+    "headline": "Weakest link (warning): Background apps (2 running; needs none) - Close: Discord, chrome.",
+    "weakest": "sw_background",
+    "partial": false,
+    "not_tested": [],
+    "checks": [
+      {
+        "id": "lan_wired",
+        "section": "lan",
+        "title": "Wired network connection",
+        "status": "PASS",
+        "value": "Ethernet at 1000 Mbps",
+        "limit": "wired adapter up",
+        "margin": null,
+        "detail": "Wired adapter(s) up: Ethernet.",
+        "fix": ""
+      },
+      {
+        "id": "obs_link",
+        "section": "lan",
+        "title": "Wired link speed",
+        "status": "PASS",
+        "value": "1000 Mbps",
+        "limit": ">= 1000 Mbps",
+        "margin": 1,
+        "detail": "Ethernet links at 1000 Mbps.",
+        "fix": ""
+      },
+      {
+        "id": "lan_virtual_adapters",
+        "section": "lan",
+        "title": "Virtual network adapters",
+        "status": "PASS",
+        "value": "none up",
+        "limit": "none",
+        "margin": null,
+        "detail": "No virtual, VPN or Hyper-V adapters are up.",
+        "fix": ""
+      },
+      {
+        "id": "lan_profile",
+        "section": "lan",
+        "title": "Network profile is Private",
+        "status": "PASS",
+        "value": "Private",
+        "limit": "Private",
+        "margin": null,
+        "detail": "The wired network is not on a Public profile.",
+        "fix": ""
+      },
+      {
+        "id": "lan_eee",
+        "section": "lan",
+        "title": "Energy-Efficient Ethernet off",
+        "status": "PASS",
+        "value": "off",
+        "limit": "off",
+        "margin": null,
+        "detail": "Energy-Efficient Ethernet is off.",
+        "fix": ""
+      },
+      {
+        "id": "hw_power",
+        "section": "hardware",
+        "title": "Power plan and mains power",
+        "status": "PASS",
+        "value": "High performance, mains",
+        "limit": "High performance or Ultimate",
+        "margin": null,
+        "detail": "Power plan keeps the CPU at full speed.",
+        "fix": ""
+      },
+      {
+        "id": "hw_pending_reboot",
+        "section": "hardware",
+        "title": "No reboot pending",
+        "status": "PASS",
+        "value": "none pending",
+        "limit": "none",
+        "margin": null,
+        "detail": "No restart is waiting.",
+        "fix": ""
+      },
+      {
+        "id": "sw_background",
+        "section": "software",
+        "title": "Background apps",
+        "status": "WARN",
+        "value": "2 running",
+        "limit": "none",
+        "margin": null,
+        "detail": "These programs compete for CPU, GPU or network: Discord, chrome.",
+        "fix": "Close: Discord, chrome."
+      },
+      {
+        "id": "sender_realtime",
+        "section": "sender",
+        "title": "Sender encode in real time",
+        "status": "PASS",
+        "value": "1.01 x",
+        "limit": ">= 0.97 x",
+        "margin": 1.04,
+        "detail": "One 1080p60 SpeedHQ encode kept up with real time (slowest 1.01 x). Unpaced it ran at 1.99 x real time.",
+        "fix": ""
+      },
+      {
+        "id": "sender_cpu",
+        "section": "sender",
+        "title": "CPU load during sender test",
+        "status": "PASS",
+        "value": "48 %",
+        "limit": "< 70 %",
+        "margin": 1.46,
+        "detail": "CPU p95 while the game/observer client and one 1080p60 SpeedHQ encode ran together. Peak 55 %.",
+        "fix": ""
+      },
+      {
+        "id": "sender_throttle",
+        "section": "sender",
+        "title": "CPU clock throttling",
+        "status": "PASS",
+        "value": "8 % drop",
+        "limit": "<= 15 %",
+        "margin": 1.95,
+        "detail": "CPU performance went from 104 % at the start to 96 % at its lowest.",
+        "fix": ""
+      }
+    ],
+    "settings": [
+      {
+        "id": "power_plan",
+        "label": "Windows power plan",
+        "value": "High performance (or Ultimate), on mains power, sleep off",
+        "why": "The default Balanced plan lets the CPU clock drop under bursty live-video load."
+      }
+    ],
+    "manual_checks": [
+      {
+        "id": "mc_obs_wait",
+        "text": "Leave Run-Observer.cmd waiting until the prod PC has finished its LAN test (Run-ShowReady.cmd -LanHosts <this PC's IP>,<other observer's IP>)."
+      },
+      {
+        "id": "mc_obs_sender",
+        "text": "Before show day, install the NDI/OMT sender (or turn on NDI/OMT output in the observer client) and check that the feed arrives in vMix/OBS on the prod PC."
+      },
+      {
+        "id": "mc_obs_rehearsal",
+        "text": "Run a 30-minute rehearsal with the game/observer client and the real NDI/OMT output; watch for dropped frames on the prod PC."
+      }
+    ],
+    "calc": {},
+    "errors": []
+  }
+}

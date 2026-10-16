@@ -1,0 +1,131 @@
+﻿{
+    "os":  {
+               "caption":  "Microsoft Windows 11 Pro",
+               "version":  "10.0.26200",
+               "build":  "26200"
+           },
+    "computer":  {
+                     "name":  "THOMASFRAMEWORK",
+                     "manufacturer":  "Framework",
+                     "model":  "Laptop (13th Gen Intel Core)",
+                     "is_laptop":  true
+                 },
+    "cpu":  {
+                "name":  "13th Gen Intel(R) Core(TM) i5-1340P",
+                "cores":  12,
+                "threads":  16,
+                "max_mhz":  1900
+            },
+    "ram_gb":  13.7,
+    "gpus":  [
+                 {
+                     "name":  "Intel(R) UHD Graphics",
+                     "vendor":  "Intel",
+                     "integrated":  true,
+                     "driver_version":  "32.0.101.7088",
+                     "nvidia_driver":  null,
+                     "driver_date":  "2026-06-17",
+                     "vram_gb":  null
+                 }
+             ],
+    "nics":  [
+                 {
+                     "name":  "vEthernet (WSL (Hyper-V firewall))",
+                     "description":  "Hyper-V Virtual Ethernet Adapter #2",
+                     "status":  "Up",
+                     "link_mbps":  10000,
+                     "kind":  "virtual",
+                     "default_route":  false,
+                     "ipv4":  [
+                                  "172.22.224.1"
+                              ],
+                     "network_category":  null,
+                     "eee":  "unknown"
+                 },
+                 {
+                     "name":  "vEthernet (Default Switch)",
+                     "description":  "Hyper-V Virtual Ethernet Adapter",
+                     "status":  "Up",
+                     "link_mbps":  10000,
+                     "kind":  "virtual",
+                     "default_route":  false,
+                     "ipv4":  [
+                                  "172.31.48.1"
+                              ],
+                     "network_category":  null,
+                     "eee":  "unknown"
+                 },
+                 {
+                     "name":  "WiFi",
+                     "description":  "Intel(R) Wi-Fi 6E AX210 160MHz",
+                     "status":  "Up",
+                     "link_mbps":  735,
+                     "kind":  "wifi",
+                     "default_route":  true,
+                     "ipv4":  [
+                                  "192.168.0.2"
+                              ],
+                     "network_category":  "Public",
+                     "eee":  "unknown"
+                 },
+                 {
+                     "name":  "Bluetooth Network Connection",
+                     "description":  "Bluetooth Device (Personal Area Network)",
+                     "status":  "Disconnected",
+                     "link_mbps":  null,
+                     "kind":  "virtual",
+                     "default_route":  false,
+                     "ipv4":  [
+                                  "169.254.25.101"
+                              ],
+                     "network_category":  null,
+                     "eee":  "unknown"
+                 }
+             ],
+    "power":  {
+                  "plan_guid":  "381b4222-f694-41f0-9685-ff5bb260df2e",
+                  "plan":  "balanced",
+                  "on_battery":  false,
+                  "battery_pct":  99
+              },
+    "disk":  {
+                 "system_drive":  "C:",
+                 "free_gb":  408.1,
+                 "total_gb":  930.4
+             },
+    "software":  {
+                     "vmix":  null,
+                     "obs":  "32.1.2",
+                     "ndi_runtime":  null,
+                     "ndi_tools":  null,
+                     "distroav":  null,
+                     "omt":  null
+                 },
+    "windows":  {
+                    "hags":  "unknown",
+                    "game_mode":  "off",
+                    "pending_reboot":  true,
+                    "firewall_profiles":  [
+                                              {
+                                                  "name":  "Domain",
+                                                  "enabled":  true
+                                              },
+                                              {
+                                                  "name":  "Private",
+                                                  "enabled":  true
+                                              },
+                                              {
+                                                  "name":  "Public",
+                                                  "enabled":  true
+                                              }
+                                          ]
+                },
+    "processes":  {
+                      "running":  [
+                                      "chrome"
+                                  ]
+                  },
+    "errors":  [
+
+               ]
+}

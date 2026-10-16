@@ -1,0 +1,39 @@
+{
+  "language": {
+    "ui": "en-US",
+    "keep_input": [
+      "ko-KR"
+    ]
+  },
+  "disk": {
+    "warn_gb": 50,
+    "fail_gb": 20
+  },
+  "updates": {
+    "pause_days": 7
+  },
+  "power": {
+    "prefer": "ultimate"
+  },
+  "drivers": {
+    "nvidia_min": "570.00",
+    "max_age_days": 365
+  },
+  "startup": {
+    "keep_patterns": "SecurityHealth|Windows ?Defender|MsMpEng|AhnLab V3|V3 ?Lite|V3UI|V3L|ESET|egui|Kaspersky|avp\\.exe|Norton|McAfee|Bitdefender|Avast|AVG|Malwarebytes|RtkAud|Realtek|RTHDVCPL|Waves|MaxxAudio|Nahimic|Dolby|Sonic ?Studio|NVIDIA|NvContainer|AMD|Radeon|IGCC|igfx|Intel\\(R\\) Graphics|Synaptics|ELAN|Logitech|LGHUB|Razer|SteelSeries|Corsair|iCUE|Wooting|Bluetooth|ctfmon|IME|NDI|\\bOMT\\b|vMix|obs64|OBS Studio|Elgato|Stream ?Deck|Blackmagic|Desktop Video|Magewell|AJA|AnyDesk|TeamViewer|Parsec|RustDesk|Splashtop|Chrome Remote|vgtray|Vanguard|FACEIT|EasyAntiCheat|BattlEye|BEService",
+    "disable_patterns": ".*"
+  },
+  "background": {
+    "close_patterns": "^(chrome|msedge|firefox|whale|opera|brave|OneDrive|Teams|ms-teams|Spotify|Dropbox|GoogleDriveFS|iCloudDrive|iCloudServices|CCXProcess|Creative Cloud|AdobeIPCBroker|Acrobat|AcroCEF|KakaoTalk|LINE|Skype|Zoom|Everything|GoogleUpdate|MicrosoftEdgeUpdate|AdobeARM|jusched|nProtect.*|npkcmsvc|TouchEn.*|Veraport.*|IPinside.*|Delfino.*|Wizvera.*|CrossEX.*|INISAFE.*|MagicLine.*|KeySharp.*|AnySign.*|ASTx.*)$",
+    "close_prod_only_patterns": "^(steam|steamwebhelper|EpicGamesLauncher|EpicWebHelper|Battle\\.net|RiotClientServices|RiotClientUx|RiotClientUxRender|LeagueClient|LeagueClientUx|Origin|EADesktop|upc|GalaxyClient)$",
+    "ask_patterns": "^(Discord|Slack|WhatsApp|Telegram|KakaoTalk)$",
+    "never_close_patterns": "^(System|Idle|smss|csrss|wininit|winlogon|services|lsass|svchost|explorer|dwm|fontdrvhost|sihost|ctfmon|RuntimeBroker|SearchHost|StartMenuExperienceHost|ShellExperienceHost|TextInputHost|SecurityHealth.*|MsMpEng|NisSrv|powershell|pwsh|cmd|conhost|WindowsTerminal|OpenConsole|ffmpeg|iperf3|vMix.*|obs64|obs32|NDI.*|OMT.*|AnyDesk|TeamViewer.*|parsecd|rustdesk|vgtray|vgc|FACEIT.*|EasyAntiCheat.*|BEService.*|League of Legends|VALORANT.*|cs2|dota2)$"
+  },
+  "network": {
+    "offer_disable_wifi_when_wired": true,
+    "offer_disable_virtual_adapters": true
+  },
+  "notifications": {
+    "disable_toasts": true
+  }
+}

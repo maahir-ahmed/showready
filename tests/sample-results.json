@@ -1,0 +1,2183 @@
+{
+  "schema": "showready/1",
+  "meta": {
+    "tool_version": "1.2.0",
+    "role": "prod",
+    "mode": "quick",
+    "started": "2026-10-16T15:12:08+09:00",
+    "finished": "2026-10-16T15:15:55+09:00",
+    "computer": "SHOWPC-01",
+    "duration_s": 227,
+    "srt_host": "",
+    "lan_hosts": [],
+    "skipped": [],
+    "steps": [
+      {
+        "key": "hardware",
+        "title": "Hardware",
+        "status": "ok",
+        "seconds": 6.9,
+        "message": null,
+        "collector_errors": 0
+      },
+      {
+        "key": "network",
+        "title": "Network",
+        "status": "ok",
+        "seconds": 98.4,
+        "message": null,
+        "collector_errors": 0
+      },
+      {
+        "key": "lan",
+        "title": "LAN",
+        "status": "ok",
+        "seconds": 36.8,
+        "message": null,
+        "collector_errors": 0
+      },
+      {
+        "key": "load",
+        "title": "Load test",
+        "status": "ok",
+        "seconds": 78.9,
+        "message": null,
+        "collector_errors": 0
+      },
+      {
+        "key": "verdict",
+        "title": "Verdict",
+        "status": "ok",
+        "seconds": 0.4,
+        "message": null,
+        "collector_errors": 0
+      }
+    ],
+    "lib_errors": []
+  },
+  "profile": {
+    "name": "Gen.G Academy Seoul -> France",
+    "inputs": {
+      "count": 2,
+      "protocol": "OMT",
+      "resolution": "1920x1080",
+      "fps": 60,
+      "mbps_per_feed": {
+        "OMT": 200,
+        "NDI": 150,
+        "NDI-HX3": 62
+      }
+    },
+    "outputs": [
+      {
+        "id": "srt",
+        "label": "SRT to France",
+        "protocol": "SRT",
+        "video_kbps": 10000,
+        "audio_kbps": 192
+      },
+      {
+        "id": "youtube",
+        "label": "YouTube",
+        "protocol": "RTMP",
+        "video_kbps": 17000,
+        "audio_kbps": 128
+      },
+      {
+        "id": "twitch",
+        "label": "Twitch",
+        "protocol": "RTMP",
+        "video_kbps": 6000,
+        "audio_kbps": 160
+      }
+    ],
+    "srt_destination_host": ""
+  },
+  "hardware": {
+    "os": {
+      "caption": "Microsoft Windows 11 Pro",
+      "version": "10.0.26200",
+      "build": 26200
+    },
+    "computer": {
+      "name": "SHOWPC-01",
+      "manufacturer": "ASUS",
+      "model": "ProArt Station PD5",
+      "is_laptop": false
+    },
+    "cpu": {
+      "name": "Intel(R) Core(TM) i7-13700K",
+      "cores": 16,
+      "threads": 24,
+      "max_mhz": 3400
+    },
+    "ram_gb": 64,
+    "gpus": [
+      {
+        "name": "NVIDIA GeForce RTX 4070",
+        "vendor": "NVIDIA",
+        "integrated": false,
+        "driver_version": "32.0.15.8129",
+        "nvidia_driver": 581.29,
+        "driver_date": "2026-05-27",
+        "vram_gb": 12
+      },
+      {
+        "name": "Intel(R) UHD Graphics 770",
+        "vendor": "Intel",
+        "integrated": true,
+        "driver_version": "32.0.101.6913",
+        "nvidia_driver": null,
+        "driver_date": "2026-03-04",
+        "vram_gb": 0.1
+      }
+    ],
+    "nics": [
+      {
+        "name": "Ethernet 2",
+        "description": "Realtek Gaming 2.5GbE Family Controller",
+        "status": "Up",
+        "link_mbps": 2500,
+        "kind": "wired",
+        "default_route": true,
+        "ipv4": ["192.168.10.20"],
+        "network_category": "Private",
+        "eee": "off"
+      },
+      {
+        "name": "Wi-Fi",
+        "description": "Intel(R) Wi-Fi 6E AX211 160MHz",
+        "status": "Disconnected",
+        "link_mbps": null,
+        "kind": "wifi",
+        "default_route": false,
+        "ipv4": [],
+        "network_category": null,
+        "eee": "unknown"
+      },
+      {
+        "name": "vEthernet (Default Switch)",
+        "description": "Hyper-V Virtual Ethernet Adapter",
+        "status": "Up",
+        "link_mbps": 10000,
+        "kind": "virtual",
+        "default_route": false,
+        "ipv4": ["172.28.64.1"],
+        "network_category": "Private",
+        "eee": "unknown"
+      },
+      {
+        "name": "vEthernet (WSL (Hyper-V firewall))",
+        "description": "Hyper-V Virtual Ethernet Adapter #2",
+        "status": "Up",
+        "link_mbps": 10000,
+        "kind": "virtual",
+        "default_route": false,
+        "ipv4": ["172.30.16.1"],
+        "network_category": "Private",
+        "eee": "unknown"
+      }
+    ],
+    "power": {
+      "plan_guid": "8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c",
+      "plan": "high_performance",
+      "on_battery": false,
+      "battery_pct": null
+    },
+    "disk": {
+      "system_drive": "C:",
+      "free_gb": 412.6,
+      "total_gb": 931.5
+    },
+    "software": {
+      "vmix": "28.0.0.45",
+      "obs": "31.0.2",
+      "ndi_runtime": "6.1.1",
+      "ndi_tools": "6.1.1",
+      "distroav": "6.1.1",
+      "omt": "1.0.0"
+    },
+    "windows": {
+      "hags": "on",
+      "game_mode": "on",
+      "pending_reboot": false,
+      "firewall_profiles": [
+        {
+          "name": "Domain",
+          "enabled": true
+        },
+        {
+          "name": "Private",
+          "enabled": true
+        },
+        {
+          "name": "Public",
+          "enabled": true
+        }
+      ]
+    },
+    "processes": {
+      "running": ["vMix64", "obs64"]
+    },
+    "errors": []
+  },
+  "network": {
+    "public": {
+      "ip": "203.0.113.42",
+      "city": "Seoul",
+      "country": "KR",
+      "org": "AS4766 Korea Telecom"
+    },
+    "targets": [
+      {
+        "name": "Orange (FR ISP)",
+        "host": "orange.fr",
+        "group": "france",
+        "service": null,
+        "ip": "203.0.113.90",
+        "icmp": {
+          "sent": 30,
+          "received": 30,
+          "loss_pct": 0,
+          "min_ms": 236,
+          "p50_ms": 247,
+          "p95_ms": 268,
+          "p99_ms": 279,
+          "max_ms": 279,
+          "jitter_ms": 13.41,
+          "samples_ms": [265, 258, 240, 248, 237, 245, 239, 247, 238, 261, 249, 263, 236, 268, 238, 250, 248, 247, 236, 241, 242, 253, 243, 279, 244, 256, 255, 237, 252, 246]
+        },
+        "tcp": {
+          "port": 443,
+          "attempts": 8,
+          "ok": 8,
+          "p50_ms": 253,
+          "p95_ms": 271,
+          "samples_ms": [250.1, 253, 251.6, 247.6, 255.5, 257.7, 271, 263.8]
+        }
+      },
+      {
+        "name": "Free (FR ISP)",
+        "host": "free.fr",
+        "group": "france",
+        "service": null,
+        "ip": "203.0.113.91",
+        "icmp": {
+          "sent": 30,
+          "received": 29,
+          "loss_pct": 3.3,
+          "min_ms": 241,
+          "p50_ms": 252,
+          "p95_ms": 276,
+          "p99_ms": 283,
+          "max_ms": 283,
+          "jitter_ms": 12.11,
+          "samples_ms": [249, 257, 251, 246, 270, 247, 242, 241, 256, 250, 253, 268, 243, 276, 261, 255, 283, 263, 259, 265, 252, 253, 245, 252, 273, 243, 248, null, 244, 242]
+        },
+        "tcp": {
+          "port": 443,
+          "attempts": 8,
+          "ok": 8,
+          "p50_ms": 259,
+          "p95_ms": 280,
+          "samples_ms": [271, 260.4, 259, 262.1, 257.9, 280, 256.8, 253.5]
+        }
+      },
+      {
+        "name": "Moji (Paris DC)",
+        "host": "iperf3.moji.fr",
+        "group": "france",
+        "service": null,
+        "ip": "198.51.100.40",
+        "icmp": {
+          "sent": 30,
+          "received": 30,
+          "loss_pct": 0,
+          "min_ms": 229,
+          "p50_ms": 241,
+          "p95_ms": 265,
+          "p99_ms": 271,
+          "max_ms": 271,
+          "jitter_ms": 12.03,
+          "samples_ms": [236, 237, 248, 229, 231, 246, 257, 232, 234, 240, 242, 252, 259, 265, 244, 235, 229, 262, 254, 232, 230, 239, 230, 271, 242, 233, 245, 241, 250, 241]
+        },
+        "tcp": {
+          "port": 5201,
+          "attempts": 8,
+          "ok": 8,
+          "p50_ms": 246,
+          "p95_ms": 262,
+          "samples_ms": [242.6, 246, 244.6, 239.7, 256.2, 262, 250.5, 248.2]
+        }
+      },
+      {
+        "name": "MilkyWan (Paris DC)",
+        "host": "speedtest.milkywan.fr",
+        "group": "france",
+        "service": null,
+        "ip": "198.51.100.41",
+        "icmp": {
+          "sent": 30,
+          "received": 30,
+          "loss_pct": 0,
+          "min_ms": 228,
+          "p50_ms": 239,
+          "p95_ms": 262,
+          "p99_ms": 268,
+          "max_ms": 268,
+          "jitter_ms": 11.76,
+          "samples_ms": [252, 232, 233, 237, 259, 239, 256, 230, 234, 243, 238, 235, 240, 231, 244, 254, 262, 230, 228, 249, 240, 228, 229, 229, 246, 247, 239, 236, 268, 241]
+        },
+        "tcp": {
+          "port": 443,
+          "attempts": 8,
+          "ok": 8,
+          "p50_ms": 244,
+          "p95_ms": 259,
+          "samples_ms": [237.4, 240.7, 253.1, 248.2, 246, 244, 243, 259]
+        }
+      },
+      {
+        "name": "Scaleway (Paris DC)",
+        "host": "ping.online.net",
+        "group": "france",
+        "service": null,
+        "ip": "198.51.100.42",
+        "icmp": {
+          "sent": 30,
+          "received": 30,
+          "loss_pct": 0,
+          "min_ms": 233,
+          "p50_ms": 245,
+          "p95_ms": 274,
+          "p99_ms": 280,
+          "max_ms": 280,
+          "jitter_ms": 15.45,
+          "samples_ms": [258, 280, 246, 250, 261, 233, 241, 264, 239, 247, 274, 234, 245, 240, 248, 233, 245, 238, 267, 270, 251, 236, 234, 243, 253, 235, 256, 237, 244, 236]
+        },
+        "tcp": {
+          "port": 5201,
+          "attempts": 8,
+          "ok": 8,
+          "p50_ms": 250,
+          "p95_ms": 268,
+          "samples_ms": [250, 245.3, 246.6, 248.7, 253.6, 268, 252.1, 260.5]
+        }
+      },
+      {
+        "name": "Bouygues (Paris)",
+        "host": "paris.bbr.iperf.bytel.fr",
+        "group": "france",
+        "service": null,
+        "ip": "198.51.100.43",
+        "icmp": {
+          "sent": 30,
+          "received": 0,
+          "loss_pct": 100,
+          "min_ms": null,
+          "p50_ms": null,
+          "p95_ms": null,
+          "p99_ms": null,
+          "max_ms": null,
+          "jitter_ms": null,
+          "samples_ms": [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null],
+          "blocked": true
+        },
+        "tcp": {
+          "port": 9200,
+          "attempts": 8,
+          "ok": 8,
+          "p50_ms": 255,
+          "p95_ms": 291,
+          "samples_ms": [291, 255, 256.7, 254.1, 252.7, 258.8, 274.1, 248.8]
+        }
+      },
+      {
+        "name": "AWS eu-west-3 (Paris)",
+        "host": "ec2.eu-west-3.amazonaws.com",
+        "group": "france",
+        "service": null,
+        "ip": "198.51.100.44",
+        "icmp": {
+          "sent": 30,
+          "received": 0,
+          "loss_pct": 100,
+          "min_ms": null,
+          "p50_ms": null,
+          "p95_ms": null,
+          "p99_ms": null,
+          "max_ms": null,
+          "jitter_ms": null,
+          "samples_ms": [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null],
+          "blocked": true
+        },
+        "tcp": {
+          "port": 443,
+          "attempts": 8,
+          "ok": 8,
+          "p50_ms": 244,
+          "p95_ms": 272,
+          "samples_ms": [238.3, 272, 243.2, 241.5, 244, 245.6, 247.2, 259.1]
+        }
+      },
+      {
+        "name": "Twitch ingest Paris",
+        "host": "euw30.contribute.live-video.net",
+        "group": "france",
+        "service": null,
+        "ip": "198.51.100.45",
+        "icmp": {
+          "sent": 30,
+          "received": 0,
+          "loss_pct": 100,
+          "min_ms": null,
+          "p50_ms": null,
+          "p95_ms": null,
+          "p99_ms": null,
+          "max_ms": null,
+          "jitter_ms": null,
+          "samples_ms": [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null],
+          "blocked": true
+        },
+        "tcp": {
+          "port": 1935,
+          "attempts": 8,
+          "ok": 8,
+          "p50_ms": 262,
+          "p95_ms": 288,
+          "samples_ms": [259.6, 265.4, 260.9, 276.3, 288, 256.9, 263.4, 262]
+        }
+      },
+      {
+        "name": "Twitch ingest Seoul",
+        "host": "apn20.contribute.live-video.net",
+        "group": "ingest",
+        "service": "twitch",
+        "ip": "198.51.100.60",
+        "icmp": {
+          "sent": 30,
+          "received": 0,
+          "loss_pct": 100,
+          "min_ms": null,
+          "p50_ms": null,
+          "p95_ms": null,
+          "p99_ms": null,
+          "max_ms": null,
+          "jitter_ms": null,
+          "samples_ms": [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null],
+          "blocked": true
+        },
+        "tcp": {
+          "port": 1935,
+          "attempts": 8,
+          "ok": 8,
+          "p50_ms": 9,
+          "p95_ms": 14,
+          "samples_ms": [11.6, 13, 3.8, 5.5, 7.3, 9, 13, 14]
+        }
+      },
+      {
+        "name": "Twitch ingest Tokyo",
+        "host": "apn10.contribute.live-video.net",
+        "group": "ingest",
+        "service": "twitch",
+        "ip": "198.51.100.61",
+        "icmp": {
+          "sent": 30,
+          "received": 0,
+          "loss_pct": 100,
+          "min_ms": null,
+          "p50_ms": null,
+          "p95_ms": null,
+          "p99_ms": null,
+          "max_ms": null,
+          "jitter_ms": null,
+          "samples_ms": [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null],
+          "blocked": true
+        },
+        "tcp": {
+          "port": 1935,
+          "attempts": 8,
+          "ok": 8,
+          "p50_ms": 38,
+          "p95_ms": 46,
+          "samples_ms": [35.7, 38, 44.6, 40.6, 36.5, 46, 43.7, 33.7]
+        }
+      },
+      {
+        "name": "YouTube ingest (nearest)",
+        "host": "a.rtmp.youtube.com",
+        "group": "ingest",
+        "service": "youtube",
+        "ip": "203.0.113.120",
+        "icmp": {
+          "sent": 30,
+          "received": 30,
+          "loss_pct": 0,
+          "min_ms": 3,
+          "p50_ms": 4,
+          "p95_ms": 6,
+          "p99_ms": 9,
+          "max_ms": 9,
+          "jitter_ms": 1.24,
+          "samples_ms": [4, 4, 3, 6, 4, 3, 4, 9, 5, 4, 4, 4, 3, 5, 5, 6, 4, 5, 5, 4, 3, 3, 3, 3, 6, 3, 4, 4, 3, 4]
+        },
+        "tcp": {
+          "port": 1935,
+          "attempts": 8,
+          "ok": 8,
+          "p50_ms": 5,
+          "p95_ms": 11,
+          "samples_ms": [7, -1.7, 2.4, 7.5, 11, 8.7, 5, 3.8]
+        }
+      }
+    ],
+    "traces": [
+      {
+        "host": "orange.fr",
+        "hops": [
+          {
+            "hop": 1,
+            "ip": "192.168.10.1",
+            "rtt_ms": [1, 1, 1]
+          },
+          {
+            "hop": 2,
+            "ip": "10.250.0.1",
+            "rtt_ms": [2, 2, 3]
+          },
+          {
+            "hop": 3,
+            "ip": "203.0.113.1",
+            "rtt_ms": [3, 3, 3]
+          },
+          {
+            "hop": 4,
+            "ip": "198.51.100.17",
+            "rtt_ms": [4, 4, 5]
+          },
+          {
+            "hop": 5,
+            "ip": "198.51.100.58",
+            "rtt_ms": [5, 5, 5]
+          },
+          {
+            "hop": 6,
+            "ip": null,
+            "rtt_ms": [null, null, null]
+          },
+          {
+            "hop": 7,
+            "ip": "198.51.100.121",
+            "rtt_ms": [44, 44, 45]
+          },
+          {
+            "hop": 8,
+            "ip": "198.51.100.122",
+            "rtt_ms": [134, 133, 134]
+          },
+          {
+            "hop": 9,
+            "ip": "203.0.113.200",
+            "rtt_ms": [134, 135, 134]
+          },
+          {
+            "hop": 10,
+            "ip": null,
+            "rtt_ms": [null, null, null]
+          },
+          {
+            "hop": 11,
+            "ip": "198.51.100.210",
+            "rtt_ms": [236, 237, 236]
+          },
+          {
+            "hop": 12,
+            "ip": "203.0.113.77",
+            "rtt_ms": [241, 242, 241]
+          },
+          {
+            "hop": 13,
+            "ip": "203.0.113.90",
+            "rtt_ms": [247, 246, 247]
+          }
+        ]
+      }
+    ],
+    "udp": [
+      {
+        "host": "iperf3.moji.fr",
+        "port": 5204,
+        "target_mbps": 12.5,
+        "seconds": 20,
+        "packet_bytes": 1316,
+        "packets": 23732,
+        "lost": 171,
+        "loss_pct": 0.72,
+        "jitter_ms": 1.03,
+        "intervals": [
+          {
+            "t": 1,
+            "packets": 1183,
+            "lost": 3
+          },
+          {
+            "t": 2,
+            "packets": 1193,
+            "lost": 8
+          },
+          {
+            "t": 3,
+            "packets": 1191,
+            "lost": 2
+          },
+          {
+            "t": 4,
+            "packets": 1185,
+            "lost": 1
+          },
+          {
+            "t": 5,
+            "packets": 1185,
+            "lost": 21
+          },
+          {
+            "t": 6,
+            "packets": 1187,
+            "lost": 1
+          },
+          {
+            "t": 7,
+            "packets": 1184,
+            "lost": 7
+          },
+          {
+            "t": 8,
+            "packets": 1187,
+            "lost": 15
+          },
+          {
+            "t": 9,
+            "packets": 1186,
+            "lost": 2
+          },
+          {
+            "t": 10,
+            "packets": 1188,
+            "lost": 11
+          },
+          {
+            "t": 11,
+            "packets": 1187,
+            "lost": 7
+          },
+          {
+            "t": 12,
+            "packets": 1182,
+            "lost": 3
+          },
+          {
+            "t": 13,
+            "packets": 1188,
+            "lost": 3
+          },
+          {
+            "t": 14,
+            "packets": 1187,
+            "lost": 22
+          },
+          {
+            "t": 15,
+            "packets": 1191,
+            "lost": 14
+          },
+          {
+            "t": 16,
+            "packets": 1184,
+            "lost": 26
+          },
+          {
+            "t": 17,
+            "packets": 1186,
+            "lost": 7
+          },
+          {
+            "t": 18,
+            "packets": 1184,
+            "lost": 2
+          },
+          {
+            "t": 19,
+            "packets": 1186,
+            "lost": 3
+          },
+          {
+            "t": 20,
+            "packets": 1188,
+            "lost": 13
+          }
+        ],
+        "worst_interval_loss_pct": 2.2,
+        "lossy_intervals": 0,
+        "error": null
+      },
+      {
+        "host": "speedtest.milkywan.fr",
+        "port": 9211,
+        "target_mbps": 12.5,
+        "seconds": 20,
+        "packet_bytes": 1316,
+        "packets": 23759,
+        "lost": 206,
+        "loss_pct": 0.87,
+        "jitter_ms": 0.5,
+        "intervals": [
+          {
+            "t": 1,
+            "packets": 1191,
+            "lost": 22
+          },
+          {
+            "t": 2,
+            "packets": 1189,
+            "lost": 7
+          },
+          {
+            "t": 3,
+            "packets": 1188,
+            "lost": 41
+          },
+          {
+            "t": 4,
+            "packets": 1185,
+            "lost": 9
+          },
+          {
+            "t": 5,
+            "packets": 1193,
+            "lost": 8
+          },
+          {
+            "t": 6,
+            "packets": 1189,
+            "lost": 20
+          },
+          {
+            "t": 7,
+            "packets": 1192,
+            "lost": 2
+          },
+          {
+            "t": 8,
+            "packets": 1185,
+            "lost": 6
+          },
+          {
+            "t": 9,
+            "packets": 1190,
+            "lost": 1
+          },
+          {
+            "t": 10,
+            "packets": 1188,
+            "lost": 3
+          },
+          {
+            "t": 11,
+            "packets": 1185,
+            "lost": 7
+          },
+          {
+            "t": 12,
+            "packets": 1192,
+            "lost": 0
+          },
+          {
+            "t": 13,
+            "packets": 1184,
+            "lost": 9
+          },
+          {
+            "t": 14,
+            "packets": 1184,
+            "lost": 2
+          },
+          {
+            "t": 15,
+            "packets": 1185,
+            "lost": 27
+          },
+          {
+            "t": 16,
+            "packets": 1185,
+            "lost": 0
+          },
+          {
+            "t": 17,
+            "packets": 1187,
+            "lost": 3
+          },
+          {
+            "t": 18,
+            "packets": 1190,
+            "lost": 13
+          },
+          {
+            "t": 19,
+            "packets": 1188,
+            "lost": 4
+          },
+          {
+            "t": 20,
+            "packets": 1189,
+            "lost": 22
+          }
+        ],
+        "worst_interval_loss_pct": 3.45,
+        "lossy_intervals": 0,
+        "error": null
+      },
+      {
+        "host": "ping.online.net",
+        "port": null,
+        "target_mbps": 12.5,
+        "seconds": 20,
+        "packet_bytes": 1316,
+        "packets": 0,
+        "lost": 0,
+        "loss_pct": null,
+        "jitter_ms": null,
+        "intervals": [],
+        "worst_interval_loss_pct": null,
+        "lossy_intervals": 0,
+        "error": "All 10 iperf3 server ports were busy (12 tries). Try again in a few minutes."
+      }
+    ],
+    "upload": {
+      "method": "cloudflare",
+      "mbps": 320.4,
+      "streams": 4,
+      "bytes": 83886080,
+      "seconds": 2.09,
+      "error": null
+    },
+    "errors": []
+  },
+  "lan": {
+    "adapter": {
+      "name": "Ethernet 2",
+      "description": "Realtek Gaming 2.5GbE Family Controller",
+      "kind": "wired",
+      "chosen_because": "wired",
+      "ipv4": "192.168.10.20",
+      "prefix_length": 24,
+      "gateway": "192.168.10.1",
+      "link_mbps": 2500,
+      "local_ips": ["192.168.10.20", "172.28.64.1", "172.30.16.1"]
+    },
+    "mdns": {
+      "query_ok": true,
+      "listen_ms": 3000,
+      "methods": [
+        {
+          "name": "unicast",
+          "ok": true,
+          "answers": 9,
+          "error": null
+        },
+        {
+          "name": "windows",
+          "ok": true,
+          "answers": 6,
+          "error": null
+        }
+      ],
+      "responders": ["192.168.10.20", "192.168.10.31", "192.168.10.32", "192.168.10.33", "192.168.10.40", "192.168.10.70"],
+      "service_types_seen": ["_ndi._tcp", "_omt._tcp", "_workstation._tcp", "_smb._tcp", "_airplay._tcp", "_http._tcp"]
+    },
+    "sources": [
+      {
+        "protocol": "NDI",
+        "name": "SHOWPC-01 (vMix Output 1)",
+        "machine": "SHOWPC-01",
+        "source": "vMix Output 1",
+        "host": "SHOWPC-01.local",
+        "port": 5961,
+        "ip": "192.168.10.20",
+        "local": true,
+        "found_by": ["windows"]
+      },
+      {
+        "protocol": "OMT",
+        "name": "GAMEPC-A (Team Blue POV)",
+        "machine": "GAMEPC-A",
+        "source": "Team Blue POV",
+        "host": "GAMEPC-A.local",
+        "port": 6400,
+        "ip": "192.168.10.31",
+        "local": false,
+        "found_by": ["unicast", "windows"]
+      },
+      {
+        "protocol": "OMT",
+        "name": "GAMEPC-B (Team Red POV)",
+        "machine": "GAMEPC-B",
+        "source": "Team Red POV",
+        "host": "GAMEPC-B.local",
+        "port": 6401,
+        "ip": "192.168.10.32",
+        "local": false,
+        "found_by": ["unicast", "windows"]
+      }
+    ],
+    "discovery_servers": {
+      "ndi": [],
+      "omt": [],
+      "ndi_config_path": null,
+      "omt_settings_path": null
+    },
+    "sweep": {
+      "cidr": "192.168.10.0/24",
+      "scanned": 254,
+      "alive": 12,
+      "seconds": 7.4,
+      "skipped_reason": null
+    },
+    "hosts": [
+      {
+        "ip": "192.168.10.1",
+        "mac": "78-8a-20-4e-91-0b",
+        "vendor": "Ubiquiti",
+        "category": "network",
+        "randomized_mac": false,
+        "ping_ms": 0.6,
+        "is_self": false,
+        "is_gateway": true,
+        "sources": []
+      },
+      {
+        "ip": "192.168.10.2",
+        "mac": "f4-cf-e2-7a-31-c0",
+        "vendor": "Cisco",
+        "category": "network",
+        "randomized_mac": false,
+        "ping_ms": 0.9,
+        "is_self": false,
+        "is_gateway": false,
+        "sources": []
+      },
+      {
+        "ip": "192.168.10.20",
+        "mac": "04-42-1a-5c-0e-77",
+        "vendor": "ASUS",
+        "category": "pc",
+        "randomized_mac": false,
+        "ping_ms": 0.1,
+        "is_self": true,
+        "is_gateway": false,
+        "sources": ["SHOWPC-01 (vMix Output 1)"]
+      },
+      {
+        "ip": "192.168.10.31",
+        "mac": "b0-83-fe-61-2d-aa",
+        "vendor": "Dell",
+        "category": "pc",
+        "randomized_mac": false,
+        "ping_ms": 0.5,
+        "is_self": false,
+        "is_gateway": false,
+        "sources": ["GAMEPC-A (Team Blue POV)"]
+      },
+      {
+        "ip": "192.168.10.32",
+        "mac": "3c-52-82-9a-b0-41",
+        "vendor": "HP",
+        "category": "pc",
+        "randomized_mac": false,
+        "ping_ms": 0.6,
+        "is_self": false,
+        "is_gateway": false,
+        "sources": ["GAMEPC-B (Team Red POV)"]
+      },
+      {
+        "ip": "192.168.10.33",
+        "mac": "f8-bc-12-0d-44-e9",
+        "vendor": "Dell",
+        "category": "pc",
+        "randomized_mac": false,
+        "ping_ms": 0.7,
+        "is_self": false,
+        "is_gateway": false,
+        "sources": []
+      },
+      {
+        "ip": "192.168.10.40",
+        "mac": "3c-22-fb-81-6a-d2",
+        "vendor": "Apple",
+        "category": "mobile",
+        "randomized_mac": false,
+        "ping_ms": null,
+        "is_self": false,
+        "is_gateway": false,
+        "sources": []
+      },
+      {
+        "ip": "192.168.10.50",
+        "mac": "b8-d7-af-4c-02-1e",
+        "vendor": "BirdDog",
+        "category": "broadcast",
+        "randomized_mac": false,
+        "ping_ms": 1.2,
+        "is_self": false,
+        "is_gateway": false,
+        "sources": []
+      },
+      {
+        "ip": "192.168.10.55",
+        "mac": "7c-2e-0d-3d-90-5a",
+        "vendor": "Blackmagic Design",
+        "category": "broadcast",
+        "randomized_mac": false,
+        "ping_ms": 1.0,
+        "is_self": false,
+        "is_gateway": false,
+        "sources": []
+      },
+      {
+        "ip": "192.168.10.60",
+        "mac": "00-1d-c1-4b-72-e8",
+        "vendor": "Audinate",
+        "category": "broadcast",
+        "randomized_mac": false,
+        "ping_ms": 1.1,
+        "is_self": false,
+        "is_gateway": false,
+        "sources": []
+      },
+      {
+        "ip": "192.168.10.70",
+        "mac": "00-11-32-a4-18-c3",
+        "vendor": "Synology",
+        "category": "other",
+        "randomized_mac": false,
+        "ping_ms": 1.4,
+        "is_self": false,
+        "is_gateway": false,
+        "sources": []
+      },
+      {
+        "ip": "192.168.10.88",
+        "mac": "da-a1-19-3c-52-0f",
+        "vendor": null,
+        "category": null,
+        "randomized_mac": true,
+        "ping_ms": null,
+        "is_self": false,
+        "is_gateway": false,
+        "sources": []
+      },
+      {
+        "ip": "192.168.10.91",
+        "mac": "50-c7-bf-2e-6b-14",
+        "vendor": "TP-Link",
+        "category": "network",
+        "randomized_mac": false,
+        "ping_ms": 2.1,
+        "is_self": false,
+        "is_gateway": false,
+        "sources": []
+      }
+    ],
+    "partners": [
+      {
+        "host": "192.168.10.31",
+        "ip": "192.168.10.31",
+        "port": 5201,
+        "origin": "auto",
+        "loopback": false,
+        "direction": "to_this_pc",
+        "tcp": {
+          "mbps": 941,
+          "retransmits": 0,
+          "seconds": 10,
+          "error": null
+        },
+        "udp": {
+          "target_mbps": 400,
+          "mbps": 399.6,
+          "packets": 357143,
+          "lost": 71,
+          "loss_pct": 0.02,
+          "jitter_ms": 0.04,
+          "seconds": 10,
+          "error": null
+        },
+        "error": null
+      },
+      {
+        "host": "192.168.10.32",
+        "ip": "192.168.10.32",
+        "port": 5201,
+        "origin": "auto",
+        "loopback": false,
+        "direction": "to_this_pc",
+        "tcp": {
+          "mbps": 937,
+          "retransmits": 3,
+          "seconds": 10,
+          "error": null
+        },
+        "udp": {
+          "target_mbps": 400,
+          "mbps": 399.4,
+          "packets": 357143,
+          "lost": 107,
+          "loss_pct": 0.03,
+          "jitter_ms": 0.05,
+          "seconds": 10,
+          "error": null
+        },
+        "error": null
+      }
+    ],
+    "test": {
+      "protocol": "OMT",
+      "per_feed_mbps": 200,
+      "target_mbps": 400,
+      "seconds": 10
+    },
+    "errors": [],
+    "combined": {
+      "hosts": ["192.168.10.31", "192.168.10.32"],
+      "seconds": 10,
+      "tcp": {
+        "mbps": 1874,
+        "per_host": [
+          {
+            "ip": "192.168.10.31",
+            "mbps": 941
+          },
+          {
+            "ip": "192.168.10.32",
+            "mbps": 933
+          }
+        ],
+        "error": null
+      },
+      "udp": {
+        "target_mbps": 800,
+        "mbps": 799.1,
+        "packets": 714286,
+        "lost": 143,
+        "loss_pct": 0.02,
+        "jitter_ms": 0.05,
+        "error": null
+      },
+      "error": null
+    }
+  },
+  "loadtest": {
+    "ffmpeg": {
+      "found": true,
+      "path": "bin\\ffmpeg.exe",
+      "version": "7.1.1-essentials_build"
+    },
+    "encoders": {
+      "available": ["h264_nvenc", "h264_qsv", "libx264"],
+      "tested": [
+        {
+          "name": "h264_nvenc",
+          "ok": true,
+          "error": null,
+          "error_lines": [],
+          "driver_required": null
+        },
+        {
+          "name": "h264_amf",
+          "ok": false,
+          "error": "[h264_amf] DLL amfrt64.dll failed to open",
+          "error_lines": ["[h264_amf] DLL amfrt64.dll failed to open"],
+          "driver_required": null
+        },
+        {
+          "name": "h264_qsv",
+          "ok": true,
+          "error": null,
+          "error_lines": [],
+          "driver_required": null
+        },
+        {
+          "name": "libx264",
+          "ok": true,
+          "error": null,
+          "error_lines": [],
+          "driver_required": null
+        }
+      ],
+      "chosen": "h264_nvenc"
+    },
+    "source": {
+      "codec": "speedhq",
+      "pix_fmt": "yuv422p",
+      "width": 1920,
+      "height": 1080,
+      "fps": 60,
+      "seconds": 4,
+      "file_mb": 61.3
+    },
+    "seconds": 45,
+    "streams": [
+      {
+        "role": "in-1",
+        "kind": "decode",
+        "codec": "speedhq",
+        "target_kbps": null,
+        "speed_min": 0.99,
+        "speed_p50": 1,
+        "fps_p50": 60,
+        "ok": true,
+        "error": null
+      },
+      {
+        "role": "in-2",
+        "kind": "decode",
+        "codec": "speedhq",
+        "target_kbps": null,
+        "speed_min": 0.99,
+        "speed_p50": 1,
+        "fps_p50": 60,
+        "ok": true,
+        "error": null
+      },
+      {
+        "role": "out-srt",
+        "kind": "encode",
+        "codec": "h264_nvenc",
+        "target_kbps": 10000,
+        "speed_min": 0.99,
+        "speed_p50": 1,
+        "fps_p50": 60,
+        "ok": true,
+        "error": null
+      },
+      {
+        "role": "out-youtube",
+        "kind": "encode",
+        "codec": "h264_nvenc",
+        "target_kbps": 17000,
+        "speed_min": 0.99,
+        "speed_p50": 1,
+        "fps_p50": 60,
+        "ok": true,
+        "error": null
+      },
+      {
+        "role": "out-twitch",
+        "kind": "encode",
+        "codec": "h264_nvenc",
+        "target_kbps": 6000,
+        "speed_min": 1,
+        "speed_p50": 1,
+        "fps_p50": 60,
+        "ok": true,
+        "error": null
+      }
+    ],
+    "system": {
+      "cpu_p50": 38.1,
+      "cpu_p95": 42.5,
+      "cpu_max": 48.6,
+      "perf_start": 106,
+      "perf_min": 100,
+      "perf_p50": 111,
+      "gpu_enc_p95": 36.5,
+      "gpu_dec_p95": 1.7,
+      "gpu_3d_p95": 5.8,
+      "mem_used_pct_max": 40.4,
+      "samples": [
+        {
+          "t": 1,
+          "cpu": 5.5,
+          "perf": 100,
+          "gpu_enc": 0,
+          "gpu_dec": 1.6,
+          "gpu_3d": 4.9,
+          "mem": 39.3
+        },
+        {
+          "t": 2,
+          "cpu": 21.2,
+          "perf": 109,
+          "gpu_enc": 12.5,
+          "gpu_dec": 1.8,
+          "gpu_3d": 3.3,
+          "mem": 39.7
+        },
+        {
+          "t": 3,
+          "cpu": 32.7,
+          "perf": 110,
+          "gpu_enc": 36.2,
+          "gpu_dec": 0.5,
+          "gpu_3d": 3.3,
+          "mem": 39.9
+        },
+        {
+          "t": 4,
+          "cpu": 41.2,
+          "perf": 110,
+          "gpu_enc": 35.7,
+          "gpu_dec": 0.6,
+          "gpu_3d": 4.5,
+          "mem": 39.4
+        },
+        {
+          "t": 5,
+          "cpu": 42.5,
+          "perf": 111,
+          "gpu_enc": 30.6,
+          "gpu_dec": 1.4,
+          "gpu_3d": 5,
+          "mem": 39.4
+        },
+        {
+          "t": 6,
+          "cpu": 42.3,
+          "perf": 111,
+          "gpu_enc": 36,
+          "gpu_dec": 0.2,
+          "gpu_3d": 3.8,
+          "mem": 39.7
+        },
+        {
+          "t": 7,
+          "cpu": 33.7,
+          "perf": 110,
+          "gpu_enc": 32.1,
+          "gpu_dec": 0.2,
+          "gpu_3d": 4.7,
+          "mem": 39.6
+        },
+        {
+          "t": 8,
+          "cpu": 37.8,
+          "perf": 113,
+          "gpu_enc": 32.3,
+          "gpu_dec": 0,
+          "gpu_3d": 4,
+          "mem": 39.8
+        },
+        {
+          "t": 9,
+          "cpu": 37.7,
+          "perf": 111,
+          "gpu_enc": 31.7,
+          "gpu_dec": 0.4,
+          "gpu_3d": 3.2,
+          "mem": 40
+        },
+        {
+          "t": 10,
+          "cpu": 41.1,
+          "perf": 114,
+          "gpu_enc": 31.6,
+          "gpu_dec": 1.1,
+          "gpu_3d": 3.4,
+          "mem": 39.7
+        },
+        {
+          "t": 11,
+          "cpu": 38.8,
+          "perf": 111,
+          "gpu_enc": 35.1,
+          "gpu_dec": 1,
+          "gpu_3d": 4.8,
+          "mem": 39.7
+        },
+        {
+          "t": 12,
+          "cpu": 36.6,
+          "perf": 106,
+          "gpu_enc": 32.7,
+          "gpu_dec": 0.4,
+          "gpu_3d": 4.7,
+          "mem": 39.6
+        },
+        {
+          "t": 13,
+          "cpu": 32.9,
+          "perf": 113,
+          "gpu_enc": 36.5,
+          "gpu_dec": 0.7,
+          "gpu_3d": 5.3,
+          "mem": 39.5
+        },
+        {
+          "t": 14,
+          "cpu": 38.3,
+          "perf": 113,
+          "gpu_enc": 34.7,
+          "gpu_dec": 1.8,
+          "gpu_3d": 5.2,
+          "mem": 39.7
+        },
+        {
+          "t": 15,
+          "cpu": 35.7,
+          "perf": 106,
+          "gpu_enc": 31.9,
+          "gpu_dec": 0.8,
+          "gpu_3d": 3.7,
+          "mem": 39.8
+        },
+        {
+          "t": 16,
+          "cpu": 39,
+          "perf": 112,
+          "gpu_enc": 28.3,
+          "gpu_dec": 1.7,
+          "gpu_3d": 3.4,
+          "mem": 39.8
+        },
+        {
+          "t": 17,
+          "cpu": 36.8,
+          "perf": 109,
+          "gpu_enc": 33.1,
+          "gpu_dec": 0.3,
+          "gpu_3d": 4.7,
+          "mem": 39.2
+        },
+        {
+          "t": 18,
+          "cpu": 35.5,
+          "perf": 112,
+          "gpu_enc": 33.2,
+          "gpu_dec": 1.3,
+          "gpu_3d": 3.8,
+          "mem": 39.4
+        },
+        {
+          "t": 19,
+          "cpu": 35.6,
+          "perf": 108,
+          "gpu_enc": 32.8,
+          "gpu_dec": 0.3,
+          "gpu_3d": 4.5,
+          "mem": 39.8
+        },
+        {
+          "t": 20,
+          "cpu": 33.9,
+          "perf": 108,
+          "gpu_enc": 33.6,
+          "gpu_dec": 0.2,
+          "gpu_3d": 4.2,
+          "mem": 39.4
+        },
+        {
+          "t": 21,
+          "cpu": 36.8,
+          "perf": 114,
+          "gpu_enc": 33.9,
+          "gpu_dec": 0.5,
+          "gpu_3d": 4.9,
+          "mem": 39.2
+        },
+        {
+          "t": 22,
+          "cpu": 40.3,
+          "perf": 111,
+          "gpu_enc": 32.8,
+          "gpu_dec": 0.9,
+          "gpu_3d": 3.5,
+          "mem": 39.5
+        },
+        {
+          "t": 23,
+          "cpu": 36.6,
+          "perf": 114,
+          "gpu_enc": 35.8,
+          "gpu_dec": 1.6,
+          "gpu_3d": 3.2,
+          "mem": 39.5
+        },
+        {
+          "t": 24,
+          "cpu": 40.3,
+          "perf": 113,
+          "gpu_enc": 33.6,
+          "gpu_dec": 1.3,
+          "gpu_3d": 3.1,
+          "mem": 39.6
+        },
+        {
+          "t": 25,
+          "cpu": 40.3,
+          "perf": 110,
+          "gpu_enc": 32.8,
+          "gpu_dec": 1.2,
+          "gpu_3d": 3.1,
+          "mem": 39.3
+        },
+        {
+          "t": 26,
+          "cpu": 39.9,
+          "perf": 112,
+          "gpu_enc": 33.9,
+          "gpu_dec": 0.9,
+          "gpu_3d": 4.8,
+          "mem": 39.7
+        },
+        {
+          "t": 27,
+          "cpu": 37.1,
+          "perf": 115,
+          "gpu_enc": 33.5,
+          "gpu_dec": 0,
+          "gpu_3d": 6.6,
+          "mem": 39.7
+        },
+        {
+          "t": 28,
+          "cpu": 40.6,
+          "perf": 110,
+          "gpu_enc": 32.8,
+          "gpu_dec": 0.5,
+          "gpu_3d": 5.8,
+          "mem": 40
+        },
+        {
+          "t": 29,
+          "cpu": 34.9,
+          "perf": 107,
+          "gpu_enc": 35.7,
+          "gpu_dec": 0.6,
+          "gpu_3d": 5.6,
+          "mem": 39.9
+        },
+        {
+          "t": 30,
+          "cpu": 38.1,
+          "perf": 109,
+          "gpu_enc": 32.7,
+          "gpu_dec": 0.3,
+          "gpu_3d": 3.3,
+          "mem": 39.7
+        },
+        {
+          "t": 31,
+          "cpu": 40.8,
+          "perf": 110,
+          "gpu_enc": 34.2,
+          "gpu_dec": 0.1,
+          "gpu_3d": 4.7,
+          "mem": 39.9
+        },
+        {
+          "t": 32,
+          "cpu": 41,
+          "perf": 105,
+          "gpu_enc": 32.6,
+          "gpu_dec": 0.1,
+          "gpu_3d": 3.6,
+          "mem": 39.9
+        },
+        {
+          "t": 33,
+          "cpu": 48.6,
+          "perf": 106,
+          "gpu_enc": 36.5,
+          "gpu_dec": 0.4,
+          "gpu_3d": 3.3,
+          "mem": 40.2
+        },
+        {
+          "t": 34,
+          "cpu": 42.7,
+          "perf": 115,
+          "gpu_enc": 34.1,
+          "gpu_dec": 0.7,
+          "gpu_3d": 4.8,
+          "mem": 40.1
+        },
+        {
+          "t": 35,
+          "cpu": 36.3,
+          "perf": 113,
+          "gpu_enc": 33,
+          "gpu_dec": 1.3,
+          "gpu_3d": 4.5,
+          "mem": 40.4
+        },
+        {
+          "t": 36,
+          "cpu": 40.2,
+          "perf": 109,
+          "gpu_enc": 31.9,
+          "gpu_dec": 0.4,
+          "gpu_3d": 5.7,
+          "mem": 39.6
+        },
+        {
+          "t": 37,
+          "cpu": 37.5,
+          "perf": 112,
+          "gpu_enc": 30,
+          "gpu_dec": 1.4,
+          "gpu_3d": 3.4,
+          "mem": 39.9
+        },
+        {
+          "t": 38,
+          "cpu": 39,
+          "perf": 109,
+          "gpu_enc": 39.2,
+          "gpu_dec": 0.2,
+          "gpu_3d": 4.5,
+          "mem": 39.5
+        },
+        {
+          "t": 39,
+          "cpu": 39.8,
+          "perf": 112,
+          "gpu_enc": 34.5,
+          "gpu_dec": 0.7,
+          "gpu_3d": 3.9,
+          "mem": 40
+        },
+        {
+          "t": 40,
+          "cpu": 38.7,
+          "perf": 110,
+          "gpu_enc": 29.1,
+          "gpu_dec": 1.3,
+          "gpu_3d": 3.6,
+          "mem": 40.1
+        },
+        {
+          "t": 41,
+          "cpu": 38,
+          "perf": 111,
+          "gpu_enc": 33.2,
+          "gpu_dec": 0.2,
+          "gpu_3d": 4.4,
+          "mem": 39.8
+        },
+        {
+          "t": 42,
+          "cpu": 38,
+          "perf": 111,
+          "gpu_enc": 30.8,
+          "gpu_dec": 1.1,
+          "gpu_3d": 5.6,
+          "mem": 40
+        },
+        {
+          "t": 43,
+          "cpu": 37.6,
+          "perf": 110,
+          "gpu_enc": 34.3,
+          "gpu_dec": 0.7,
+          "gpu_3d": 5.4,
+          "mem": 39.8
+        },
+        {
+          "t": 44,
+          "cpu": 40.5,
+          "perf": 110,
+          "gpu_enc": 26.9,
+          "gpu_dec": 0.4,
+          "gpu_3d": 3.1,
+          "mem": 40
+        },
+        {
+          "t": 45,
+          "cpu": 40,
+          "perf": 112,
+          "gpu_enc": 36.3,
+          "gpu_dec": 0.2,
+          "gpu_3d": 5.9,
+          "mem": 40
+        }
+      ]
+    },
+    "note": "SpeedHQ is the codec inside full-bandwidth NDI; OMT’s VMX is the same class but not identical. vMix/OBS compositing load is NOT included — treat results as a lower bound.",
+    "errors": []
+  },
+  "verdict": {
+    "overall": "CAUTION",
+    "headline": "Weakest link (warning): Virtual network adapters (2 virtual adapter(s) up; needs none) - Disable the virtual adapters for the show, or pin the adapter in NDI Access Manager / vMix.",
+    "weakest": "lan_virtual_adapters",
+    "partial": false,
+    "not_tested": [],
+    "checks": [
+      {
+        "id": "fr_reach",
+        "section": "france",
+        "title": "France reachable",
+        "status": "PASS",
+        "value": "8 of 8 France targets answered",
+        "limit": ">= 1 target",
+        "margin": 8,
+        "detail": "Answered: Orange (FR ISP), Free (FR ISP), Moji (Paris DC), MilkyWan (Paris DC), Scaleway (Paris DC), Bouygues (Paris), AWS eu-west-3 (Paris), Twitch ingest Paris.",
+        "fix": ""
+      },
+      {
+        "id": "fr_rtt",
+        "section": "france",
+        "title": "Round-trip time to France (p95)",
+        "status": "INFO",
+        "value": "273 ms",
+        "limit": "",
+        "margin": null,
+        "detail": "Median of the p95 values of 8 France targets; they range from 262 ms (MilkyWan (Paris DC)) to 291 ms (Bouygues (Paris)). The SRT latency below is computed from this; re-run with -SrtHost <partner IP> for the exact path.",
+        "fix": ""
+      },
+      {
+        "id": "fr_rtt_spread",
+        "section": "france",
+        "title": "Round-trip stability (p99 - p50)",
+        "status": "PASS",
+        "value": "35 ms",
+        "limit": "< 40 ms",
+        "margin": 1.14,
+        "detail": "Worst spread between the typical (p50) and slowest 1 % (p99) ping: Scaleway (Paris DC). Big spread means jitter that SRT must absorb.",
+        "fix": ""
+      },
+      {
+        "id": "fr_icmp_loss",
+        "section": "france",
+        "title": "Ping loss to France",
+        "status": "PASS",
+        "value": "0.7 %",
+        "limit": "< 1 %",
+        "margin": 1.5,
+        "detail": "Pooled over 5 target(s): 1 of 150 pings lost. Ignores ping (not a fault): Bouygues (Paris), AWS eu-west-3 (Paris), Twitch ingest Paris.",
+        "fix": ""
+      },
+      {
+        "id": "fr_udp_loss",
+        "section": "france",
+        "title": "UDP loss at SRT bitrate",
+        "status": "PASS",
+        "value": "0.79 %",
+        "limit": "<= 1 %",
+        "margin": 1.26,
+        "detail": "Receiver-side loss over 2 iperf3 test(s) at 12.5 Mbps for 20 s each: iperf3.moji.fr 0.72 %, speedtest.milkywan.fr 0.87 %.",
+        "fix": ""
+      },
+      {
+        "id": "fr_udp_bursts",
+        "section": "france",
+        "title": "UDP loss bursts",
+        "status": "PASS",
+        "value": "0 lossy intervals",
+        "limit": "0",
+        "margin": null,
+        "detail": "No 1 s interval lost more than 5 % of its packets.",
+        "fix": ""
+      },
+      {
+        "id": "uplink_capacity",
+        "section": "uplink",
+        "title": "Upload capacity vs. show needs",
+        "status": "PASS",
+        "value": "320 Mbps",
+        "limit": ">= 2 x 36.0 Mbps",
+        "margin": 4.45,
+        "detail": "Measured upload to a nearby Cloudflare PoP: 320 Mbps. The show needs 36.0 Mbps (SRT video+audio with 25 % overhead, YouTube, Twitch), ratio 8.9 x.",
+        "fix": ""
+      },
+      {
+        "id": "uplink_wifi",
+        "section": "uplink",
+        "title": "Stream over wired Ethernet",
+        "status": "PASS",
+        "value": "wired",
+        "limit": "wired",
+        "margin": null,
+        "detail": "Internet traffic leaves through Ethernet 2.",
+        "fix": ""
+      },
+      {
+        "id": "ingest_youtube",
+        "section": "ingest",
+        "title": "YouTube ingest reachable",
+        "status": "PASS",
+        "value": "11 ms",
+        "limit": "<= 120 ms",
+        "margin": 10,
+        "detail": "TCP connect p95 per ingest (port 1935): YouTube ingest (nearest) 11 ms.",
+        "fix": ""
+      },
+      {
+        "id": "ingest_twitch",
+        "section": "ingest",
+        "title": "Twitch ingest reachable",
+        "status": "PASS",
+        "value": "14 ms",
+        "limit": "<= 120 ms",
+        "margin": 8.57,
+        "detail": "TCP connect p95 per ingest (port 1935): Twitch ingest Seoul 14 ms, Twitch ingest Tokyo 46 ms. Reachability only - Twitch closed its Korean business in Feb 2024; do a 30-second test stream with the real key from this venue.",
+        "fix": ""
+      },
+      {
+        "id": "lan_wired",
+        "section": "lan",
+        "title": "Wired network connection",
+        "status": "PASS",
+        "value": "Ethernet 2 at 2500 Mbps",
+        "limit": "wired adapter up",
+        "margin": null,
+        "detail": "Wired adapter(s) up: Ethernet 2.",
+        "fix": ""
+      },
+      {
+        "id": "lan_headroom",
+        "section": "lan",
+        "title": "LAN headroom for incoming feeds",
+        "status": "PASS",
+        "value": "2500 Mbps link",
+        "limit": ">= 2 x 436 Mbps",
+        "margin": 2.87,
+        "detail": "Ethernet 2 links at 2500 Mbps; 2 x OMT feeds need 400 Mbps plus 36.0 Mbps of outgoing streams on the same adapter, ratio 5.7 x.",
+        "fix": ""
+      },
+      {
+        "id": "lan_virtual_adapters",
+        "section": "lan",
+        "title": "Virtual network adapters",
+        "status": "WARN",
+        "value": "2 virtual adapter(s) up",
+        "limit": "none",
+        "margin": null,
+        "detail": "NDI/OMT discovery may bind to vEthernet (Default Switch), vEthernet (WSL (Hyper-V firewall)).",
+        "fix": "Disable the virtual adapters for the show, or pin the adapter in NDI Access Manager / vMix."
+      },
+      {
+        "id": "lan_profile",
+        "section": "lan",
+        "title": "Network profile is Private",
+        "status": "PASS",
+        "value": "Private",
+        "limit": "Private",
+        "margin": null,
+        "detail": "The wired network is not on a Public profile.",
+        "fix": ""
+      },
+      {
+        "id": "lan_eee",
+        "section": "lan",
+        "title": "Energy-Efficient Ethernet off",
+        "status": "PASS",
+        "value": "off",
+        "limit": "off",
+        "margin": null,
+        "detail": "Energy-Efficient Ethernet is off.",
+        "fix": ""
+      },
+      {
+        "id": "lan_sources_found",
+        "section": "lan",
+        "title": "Incoming feeds found on the network",
+        "status": "PASS",
+        "value": "2 OMT sources",
+        "limit": ">= 2 OMT sources",
+        "margin": 1,
+        "detail": "Found: GAMEPC-A (Team Blue POV) (192.168.10.31:6400), GAMEPC-B (Team Red POV) (192.168.10.32:6401). On this PC (not counted): SHOWPC-01 (vMix Output 1) (192.168.10.20:5961).",
+        "fix": ""
+      },
+      {
+        "id": "lan_partner_throughput",
+        "section": "lan",
+        "title": "Network throughput from source PCs",
+        "status": "PASS",
+        "value": "937 Mbps TCP, 0.03 % UDP loss",
+        "limit": ">= 300 Mbps, < 0.1 % UDP loss",
+        "margin": 3.12,
+        "detail": "Per feed 200 Mbps (OMT), tested at 400 Mbps for 10 s, source PC to this PC. 192.168.10.31: TCP 941 Mbps, 0 retransmits; UDP 400 Mbps received, 0.02 % loss, jitter 0.04 ms. 192.168.10.32: TCP 937 Mbps, 3 retransmits; UDP 399 Mbps received, 0.03 % loss, jitter 0.05 ms. Both at once (2 source PCs): TCP 1874 Mbps, UDP 799 Mbps received, 0.02 % loss; needs >= 600 Mbps together.",
+        "fix": ""
+      },
+      {
+        "id": "lan_hosts",
+        "section": "lan",
+        "title": "Devices on the local network",
+        "status": "INFO",
+        "value": "12 devices on 192.168.10.0/24",
+        "limit": "",
+        "margin": null,
+        "detail": "Gateway: 192.168.10.1 (Ubiquiti). Network gear: Cisco (192.168.10.2), TP-Link (192.168.10.91). PCs: 4 (ASUS, Dell, HP). Broadcast gear: BirdDog (192.168.10.50), Blackmagic Design (192.168.10.55), Audinate (192.168.10.60). Source PCs: 192.168.10.20 (1 source), 192.168.10.31 (1 source), 192.168.10.32 (1 source). Unknown vendor: 1 (1 with a private/randomised MAC). Managed switches only appear if they have a management IP on this subnet.",
+        "fix": ""
+      },
+      {
+        "id": "hw_cpu_threads",
+        "section": "hardware",
+        "title": "CPU threads",
+        "status": "PASS",
+        "value": "24 threads",
+        "limit": ">= 12 threads",
+        "margin": 2,
+        "detail": "Intel(R) Core(TM) i7-13700K (16 cores)",
+        "fix": ""
+      },
+      {
+        "id": "hw_ram",
+        "section": "hardware",
+        "title": "RAM",
+        "status": "PASS",
+        "value": "64.0 GB",
+        "limit": ">= 32 GB",
+        "margin": 2.11,
+        "detail": "Installed RAM reads a few percent below its nominal size, so 32 GB is matched from 30.4 GB.",
+        "fix": ""
+      },
+      {
+        "id": "hw_gpu",
+        "section": "hardware",
+        "title": "Dedicated GPU",
+        "status": "PASS",
+        "value": "NVIDIA GeForce RTX 4070 (12 GB)",
+        "limit": "dedicated NVIDIA/AMD GPU",
+        "margin": null,
+        "detail": "A dedicated GPU provides the hardware video encoders for the three outputs.",
+        "fix": ""
+      },
+      {
+        "id": "hw_nvenc_sessions",
+        "section": "hardware",
+        "title": "NVENC encode sessions",
+        "status": "PASS",
+        "value": "8 sessions (driver 581.29)",
+        "limit": "driver >= 551.76 for 8",
+        "margin": 2.67,
+        "detail": "This driver allows 8 simultaneous NVENC sessions: 3 outputs plus recording or a spare.",
+        "fix": ""
+      },
+      {
+        "id": "hw_power",
+        "section": "hardware",
+        "title": "Power plan and mains power",
+        "status": "PASS",
+        "value": "High performance, mains",
+        "limit": "High performance or Ultimate",
+        "margin": null,
+        "detail": "Power plan keeps the CPU at full speed.",
+        "fix": ""
+      },
+      {
+        "id": "hw_gpu_driver_age",
+        "section": "hardware",
+        "title": "GPU driver age",
+        "status": "PASS",
+        "value": "142 days old",
+        "limit": "<= 365 days",
+        "margin": 2.57,
+        "detail": "Newest dedicated GPU driver is dated 2026-05-27.",
+        "fix": ""
+      },
+      {
+        "id": "hw_disk",
+        "section": "hardware",
+        "title": "System drive free space",
+        "status": "PASS",
+        "value": "413 GB free",
+        "limit": ">= 50 GB",
+        "margin": 8.25,
+        "detail": "System drive C:.",
+        "fix": ""
+      },
+      {
+        "id": "hw_pending_reboot",
+        "section": "hardware",
+        "title": "No reboot pending",
+        "status": "PASS",
+        "value": "none pending",
+        "limit": "none",
+        "margin": null,
+        "detail": "No restart is waiting.",
+        "fix": ""
+      },
+      {
+        "id": "load_encoder",
+        "section": "load",
+        "title": "Hardware video encoder",
+        "status": "PASS",
+        "value": "h264_nvenc",
+        "limit": "hardware encoder",
+        "margin": null,
+        "detail": "The test encoded with h264_nvenc. Encoders that did not work: h264_amf ([h264_amf] DLL amfrt64.dll failed to open).",
+        "fix": ""
+      },
+      {
+        "id": "load_realtime",
+        "section": "load",
+        "title": "Real-time 2 in + 3 out",
+        "status": "PASS",
+        "value": "5 of 5 streams real-time",
+        "limit": "speed >= 0.97 x",
+        "margin": 1.02,
+        "detail": "All decodes and encodes kept up with real time. Slowest stream ran at 0.99 x.",
+        "fix": ""
+      },
+      {
+        "id": "load_cpu",
+        "section": "load",
+        "title": "CPU load during test",
+        "status": "PASS",
+        "value": "43 %",
+        "limit": "< 60 %",
+        "margin": 1.41,
+        "detail": "CPU p95 during the test; vMix/OBS compositing is not included. Peak 49 %.",
+        "fix": ""
+      },
+      {
+        "id": "load_gpu_encode",
+        "section": "load",
+        "title": "GPU encoder load during test",
+        "status": "PASS",
+        "value": "37 %",
+        "limit": "< 70 %",
+        "margin": 1.92,
+        "detail": "GPU video-encode engine load (p95) while encoding the three outputs.",
+        "fix": ""
+      },
+      {
+        "id": "load_throttle",
+        "section": "load",
+        "title": "CPU clock throttling",
+        "status": "PASS",
+        "value": "6 % drop",
+        "limit": "<= 15 %",
+        "margin": 2.65,
+        "detail": "CPU performance went from 106 % at the start to 100 % at its lowest.",
+        "fix": ""
+      },
+      {
+        "id": "sw_mixer",
+        "section": "software",
+        "title": "vMix or OBS installed",
+        "status": "PASS",
+        "value": "vMix 28.0.0.45, OBS 31.0.2",
+        "limit": "vMix or OBS",
+        "margin": null,
+        "detail": "A production mixer is installed.",
+        "fix": ""
+      },
+      {
+        "id": "sw_ndi",
+        "section": "software",
+        "title": "NDI / OMT software",
+        "status": "INFO",
+        "value": "NDI runtime 6.1.1, NDI Tools 6.1.1, DistroAV 6.1.1, OMT 1.0.0",
+        "limit": "",
+        "margin": null,
+        "detail": "The show uses OMT; make sure the sending PCs and vMix/OBS support it.",
+        "fix": ""
+      },
+      {
+        "id": "sw_background",
+        "section": "software",
+        "title": "Background apps",
+        "status": "PASS",
+        "value": "none running",
+        "limit": "none",
+        "margin": null,
+        "detail": "No known background apps (OneDrive, Teams, Discord, browsers, game launchers) are running.",
+        "fix": ""
+      }
+    ],
+    "settings": [
+      {
+        "id": "srt_latency",
+        "label": "SRT latency (both ends)",
+        "value": "1,100 ms",
+        "why": "~4 x p95 RTT 273 ms = 1092 ms, rounded up to 1,100 ms. Haivision table minimum 850 ms (3 x for loss <= 1 %); raised to 4 x because the path is long-haul (RTT > 150 ms) and short probes miss rare bursts. SRT needs several round trips to resend lost packets; the 120-125 ms encoder default will drop video on this path."
+      },
+      {
+        "id": "srt_overhead",
+        "label": "SRT bandwidth overhead",
+        "value": "25 %",
+        "why": "Haivision rule: at least the table overhead (1 %) and never below 100 / 4 = 25 %."
+      },
+      {
+        "id": "srt_bitrate",
+        "label": "SRT video bitrate",
+        "value": "10 Mbps video CBR, keyframe 2 s",
+        "why": "Constant bitrate keeps the SRT overhead calculation valid; a 2 s keyframe interval is what the partner decoder expects."
+      },
+      {
+        "id": "srt_mode",
+        "label": "SRT mode",
+        "value": "caller, packet size 1316, same latency on both ends (receiver latency wins if higher)",
+        "why": "The Seoul PC calls out to the partner in France; both sides must be set so the higher latency is not a surprise."
+      },
+      {
+        "id": "ingest_servers",
+        "label": "Ingest servers",
+        "value": "YouTube: rtmp://a.rtmp.youtube.com/live2 (auto-nearest) | Twitch: apn20.contribute.live-video.net",
+        "why": "The Twitch host is the one with the fastest TCP connect from this venue."
+      },
+      {
+        "id": "input_protocol",
+        "label": "Input protocol",
+        "value": "OMT (Medium) or full NDI",
+        "why": "The wired link has 5.7 x the bandwidth the feeds need."
+      },
+      {
+        "id": "power_plan",
+        "label": "Windows power plan",
+        "value": "High performance (or Ultimate), on mains power, sleep off",
+        "why": "The default Balanced plan lets the CPU clock drop under bursty live-video load."
+      },
+      {
+        "id": "encoder",
+        "label": "Video encoder",
+        "value": "NVENC H.264 (h264_nvenc), preset P4, CBR, keyframe 2 s - same for all three outputs",
+        "why": "Chosen by the load test (first hardware encoder that worked)."
+      }
+    ],
+    "manual_checks": [
+      {
+        "id": "mc_partner_latency",
+        "text": "Confirm the French partner's receive latency matches the SRT latency above (the higher of the two ends wins)."
+      },
+      {
+        "id": "mc_twitch_test",
+        "text": "Twitch from Korea: do a 30-second test stream with the real stream key from this venue before show day."
+      },
+      {
+        "id": "mc_same_time",
+        "text": "Re-run ShowReady at the same time of day as the show (evening congestion differs from daytime)."
+      },
+      {
+        "id": "mc_rehearsal",
+        "text": "Run a 30-minute rehearsal with the real vMix/OBS scene and both real feeds; watch vMix/OBS dropped frames."
+      },
+      {
+        "id": "mc_srthost",
+        "text": "When the partner sends their SRT IP, run: Run-ShowReady.cmd -SrtHost <their IP>."
+      }
+    ],
+    "calc": {
+      "srt": {
+        "rtt_p95_ms": 273,
+        "rtt_calc_ms": 273,
+        "loss_pct": 0.794,
+        "loss_source": "udp",
+        "udp_measured": true,
+        "lossy_intervals": 0,
+        "mult_table": 3,
+        "mult": 4,
+        "latency_table_ms": 850,
+        "latency_raw_ms": 1092,
+        "latency_ms": 1100,
+        "overhead_pct": 25,
+        "reasons": ["the path is long-haul (RTT > 150 ms) and short probes miss rare bursts"]
+      },
+      "need_mbps": 36.028,
+      "intake_mbps": 400
+    },
+    "errors": []
+  }
+}

@@ -1,0 +1,84 @@
+{
+  "show": {
+    "name": "Gen.G Academy Seoul -> France",
+    "inputs": { "count": 2, "protocol": "OMT", "resolution": "1920x1080", "fps": 60,
+                "mbps_per_feed": { "OMT": 200, "NDI": 150, "NDI-HX3": 62 } },
+    "outputs": [
+      { "id": "srt",     "label": "SRT to France", "protocol": "SRT",  "video_kbps": 10000, "audio_kbps": 192 },
+      { "id": "youtube", "label": "YouTube",       "protocol": "RTMP", "video_kbps": 17000, "audio_kbps": 128 },
+      { "id": "twitch",  "label": "Twitch",        "protocol": "RTMP", "video_kbps": 6000,  "audio_kbps": 160 }
+    ],
+    "srt_destination_host": ""
+  },
+  "network": {
+    "ping_count": { "quick": 30, "full": 100 },
+    "ping_interval_ms": 250,
+    "tcp_samples": 8,
+    "udp_seconds": { "quick": 20, "full": 60 },
+    "udp_packet_bytes": 1316,
+    "public_ip_lookup": "https://ipinfo.io/json",
+    "upload_test": { "url": "https://speed.cloudflare.com/__up", "mb_per_stream": 20, "streams": 4 },
+    "trace_hosts": { "quick": ["orange.fr"], "full": ["orange.fr", "ping.online.net", "euw30.contribute.live-video.net"] },
+    "targets": [
+      { "name": "Orange (FR ISP)",            "host": "orange.fr",                       "group": "france", "tcp_port": 443 },
+      { "name": "Free (FR ISP)",              "host": "free.fr",                         "group": "france", "tcp_port": 443 },
+      { "name": "Moji (Paris DC)",            "host": "iperf3.moji.fr",                  "group": "france", "tcp_port": 5201, "iperf_ports": [5200, 5240] },
+      { "name": "MilkyWan (Paris DC)",        "host": "speedtest.milkywan.fr",           "group": "france", "tcp_port": 443,  "iperf_ports": [9200, 9240] },
+      { "name": "Scaleway (Paris DC)",        "host": "ping.online.net",                 "group": "france", "tcp_port": 5201, "iperf_ports": [5200, 5209] },
+      { "name": "Bouygues (Paris)",           "host": "paris.bbr.iperf.bytel.fr",        "group": "france", "tcp_port": 9200 },
+      { "name": "AWS eu-west-3 (Paris)",      "host": "ec2.eu-west-3.amazonaws.com",     "group": "france", "tcp_port": 443 },
+      { "name": "Twitch ingest Paris",        "host": "euw30.contribute.live-video.net", "group": "france", "tcp_port": 1935 },
+      { "name": "Twitch ingest Seoul",        "host": "apn20.contribute.live-video.net", "group": "ingest", "tcp_port": 1935, "service": "twitch" },
+      { "name": "Twitch ingest Tokyo",        "host": "apn10.contribute.live-video.net", "group": "ingest", "tcp_port": 1935, "service": "twitch" },
+      { "name": "YouTube ingest (nearest)",   "host": "a.rtmp.youtube.com",              "group": "ingest", "tcp_port": 1935, "service": "youtube" }
+    ]
+  },
+  "lan": {
+    "partner_hosts": [],
+    "partner_port": 5201,
+    "auto_partners": true,
+    "test_seconds": 10,
+    "test_multiplier": 2,
+    "mdns_listen_ms": { "quick": 3000, "full": 6000 },
+    "sweep": true,
+    "sweep_timeout_ms": 600,
+    "require_sources": false,
+    "combined_test": true
+  },
+  "loadtest": { "seconds": { "quick": 45, "full": 120 } },
+  "observer": { "sender_seconds": { "quick": 45, "full": 120 }, "server_minutes": 30, "port": 5201 },
+  "thresholds": {
+    "srt_rtt_multiplier_table": [
+      { "max_loss_pct": 1,  "multiplier": 3,  "overhead_pct": 1 },
+      { "max_loss_pct": 3,  "multiplier": 4,  "overhead_pct": 4 },
+      { "max_loss_pct": 7,  "multiplier": 6,  "overhead_pct": 9 },
+      { "max_loss_pct": 10, "multiplier": 8,  "overhead_pct": 15 },
+      { "max_loss_pct": 12, "multiplier": 8,  "overhead_pct": 20 },
+      { "max_loss_pct": 21, "multiplier": 10, "overhead_pct": 38 }
+    ],
+    "srt_min_multiplier_when_unmeasured_or_bursty": 4,
+    "srt_burst_interval_loss_pct": 5,
+    "srt_latency_round_ms": 50,
+    "srt_latency_max_ms": 8000,
+    "udp_loss_pct":   { "warn": 1, "fail": 7 },
+    "icmp_loss_pct":  { "warn": 1, "fail": 5 },
+    "rtt_spread_ms":  { "warn": 40, "fail": 120 },
+    "uplink_ratio":   { "pass": 2.0, "warn": 1.4 },
+    "lan_ratio":      { "pass": 2.0, "warn": 1.25 },
+    "lan_partner_ratio": { "pass": 1.5, "warn": 1.0 },
+    "lan_partner_udp_loss_pct": { "pass": 0.1, "warn": 1 },
+    "ingest_tcp_p95_ms": { "warn": 120 },
+    "ram_gb":         { "pass": 32, "warn": 16 },
+    "threads":        { "pass": 12, "warn": 8 },
+    "disk_free_gb":   { "warn": 50 },
+    "gpu_driver_age_days": { "warn": 365 },
+    "nvenc_8_session_driver": 551.76,
+    "nvenc_5_session_driver": 531.41,
+    "load_speed_min": 0.97,
+    "load_cpu_p95":   { "warn": 60, "fail": 80 },
+    "load_gpu_enc_p95": { "warn": 70, "fail": 90 },
+    "load_perf_drop_pct": { "warn": 15 },
+    "sender_cpu_p95": { "warn": 70, "fail": 90 },
+    "observer_link_mbps": { "pass": 1000 }
+  }
+}

@@ -1,0 +1,6 @@
+# keys and local data never go in git
+upload.json
+results/
+tests/*.SUMMARY.md
+# ffmpeg is >100 MB: it ships in the release zip, not in git
+bin/ffmpeg.exe

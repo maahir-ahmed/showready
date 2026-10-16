@@ -1,0 +1,77 @@
+{
+  "adapter": {
+    "name": "Ethernet",
+    "description": "Intel(R) Ethernet Connection I219-V",
+    "kind": "wired",
+    "chosen_because": "wired",
+    "ipv4": "10.0.0.50",
+    "prefix_length": 24,
+    "gateway": "10.0.0.1",
+    "link_mbps": 1000,
+    "local_ips": [
+      "10.0.0.50"
+    ]
+  },
+  "mdns": {
+    "query_ok": true,
+    "listen_ms": 3000,
+    "methods": [
+      {
+        "name": "unicast",
+        "ok": true,
+        "answers": 0,
+        "error": null
+      }
+    ],
+    "responders": [],
+    "service_types_seen": []
+  },
+  "sources": [],
+  "discovery_servers": {
+    "ndi": [],
+    "omt": [
+      "omt://10.0.0.5:6399"
+    ],
+    "ndi_config_path": null,
+    "omt_settings_path": "C:\\ProgramData\\OMT\\settings.xml"
+  },
+  "sweep": {
+    "cidr": "10.0.0.0/24",
+    "scanned": 254,
+    "alive": 2,
+    "seconds": 1.0,
+    "skipped_reason": null
+  },
+  "hosts": [
+    {
+      "ip": "10.0.0.1",
+      "mac": "00-11-22-33-44-01",
+      "vendor": "Cisco Systems",
+      "category": "network",
+      "randomized_mac": false,
+      "ping_ms": 0.5,
+      "is_self": false,
+      "is_gateway": true,
+      "sources": []
+    },
+    {
+      "ip": "10.0.0.50",
+      "mac": "00-14-22-01-02-50",
+      "vendor": "Dell Inc.",
+      "category": "pc",
+      "randomized_mac": false,
+      "ping_ms": 0.1,
+      "is_self": true,
+      "is_gateway": false,
+      "sources": []
+    }
+  ],
+  "partners": [],
+  "test": {
+    "protocol": "OMT",
+    "per_feed_mbps": 200,
+    "target_mbps": 400,
+    "seconds": 10
+  },
+  "errors": []
+}

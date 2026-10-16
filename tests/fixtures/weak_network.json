@@ -1,0 +1,454 @@
+{
+    "public":  {
+                   "ip":  "203.0.113.50",
+                   "city":  "Seoul",
+                   "country":  "KR",
+                   "org":  "AS4766 Korea Telecom"
+               },
+    "targets":  [
+                    {
+                        "name":  "Orange (FR ISP)",
+                        "host":  "orange.fr",
+                        "group":  "france",
+                        "service":  null,
+                        "ip":  "203.0.113.10",
+                        "icmp":  {
+                                     "sent":  30,
+                                     "received":  30,
+                                     "loss_pct":  1.4,
+                                     "min_ms":  277,
+                                     "p50_ms":  285,
+                                     "p95_ms":  330,
+                                     "p99_ms":  380,
+                                     "max_ms":  382,
+                                     "jitter_ms":  2.5,
+                                     "samples_ms":  [
+                                                        280,
+                                                        287,
+                                                        283,
+                                                        290,
+                                                        286,
+                                                        282,
+                                                        289,
+                                                        285,
+                                                        281,
+                                                        288,
+                                                        284,
+                                                        280,
+                                                        287,
+                                                        283,
+                                                        290,
+                                                        286,
+                                                        282,
+                                                        289,
+                                                        285,
+                                                        281,
+                                                        288,
+                                                        284,
+                                                        280,
+                                                        287,
+                                                        283,
+                                                        290,
+                                                        286,
+                                                        282,
+                                                        289,
+                                                        380
+                                                    ]
+                                 },
+                        "tcp":  {
+                                    "port":  443,
+                                    "attempts":  8,
+                                    "ok":  8,
+                                    "p50_ms":  290,
+                                    "p95_ms":  335,
+                                    "samples_ms":  [
+
+                                                   ]
+                                }
+                    },
+                    {
+                        "name":  "Free (FR ISP)",
+                        "host":  "free.fr",
+                        "group":  "france",
+                        "service":  null,
+                        "ip":  "203.0.113.10",
+                        "icmp":  {
+                                     "sent":  30,
+                                     "received":  30,
+                                     "loss_pct":  0.7,
+                                     "min_ms":  267,
+                                     "p50_ms":  275,
+                                     "p95_ms":  310,
+                                     "p99_ms":  365,
+                                     "max_ms":  367,
+                                     "jitter_ms":  2.5,
+                                     "samples_ms":  [
+                                                        270,
+                                                        277,
+                                                        273,
+                                                        280,
+                                                        276,
+                                                        272,
+                                                        279,
+                                                        275,
+                                                        271,
+                                                        278,
+                                                        274,
+                                                        270,
+                                                        277,
+                                                        273,
+                                                        280,
+                                                        276,
+                                                        272,
+                                                        279,
+                                                        275,
+                                                        271,
+                                                        278,
+                                                        274,
+                                                        270,
+                                                        277,
+                                                        273,
+                                                        280,
+                                                        276,
+                                                        272,
+                                                        279,
+                                                        365
+                                                    ]
+                                 },
+                        "tcp":  {
+                                    "port":  443,
+                                    "attempts":  8,
+                                    "ok":  8,
+                                    "p50_ms":  280,
+                                    "p95_ms":  320,
+                                    "samples_ms":  [
+
+                                                   ]
+                                }
+                    },
+                    {
+                        "name":  "Moji (Paris DC)",
+                        "host":  "iperf3.moji.fr",
+                        "group":  "france",
+                        "service":  null,
+                        "ip":  "203.0.113.10",
+                        "icmp":  {
+                                     "sent":  30,
+                                     "received":  29,
+                                     "loss_pct":  2.1,
+                                     "min_ms":  287,
+                                     "p50_ms":  295,
+                                     "p95_ms":  340,
+                                     "p99_ms":  410,
+                                     "max_ms":  412,
+                                     "jitter_ms":  2.5,
+                                     "samples_ms":  [
+                                                        290,
+                                                        297,
+                                                        293,
+                                                        300,
+                                                        296,
+                                                        292,
+                                                        299,
+                                                        295,
+                                                        291,
+                                                        298,
+                                                        294,
+                                                        290,
+                                                        297,
+                                                        293,
+                                                        300,
+                                                        296,
+                                                        292,
+                                                        299,
+                                                        295,
+                                                        291,
+                                                        298,
+                                                        294,
+                                                        290,
+                                                        297,
+                                                        293,
+                                                        300,
+                                                        296,
+                                                        292,
+                                                        414
+                                                    ]
+                                 },
+                        "tcp":  {
+                                    "port":  5201,
+                                    "attempts":  8,
+                                    "ok":  8,
+                                    "p50_ms":  298,
+                                    "p95_ms":  345,
+                                    "samples_ms":  [
+
+                                                   ]
+                                }
+                    },
+                    {
+                        "name":  "Twitch ingest Seoul",
+                        "host":  "apn20.contribute.live-video.net",
+                        "group":  "ingest",
+                        "service":  "twitch",
+                        "ip":  "203.0.113.10",
+                        "icmp":  {
+                                     "sent":  30,
+                                     "received":  30,
+                                     "loss_pct":  0,
+                                     "min_ms":  10,
+                                     "p50_ms":  18,
+                                     "p95_ms":  40,
+                                     "p99_ms":  80,
+                                     "max_ms":  82,
+                                     "jitter_ms":  2.5,
+                                     "samples_ms":  [
+                                                        13,
+                                                        20,
+                                                        16,
+                                                        23,
+                                                        19,
+                                                        15,
+                                                        22,
+                                                        18,
+                                                        14,
+                                                        21,
+                                                        17,
+                                                        13,
+                                                        20,
+                                                        16,
+                                                        23,
+                                                        19,
+                                                        15,
+                                                        22,
+                                                        18,
+                                                        14,
+                                                        21,
+                                                        17,
+                                                        13,
+                                                        20,
+                                                        16,
+                                                        23,
+                                                        19,
+                                                        15,
+                                                        22,
+                                                        80
+                                                    ]
+                                 },
+                        "tcp":  {
+                                    "port":  1935,
+                                    "attempts":  8,
+                                    "ok":  8,
+                                    "p50_ms":  20,
+                                    "p95_ms":  45,
+                                    "samples_ms":  [
+
+                                                   ]
+                                }
+                    },
+                    {
+                        "name":  "YouTube ingest (nearest)",
+                        "host":  "a.rtmp.youtube.com",
+                        "group":  "ingest",
+                        "service":  "youtube",
+                        "ip":  "203.0.113.10",
+                        "icmp":  {
+                                     "sent":  30,
+                                     "received":  30,
+                                     "loss_pct":  0,
+                                     "min_ms":  4,
+                                     "p50_ms":  12,
+                                     "p95_ms":  30,
+                                     "p99_ms":  60,
+                                     "max_ms":  62,
+                                     "jitter_ms":  2.5,
+                                     "samples_ms":  [
+                                                        7,
+                                                        14,
+                                                        10,
+                                                        17,
+                                                        13,
+                                                        9,
+                                                        16,
+                                                        12,
+                                                        8,
+                                                        15,
+                                                        11,
+                                                        7,
+                                                        14,
+                                                        10,
+                                                        17,
+                                                        13,
+                                                        9,
+                                                        16,
+                                                        12,
+                                                        8,
+                                                        15,
+                                                        11,
+                                                        7,
+                                                        14,
+                                                        10,
+                                                        17,
+                                                        13,
+                                                        9,
+                                                        16,
+                                                        60
+                                                    ]
+                                 },
+                        "tcp":  {
+                                    "port":  1935,
+                                    "attempts":  8,
+                                    "ok":  8,
+                                    "p50_ms":  14,
+                                    "p95_ms":  33,
+                                    "samples_ms":  [
+
+                                                   ]
+                                }
+                    }
+                ],
+    "traces":  [
+                   {
+                       "host":  "orange.fr",
+                       "hops":  [
+                                    {
+                                        "hop":  1,
+                                        "ip":  "10.20.0.1",
+                                        "rtt_ms":  [
+                                                       1,
+                                                       1,
+                                                       1
+                                                   ]
+                                    }
+                                ]
+                   }
+               ],
+    "udp":  [
+                {
+                    "host":  "iperf3.moji.fr",
+                    "port":  5200,
+                    "target_mbps":  12.5,
+                    "seconds":  20,
+                    "packet_bytes":  1316,
+                    "packets":  23756,
+                    "lost":  570,
+                    "loss_pct":  2.399,
+                    "jitter_ms":  0.4,
+                    "intervals":  [
+                                      {
+                                          "t":  0,
+                                          "packets":  1188,
+                                          "lost":  108
+                                      },
+                                      {
+                                          "t":  1,
+                                          "packets":  1188,
+                                          "lost":  108
+                                      },
+                                      {
+                                          "t":  2,
+                                          "packets":  1188,
+                                          "lost":  108
+                                      },
+                                      {
+                                          "t":  3,
+                                          "packets":  1188,
+                                          "lost":  28
+                                      },
+                                      {
+                                          "t":  4,
+                                          "packets":  1188,
+                                          "lost":  28
+                                      },
+                                      {
+                                          "t":  5,
+                                          "packets":  1188,
+                                          "lost":  28
+                                      },
+                                      {
+                                          "t":  6,
+                                          "packets":  1188,
+                                          "lost":  28
+                                      },
+                                      {
+                                          "t":  7,
+                                          "packets":  1188,
+                                          "lost":  28
+                                      },
+                                      {
+                                          "t":  8,
+                                          "packets":  1188,
+                                          "lost":  28
+                                      },
+                                      {
+                                          "t":  9,
+                                          "packets":  1188,
+                                          "lost":  28
+                                      },
+                                      {
+                                          "t":  10,
+                                          "packets":  1188,
+                                          "lost":  28
+                                      },
+                                      {
+                                          "t":  11,
+                                          "packets":  1188,
+                                          "lost":  28
+                                      },
+                                      {
+                                          "t":  12,
+                                          "packets":  1188,
+                                          "lost":  28
+                                      },
+                                      {
+                                          "t":  13,
+                                          "packets":  1188,
+                                          "lost":  28
+                                      },
+                                      {
+                                          "t":  14,
+                                          "packets":  1188,
+                                          "lost":  28
+                                      },
+                                      {
+                                          "t":  15,
+                                          "packets":  1188,
+                                          "lost":  28
+                                      },
+                                      {
+                                          "t":  16,
+                                          "packets":  1188,
+                                          "lost":  28
+                                      },
+                                      {
+                                          "t":  17,
+                                          "packets":  1188,
+                                          "lost":  28
+                                      },
+                                      {
+                                          "t":  18,
+                                          "packets":  1188,
+                                          "lost":  28
+                                      },
+                                      {
+                                          "t":  19,
+                                          "packets":  1188,
+                                          "lost":  28
+                                      }
+                                  ],
+                    "worst_interval_loss_pct":  9.1,
+                    "lossy_intervals":  3,
+                    "error":  null
+                }
+            ],
+    "upload":  {
+                   "method":  "cloudflare",
+                   "mbps":  22.5,
+                   "streams":  4,
+                   "bytes":  83886080,
+                   "seconds":  1.3,
+                   "error":  null
+               },
+    "errors":  [
+
+               ]
+}

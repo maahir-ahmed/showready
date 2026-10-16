@@ -1,0 +1,81 @@
+{
+  "adapter": {
+    "name": "Wi-Fi",
+    "description": "Intel(R) Wi-Fi 6 AX201 160MHz",
+    "kind": "wifi",
+    "chosen_because": "default_route",
+    "ipv4": "10.0.0.15",
+    "prefix_length": 24,
+    "gateway": "10.0.0.1",
+    "link_mbps": 144,
+    "local_ips": [
+      "10.0.0.15"
+    ]
+  },
+  "mdns": {
+    "query_ok": true,
+    "listen_ms": 3000,
+    "methods": [
+      {
+        "name": "unicast",
+        "ok": true,
+        "answers": 0,
+        "error": null
+      },
+      {
+        "name": "windows",
+        "ok": true,
+        "answers": 0,
+        "error": null
+      }
+    ],
+    "responders": [],
+    "service_types_seen": []
+  },
+  "sources": [],
+  "discovery_servers": {
+    "ndi": [],
+    "omt": [],
+    "ndi_config_path": null,
+    "omt_settings_path": null
+  },
+  "sweep": {
+    "cidr": "10.0.0.0/24",
+    "scanned": 254,
+    "alive": 2,
+    "seconds": 1.0,
+    "skipped_reason": null
+  },
+  "hosts": [
+    {
+      "ip": "10.0.0.1",
+      "mac": "00-0c-29-11-22-33",
+      "vendor": null,
+      "category": null,
+      "randomized_mac": false,
+      "ping_ms": 1.5,
+      "is_self": false,
+      "is_gateway": true,
+      "sources": []
+    },
+    {
+      "ip": "10.0.0.15",
+      "mac": "00-14-22-aa-bb-cc",
+      "vendor": null,
+      "category": null,
+      "randomized_mac": false,
+      "ping_ms": 0.1,
+      "is_self": true,
+      "is_gateway": false,
+      "sources": []
+    }
+  ],
+  "partners": [],
+  "test": {
+    "protocol": "OMT",
+    "per_feed_mbps": 200,
+    "target_mbps": 400,
+    "seconds": 10
+  },
+  "errors": []
+}

@@ -1,0 +1,122 @@
+{
+    "ffmpeg":  {
+                   "found":  true,
+                   "path":  "bin\\ffmpeg.exe",
+                   "version":  "7.1"
+               },
+    "encoders":  {
+                     "available":  [
+                                       "h264_qsv",
+                                       "libx264"
+                                   ],
+                     "tested":  [
+                                    {
+                                        "name":  "h264_nvenc",
+                                        "ok":  false,
+                                        "error":  "no device"
+                                    },
+                                    {
+                                        "name":  "h264_amf",
+                                        "ok":  false,
+                                        "error":  "no device"
+                                    },
+                                    {
+                                        "name":  "h264_qsv",
+                                        "ok":  false,
+                                        "error":  "failed"
+                                    },
+                                    {
+                                        "name":  "libx264",
+                                        "ok":  true,
+                                        "error":  null
+                                    }
+                                ],
+                     "chosen":  "libx264"
+                 },
+    "source":  {
+                   "codec":  "speedhq",
+                   "pix_fmt":  "yuv422p",
+                   "width":  1920,
+                   "height":  1080,
+                   "fps":  60,
+                   "seconds":  4,
+                   "file_mb":  60
+               },
+    "seconds":  45,
+    "streams":  [
+                    {
+                        "role":  "in-1",
+                        "kind":  "decode",
+                        "codec":  "speedhq",
+                        "target_kbps":  0,
+                        "speed_min":  0.62,
+                        "speed_p50":  0.7,
+                        "fps_p50":  60,
+                        "ok":  false,
+                        "error":  null
+                    },
+                    {
+                        "role":  "in-2",
+                        "kind":  "decode",
+                        "codec":  "speedhq",
+                        "target_kbps":  0,
+                        "speed_min":  0.6,
+                        "speed_p50":  0.7,
+                        "fps_p50":  60,
+                        "ok":  false,
+                        "error":  null
+                    },
+                    {
+                        "role":  "out-srt",
+                        "kind":  "encode",
+                        "codec":  "libx264",
+                        "target_kbps":  10000,
+                        "speed_min":  0.35,
+                        "speed_p50":  0.4,
+                        "fps_p50":  60,
+                        "ok":  false,
+                        "error":  null
+                    },
+                    {
+                        "role":  "out-youtube",
+                        "kind":  "encode",
+                        "codec":  "libx264",
+                        "target_kbps":  17000,
+                        "speed_min":  0.22,
+                        "speed_p50":  0.3,
+                        "fps_p50":  60,
+                        "ok":  false,
+                        "error":  null
+                    },
+                    {
+                        "role":  "out-twitch",
+                        "kind":  "encode",
+                        "codec":  "libx264",
+                        "target_kbps":  6000,
+                        "speed_min":  0.5,
+                        "speed_p50":  0.55,
+                        "fps_p50":  60,
+                        "ok":  false,
+                        "error":  null
+                    }
+                ],
+    "system":  {
+                   "cpu_p50":  97,
+                   "cpu_p95":  100,
+                   "cpu_max":  100,
+                   "perf_start":  100,
+                   "perf_min":  55,
+                   "perf_p50":  62,
+                   "gpu_enc_p95":  0,
+                   "gpu_dec_p95":  3,
+                   "gpu_3d_p95":  20,
+                   "mem_used_pct_max":  88,
+                   "samples":  [
+
+                               ]
+               },
+    "note":  "synthetic",
+    "errors":  [
+
+               ]
+}

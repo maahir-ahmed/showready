@@ -1,0 +1,271 @@
+{
+  "adapter": {
+    "name": "Ethernet",
+    "description": "Intel(R) Ethernet Connection I219-V",
+    "kind": "wired",
+    "chosen_because": "wired",
+    "ipv4": "192.168.0.50",
+    "prefix_length": 24,
+    "gateway": "192.168.0.1",
+    "link_mbps": 1000,
+    "local_ips": [
+      "192.168.0.50"
+    ]
+  },
+  "mdns": {
+    "query_ok": true,
+    "listen_ms": 3000,
+    "methods": [
+      {
+        "name": "unicast",
+        "ok": true,
+        "answers": 3,
+        "error": null
+      },
+      {
+        "name": "windows",
+        "ok": true,
+        "answers": 3,
+        "error": null
+      }
+    ],
+    "responders": [
+      "192.168.0.21",
+      "192.168.0.22"
+    ],
+    "service_types_seen": [
+      "_omt._tcp",
+      "_ndi._tcp"
+    ]
+  },
+  "sources": [
+    {
+      "protocol": "OMT",
+      "name": "STUDIO-A (Main Feed)",
+      "machine": "STUDIO-A",
+      "source": "Main Feed",
+      "host": "studio-a.local",
+      "port": 6400,
+      "ip": "192.168.0.21",
+      "local": false,
+      "found_by": [
+        "unicast",
+        "windows"
+      ]
+    },
+    {
+      "protocol": "OMT",
+      "name": "STUDIO-B (Side Feed)",
+      "machine": "STUDIO-B",
+      "source": "Side Feed",
+      "host": "studio-b.local",
+      "port": 6400,
+      "ip": "192.168.0.22",
+      "local": false,
+      "found_by": [
+        "unicast",
+        "windows"
+      ]
+    },
+    {
+      "protocol": "NDI",
+      "name": "LOCAL-PC (Screen)",
+      "machine": "LOCAL-PC",
+      "source": "Screen",
+      "host": "local-pc.local",
+      "port": 5961,
+      "ip": "192.168.0.50",
+      "local": true,
+      "found_by": [
+        "unicast"
+      ]
+    }
+  ],
+  "discovery_servers": {
+    "ndi": [],
+    "omt": [],
+    "ndi_config_path": null,
+    "omt_settings_path": null
+  },
+  "sweep": {
+    "cidr": "192.168.0.0/24",
+    "scanned": 254,
+    "alive": 12,
+    "seconds": 1.2,
+    "skipped_reason": null
+  },
+  "hosts": [
+    {
+      "ip": "192.168.0.1",
+      "mac": "00-11-22-33-44-01",
+      "vendor": "Cisco Systems",
+      "category": "network",
+      "randomized_mac": false,
+      "ping_ms": 0.5,
+      "is_self": false,
+      "is_gateway": true,
+      "sources": []
+    },
+    {
+      "ip": "192.168.0.2",
+      "mac": "00-11-22-33-44-02",
+      "vendor": "Cisco Systems",
+      "category": "network",
+      "randomized_mac": false,
+      "ping_ms": 0.6,
+      "is_self": false,
+      "is_gateway": false,
+      "sources": []
+    },
+    {
+      "ip": "192.168.0.10",
+      "mac": "00-14-22-01-02-03",
+      "vendor": "Dell Inc.",
+      "category": "pc",
+      "randomized_mac": false,
+      "ping_ms": 0.8,
+      "is_self": false,
+      "is_gateway": false,
+      "sources": []
+    },
+    {
+      "ip": "192.168.0.11",
+      "mac": "00-14-22-01-02-04",
+      "vendor": "Dell Inc.",
+      "category": "pc",
+      "randomized_mac": false,
+      "ping_ms": 0.9,
+      "is_self": false,
+      "is_gateway": false,
+      "sources": []
+    },
+    {
+      "ip": "192.168.0.20",
+      "mac": "70-b3-d5-11-22-33",
+      "vendor": "BirdDog Australia",
+      "category": "broadcast",
+      "randomized_mac": false,
+      "ping_ms": 1.1,
+      "is_self": false,
+      "is_gateway": false,
+      "sources": []
+    },
+    {
+      "ip": "192.168.0.21",
+      "mac": "00-14-22-01-02-05",
+      "vendor": "Dell Inc.",
+      "category": "pc",
+      "randomized_mac": false,
+      "ping_ms": 0.7,
+      "is_self": false,
+      "is_gateway": false,
+      "sources": [
+        "STUDIO-A (Main Feed)"
+      ]
+    },
+    {
+      "ip": "192.168.0.22",
+      "mac": "00-14-22-01-02-06",
+      "vendor": "Dell Inc.",
+      "category": "pc",
+      "randomized_mac": false,
+      "ping_ms": 0.8,
+      "is_self": false,
+      "is_gateway": false,
+      "sources": [
+        "STUDIO-B (Side Feed)"
+      ]
+    },
+    {
+      "ip": "192.168.0.50",
+      "mac": "00-14-22-01-02-07",
+      "vendor": "Dell Inc.",
+      "category": "pc",
+      "randomized_mac": false,
+      "ping_ms": 0.1,
+      "is_self": true,
+      "is_gateway": false,
+      "sources": [
+        "LOCAL-PC (Screen)"
+      ]
+    },
+    {
+      "ip": "192.168.0.99",
+      "mac": "da-a1-19-22-33-44",
+      "vendor": null,
+      "category": null,
+      "randomized_mac": true,
+      "ping_ms": 15.2,
+      "is_self": false,
+      "is_gateway": false,
+      "sources": []
+    },
+    {
+      "ip": "192.168.0.101",
+      "mac": "00-14-22-01-02-08",
+      "vendor": "Dell Inc.",
+      "category": "pc",
+      "randomized_mac": false,
+      "ping_ms": 1.0,
+      "is_self": false,
+      "is_gateway": false,
+      "sources": []
+    },
+    {
+      "ip": "192.168.0.102",
+      "mac": null,
+      "vendor": null,
+      "category": null,
+      "randomized_mac": false,
+      "ping_ms": 2.5,
+      "is_self": false,
+      "is_gateway": false,
+      "sources": []
+    },
+    {
+      "ip": "192.168.0.103",
+      "mac": "00-14-22-01-02-09",
+      "vendor": "Dell Inc.",
+      "category": "pc",
+      "randomized_mac": false,
+      "ping_ms": 1.2,
+      "is_self": false,
+      "is_gateway": false,
+      "sources": []
+    }
+  ],
+  "partners": [
+    {
+      "host": "192.168.0.21",
+      "ip": "192.168.0.21",
+      "port": 5201,
+      "origin": "auto",
+      "loopback": false,
+      "direction": "to_this_pc",
+      "tcp": {
+        "mbps": 941,
+        "retransmits": 0,
+        "seconds": 10,
+        "error": null
+      },
+      "udp": {
+        "target_mbps": 400,
+        "mbps": 400,
+        "packets": 38000,
+        "lost": 0,
+        "loss_pct": 0.0,
+        "jitter_ms": 0.02,
+        "seconds": 10,
+        "error": null
+      },
+      "error": null
+    }
+  ],
+  "test": {
+    "protocol": "OMT",
+    "per_feed_mbps": 200,
+    "target_mbps": 400,
+    "seconds": 10
+  },
+  "errors": []
+}

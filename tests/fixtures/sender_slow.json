@@ -1,0 +1,54 @@
+{
+  "ffmpeg": {
+    "found": true,
+    "path": "C:\\ShowReady\\bin\\ffmpeg.exe",
+    "version": "n8.1-1-g0090ffc5b9-20250228"
+  },
+  "codec": "speedhq",
+  "pix_fmt": "yuv422p",
+  "width": 1920,
+  "height": 1080,
+  "fps": 60,
+  "seconds": 45,
+  "source": {
+    "codec": "speedhq",
+    "pix_fmt": "yuv422p",
+    "width": 1920,
+    "height": 1080,
+    "fps": 60,
+    "seconds": 4,
+    "file_mb": 42.5
+  },
+  "max_speed": 0.74,
+  "stream": {
+    "speed_min": 0.71,
+    "speed_p50": 0.72,
+    "fps_p50": 43.0,
+    "ok": false,
+    "error": "speed_min 0.71 < threshold 0.97"
+  },
+  "system": {
+    "cpu_p50": 95.0,
+    "cpu_p95": 99.0,
+    "cpu_max": 100.0,
+    "perf_start": 100.0,
+    "perf_min": 70.0,
+    "perf_p50": 80.0,
+    "gpu_3d_p95": 85.0,
+    "mem_used_pct_max": 75.0,
+    "samples": [
+      { "t": 1, "cpu": 92.0, "perf": 100.0, "gpu_3d": 80.0, "mem": 70.0 },
+      { "t": 2, "cpu": 94.0, "perf": 95.0, "gpu_3d": 82.0, "mem": 71.0 },
+      { "t": 3, "cpu": 95.0, "perf": 90.0, "gpu_3d": 83.0, "mem": 72.0 },
+      { "t": 4, "cpu": 95.0, "perf": 85.0, "gpu_3d": 85.0, "mem": 73.0 },
+      { "t": 5, "cpu": 96.0, "perf": 80.0, "gpu_3d": 84.0, "mem": 73.5 },
+      { "t": 6, "cpu": 97.0, "perf": 75.0, "gpu_3d": 85.0, "mem": 74.0 },
+      { "t": 7, "cpu": 98.0, "perf": 72.0, "gpu_3d": 84.5, "mem": 74.2 },
+      { "t": 8, "cpu": 99.0, "perf": 70.0, "gpu_3d": 85.0, "mem": 74.8 },
+      { "t": 9, "cpu": 99.0, "perf": 70.0, "gpu_3d": 84.0, "mem": 75.0 },
+      { "t": 10, "cpu": 100.0, "perf": 70.0, "gpu_3d": 85.0, "mem": 75.0 }
+    ]
+  },
+  "note": "SpeedHQ is the codec full NDI uses. OMT's VMX codec has no ffmpeg encoder, so SpeedHQ stands in for both. ffmpeg's SpeedHQ encoder is less optimised than the NDI SDK's, so this errs on the safe side.",
+  "errors": []
+}

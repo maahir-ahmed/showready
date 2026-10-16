@@ -1,0 +1,850 @@
+﻿{
+  "adapter": {
+    "name": "WiFi",
+    "description": "Intel(R) Wi-Fi 6E AX210 160MHz",
+    "kind": "wifi",
+    "chosen_because": "default_route",
+    "ipv4": "192.168.24.73",
+    "prefix_length": 24,
+    "gateway": "192.168.24.1",
+    "link_mbps": 144,
+    "local_ips": [
+      "172.22.224.1",
+      "172.31.48.1",
+      "169.254.95.245",
+      "169.254.157.171",
+      "169.254.25.101",
+      "192.168.24.73",
+      "127.0.0.1"
+    ]
+  },
+  "mdns": {
+    "query_ok": true,
+    "listen_ms": 3000,
+    "methods": [
+      {
+        "name": "unicast",
+        "ok": true,
+        "answers": 0,
+        "error": null
+      },
+      {
+        "name": "windows",
+        "ok": true,
+        "answers": 0,
+        "error": null
+      }
+    ],
+    "responders": [],
+    "service_types_seen": []
+  },
+  "sources": [],
+  "discovery_servers": {
+    "ndi": [],
+    "omt": [],
+    "ndi_config_path": null,
+    "omt_settings_path": null
+  },
+  "sweep": {
+    "cidr": "192.168.24.0/24",
+    "scanned": 253,
+    "alive": 68,
+    "seconds": 1.7,
+    "skipped_reason": null
+  },
+  "hosts": [
+    {
+      "ip": "192.168.24.1",
+      "mac": "00-01-21-01-f3-f4",
+      "vendor": null,
+      "category": null,
+      "randomized_mac": false,
+      "ping_ms": 11,
+      "is_self": false,
+      "is_gateway": true,
+      "sources": []
+    },
+    {
+      "ip": "192.168.24.10",
+      "mac": "cc-7f-75-fe-db-c0",
+      "vendor": null,
+      "category": null,
+      "randomized_mac": false,
+      "ping_ms": 40,
+      "is_self": false,
+      "is_gateway": false,
+      "sources": []
+    },
+    {
+      "ip": "192.168.24.11",
+      "mac": "84-f1-47-8a-06-c8",
+      "vendor": null,
+      "category": null,
+      "randomized_mac": false,
+      "ping_ms": 9,
+      "is_self": false,
+      "is_gateway": false,
+      "sources": []
+    },
+    {
+      "ip": "192.168.24.12",
+      "mac": "a4-b2-39-be-02-08",
+      "vendor": null,
+      "category": null,
+      "randomized_mac": false,
+      "ping_ms": 13,
+      "is_self": false,
+      "is_gateway": false,
+      "sources": []
+    },
+    {
+      "ip": "192.168.24.13",
+      "mac": "a4-b2-39-be-00-d8",
+      "vendor": null,
+      "category": null,
+      "randomized_mac": false,
+      "ping_ms": 18,
+      "is_self": false,
+      "is_gateway": false,
+      "sources": []
+    },
+    {
+      "ip": "192.168.24.14",
+      "mac": "a4-b2-39-be-02-28",
+      "vendor": null,
+      "category": null,
+      "randomized_mac": false,
+      "ping_ms": 17,
+      "is_self": false,
+      "is_gateway": false,
+      "sources": []
+    },
+    {
+      "ip": "192.168.24.15",
+      "mac": "a4-b2-39-be-02-10",
+      "vendor": null,
+      "category": null,
+      "randomized_mac": false,
+      "ping_ms": 17,
+      "is_self": false,
+      "is_gateway": false,
+      "sources": []
+    },
+    {
+      "ip": "192.168.24.16",
+      "mac": "a4-b2-39-be-03-68",
+      "vendor": null,
+      "category": null,
+      "randomized_mac": false,
+      "ping_ms": 31,
+      "is_self": false,
+      "is_gateway": false,
+      "sources": []
+    },
+    {
+      "ip": "192.168.24.17",
+      "mac": "a4-b2-39-be-01-38",
+      "vendor": null,
+      "category": null,
+      "randomized_mac": false,
+      "ping_ms": 20,
+      "is_self": false,
+      "is_gateway": false,
+      "sources": []
+    },
+    {
+      "ip": "192.168.24.18",
+      "mac": "a4-b2-39-be-02-50",
+      "vendor": null,
+      "category": null,
+      "randomized_mac": false,
+      "ping_ms": 30,
+      "is_self": false,
+      "is_gateway": false,
+      "sources": []
+    },
+    {
+      "ip": "192.168.24.19",
+      "mac": "a0-44-b7-a9-c3-cf",
+      "vendor": null,
+      "category": null,
+      "randomized_mac": false,
+      "ping_ms": 88,
+      "is_self": false,
+      "is_gateway": false,
+      "sources": []
+    },
+    {
+      "ip": "192.168.24.20",
+      "mac": "b4-0e-de-76-ca-d7",
+      "vendor": null,
+      "category": null,
+      "randomized_mac": false,
+      "ping_ms": 36,
+      "is_self": false,
+      "is_gateway": false,
+      "sources": []
+    },
+    {
+      "ip": "192.168.24.21",
+      "mac": "fc-31-5d-41-87-98",
+      "vendor": null,
+      "category": null,
+      "randomized_mac": false,
+      "ping_ms": 87,
+      "is_self": false,
+      "is_gateway": false,
+      "sources": []
+    },
+    {
+      "ip": "192.168.24.29",
+      "mac": "22-ec-ef-f9-eb-c2",
+      "vendor": null,
+      "category": null,
+      "randomized_mac": true,
+      "ping_ms": null,
+      "is_self": false,
+      "is_gateway": false,
+      "sources": []
+    },
+    {
+      "ip": "192.168.24.30",
+      "mac": "c6-c4-d6-f2-c3-8c",
+      "vendor": null,
+      "category": null,
+      "randomized_mac": true,
+      "ping_ms": null,
+      "is_self": false,
+      "is_gateway": false,
+      "sources": []
+    },
+    {
+      "ip": "192.168.24.40",
+      "mac": "62-23-25-f8-af-dd",
+      "vendor": null,
+      "category": null,
+      "randomized_mac": true,
+      "ping_ms": 35,
+      "is_self": false,
+      "is_gateway": false,
+      "sources": []
+    },
+    {
+      "ip": "192.168.24.41",
+      "mac": "c2-6d-a3-38-1f-ad",
+      "vendor": null,
+      "category": null,
+      "randomized_mac": true,
+      "ping_ms": null,
+      "is_self": false,
+      "is_gateway": false,
+      "sources": []
+    },
+    {
+      "ip": "192.168.24.45",
+      "mac": "52-b2-f9-f3-9c-28",
+      "vendor": null,
+      "category": null,
+      "randomized_mac": true,
+      "ping_ms": null,
+      "is_self": false,
+      "is_gateway": false,
+      "sources": []
+    },
+    {
+      "ip": "192.168.24.49",
+      "mac": "d4-54-8b-d1-6e-bf",
+      "vendor": null,
+      "category": null,
+      "randomized_mac": false,
+      "ping_ms": null,
+      "is_self": false,
+      "is_gateway": false,
+      "sources": []
+    },
+    {
+      "ip": "192.168.24.50",
+      "mac": "2e-9d-20-ed-12-08",
+      "vendor": null,
+      "category": null,
+      "randomized_mac": true,
+      "ping_ms": null,
+      "is_self": false,
+      "is_gateway": false,
+      "sources": []
+    },
+    {
+      "ip": "192.168.24.51",
+      "mac": "a8-e5-39-af-27-dc",
+      "vendor": null,
+      "category": null,
+      "randomized_mac": false,
+      "ping_ms": null,
+      "is_self": false,
+      "is_gateway": false,
+      "sources": []
+    },
+    {
+      "ip": "192.168.24.52",
+      "mac": "a8-e5-39-af-27-db",
+      "vendor": null,
+      "category": null,
+      "randomized_mac": false,
+      "ping_ms": null,
+      "is_self": false,
+      "is_gateway": false,
+      "sources": []
+    },
+    {
+      "ip": "192.168.24.59",
+      "mac": "be-14-fd-6c-c9-fe",
+      "vendor": null,
+      "category": null,
+      "randomized_mac": true,
+      "ping_ms": null,
+      "is_self": false,
+      "is_gateway": false,
+      "sources": []
+    },
+    {
+      "ip": "192.168.24.62",
+      "mac": "da-e0-98-b2-33-d2",
+      "vendor": null,
+      "category": null,
+      "randomized_mac": true,
+      "ping_ms": null,
+      "is_self": false,
+      "is_gateway": false,
+      "sources": []
+    },
+    {
+      "ip": "192.168.24.66",
+      "mac": "00-93-37-b1-d2-71",
+      "vendor": null,
+      "category": null,
+      "randomized_mac": false,
+      "ping_ms": null,
+      "is_self": false,
+      "is_gateway": false,
+      "sources": []
+    },
+    {
+      "ip": "192.168.24.70",
+      "mac": "c0-8a-cd-48-b4-41",
+      "vendor": null,
+      "category": null,
+      "randomized_mac": false,
+      "ping_ms": 67,
+      "is_self": false,
+      "is_gateway": false,
+      "sources": []
+    },
+    {
+      "ip": "192.168.24.71",
+      "mac": "5a-04-6d-92-09-81",
+      "vendor": null,
+      "category": null,
+      "randomized_mac": true,
+      "ping_ms": null,
+      "is_self": false,
+      "is_gateway": false,
+      "sources": []
+    },
+    {
+      "ip": "192.168.24.73",
+      "mac": "8c-f8-c5-74-5a-d6",
+      "vendor": null,
+      "category": null,
+      "randomized_mac": false,
+      "ping_ms": null,
+      "is_self": true,
+      "is_gateway": false,
+      "sources": []
+    },
+    {
+      "ip": "192.168.24.81",
+      "mac": "d6-02-88-eb-7b-fa",
+      "vendor": null,
+      "category": null,
+      "randomized_mac": true,
+      "ping_ms": 142,
+      "is_self": false,
+      "is_gateway": false,
+      "sources": []
+    },
+    {
+      "ip": "192.168.24.84",
+      "mac": "f2-fc-b4-66-12-83",
+      "vendor": null,
+      "category": null,
+      "randomized_mac": true,
+      "ping_ms": null,
+      "is_self": false,
+      "is_gateway": false,
+      "sources": []
+    },
+    {
+      "ip": "192.168.24.85",
+      "mac": "a6-9f-11-dd-d1-37",
+      "vendor": null,
+      "category": null,
+      "randomized_mac": true,
+      "ping_ms": null,
+      "is_self": false,
+      "is_gateway": false,
+      "sources": []
+    },
+    {
+      "ip": "192.168.24.89",
+      "mac": "68-54-5a-41-87-91",
+      "vendor": null,
+      "category": null,
+      "randomized_mac": false,
+      "ping_ms": null,
+      "is_self": false,
+      "is_gateway": false,
+      "sources": []
+    },
+    {
+      "ip": "192.168.24.90",
+      "mac": "de-ae-b2-f0-8c-92",
+      "vendor": null,
+      "category": null,
+      "randomized_mac": true,
+      "ping_ms": null,
+      "is_self": false,
+      "is_gateway": false,
+      "sources": []
+    },
+    {
+      "ip": "192.168.24.93",
+      "mac": "a2-49-b7-b0-2b-d9",
+      "vendor": null,
+      "category": null,
+      "randomized_mac": true,
+      "ping_ms": null,
+      "is_self": false,
+      "is_gateway": false,
+      "sources": []
+    },
+    {
+      "ip": "192.168.24.94",
+      "mac": "b2-c4-53-fd-cd-b9",
+      "vendor": null,
+      "category": null,
+      "randomized_mac": true,
+      "ping_ms": null,
+      "is_self": false,
+      "is_gateway": false,
+      "sources": []
+    },
+    {
+      "ip": "192.168.24.107",
+      "mac": "e2-e7-50-42-fc-f9",
+      "vendor": null,
+      "category": null,
+      "randomized_mac": true,
+      "ping_ms": null,
+      "is_self": false,
+      "is_gateway": false,
+      "sources": []
+    },
+    {
+      "ip": "192.168.24.114",
+      "mac": "a6-62-06-6c-c3-08",
+      "vendor": null,
+      "category": null,
+      "randomized_mac": true,
+      "ping_ms": 53,
+      "is_self": false,
+      "is_gateway": false,
+      "sources": []
+    },
+    {
+      "ip": "192.168.24.115",
+      "mac": "3e-d8-25-c0-54-4a",
+      "vendor": null,
+      "category": null,
+      "randomized_mac": true,
+      "ping_ms": null,
+      "is_self": false,
+      "is_gateway": false,
+      "sources": []
+    },
+    {
+      "ip": "192.168.24.116",
+      "mac": "2e-45-04-c5-a4-a2",
+      "vendor": null,
+      "category": null,
+      "randomized_mac": true,
+      "ping_ms": null,
+      "is_self": false,
+      "is_gateway": false,
+      "sources": []
+    },
+    {
+      "ip": "192.168.24.117",
+      "mac": "f2-b8-be-2d-90-df",
+      "vendor": null,
+      "category": null,
+      "randomized_mac": true,
+      "ping_ms": null,
+      "is_self": false,
+      "is_gateway": false,
+      "sources": []
+    },
+    {
+      "ip": "192.168.24.118",
+      "mac": "c8-58-c0-26-e4-54",
+      "vendor": null,
+      "category": null,
+      "randomized_mac": false,
+      "ping_ms": null,
+      "is_self": false,
+      "is_gateway": false,
+      "sources": []
+    },
+    {
+      "ip": "192.168.24.119",
+      "mac": "b0-60-88-2e-72-f0",
+      "vendor": null,
+      "category": null,
+      "randomized_mac": false,
+      "ping_ms": null,
+      "is_self": false,
+      "is_gateway": false,
+      "sources": []
+    },
+    {
+      "ip": "192.168.24.120",
+      "mac": "f4-6a-dd-8b-11-21",
+      "vendor": null,
+      "category": null,
+      "randomized_mac": false,
+      "ping_ms": null,
+      "is_self": false,
+      "is_gateway": false,
+      "sources": []
+    },
+    {
+      "ip": "192.168.24.122",
+      "mac": "00-93-37-b1-ff-58",
+      "vendor": null,
+      "category": null,
+      "randomized_mac": false,
+      "ping_ms": null,
+      "is_self": false,
+      "is_gateway": false,
+      "sources": []
+    },
+    {
+      "ip": "192.168.24.128",
+      "mac": "bc-38-98-5d-cb-2c",
+      "vendor": null,
+      "category": null,
+      "randomized_mac": false,
+      "ping_ms": 42,
+      "is_self": false,
+      "is_gateway": false,
+      "sources": []
+    },
+    {
+      "ip": "192.168.24.129",
+      "mac": "5e-98-23-eb-ed-3c",
+      "vendor": null,
+      "category": null,
+      "randomized_mac": true,
+      "ping_ms": null,
+      "is_self": false,
+      "is_gateway": false,
+      "sources": []
+    },
+    {
+      "ip": "192.168.24.132",
+      "mac": "b6-42-f9-ab-cb-d3",
+      "vendor": null,
+      "category": null,
+      "randomized_mac": true,
+      "ping_ms": null,
+      "is_self": false,
+      "is_gateway": false,
+      "sources": []
+    },
+    {
+      "ip": "192.168.24.134",
+      "mac": "ee-bc-cf-c9-f9-53",
+      "vendor": null,
+      "category": null,
+      "randomized_mac": true,
+      "ping_ms": 126,
+      "is_self": false,
+      "is_gateway": false,
+      "sources": []
+    },
+    {
+      "ip": "192.168.24.138",
+      "mac": "2c-6d-c1-19-c8-be",
+      "vendor": null,
+      "category": null,
+      "randomized_mac": false,
+      "ping_ms": 34,
+      "is_self": false,
+      "is_gateway": false,
+      "sources": []
+    },
+    {
+      "ip": "192.168.24.139",
+      "mac": "94-a4-08-d7-3d-12",
+      "vendor": null,
+      "category": null,
+      "randomized_mac": false,
+      "ping_ms": 124,
+      "is_self": false,
+      "is_gateway": false,
+      "sources": []
+    },
+    {
+      "ip": "192.168.24.140",
+      "mac": "52-c5-3e-a0-d1-45",
+      "vendor": null,
+      "category": null,
+      "randomized_mac": true,
+      "ping_ms": 109,
+      "is_self": false,
+      "is_gateway": false,
+      "sources": []
+    },
+    {
+      "ip": "192.168.24.142",
+      "mac": "62-5f-61-5c-d3-11",
+      "vendor": null,
+      "category": null,
+      "randomized_mac": true,
+      "ping_ms": null,
+      "is_self": false,
+      "is_gateway": false,
+      "sources": []
+    },
+    {
+      "ip": "192.168.24.148",
+      "mac": "ea-97-c3-67-a5-14",
+      "vendor": null,
+      "category": null,
+      "randomized_mac": true,
+      "ping_ms": null,
+      "is_self": false,
+      "is_gateway": false,
+      "sources": []
+    },
+    {
+      "ip": "192.168.24.152",
+      "mac": "0c-91-92-50-70-df",
+      "vendor": null,
+      "category": null,
+      "randomized_mac": false,
+      "ping_ms": null,
+      "is_self": false,
+      "is_gateway": false,
+      "sources": []
+    },
+    {
+      "ip": "192.168.24.154",
+      "mac": "66-37-69-99-01-d5",
+      "vendor": null,
+      "category": null,
+      "randomized_mac": true,
+      "ping_ms": 371,
+      "is_self": false,
+      "is_gateway": false,
+      "sources": []
+    },
+    {
+      "ip": "192.168.24.159",
+      "mac": "22-5b-4e-0f-f2-06",
+      "vendor": null,
+      "category": null,
+      "randomized_mac": true,
+      "ping_ms": null,
+      "is_self": false,
+      "is_gateway": false,
+      "sources": []
+    },
+    {
+      "ip": "192.168.24.160",
+      "mac": "0a-fa-0f-ed-65-1c",
+      "vendor": null,
+      "category": null,
+      "randomized_mac": true,
+      "ping_ms": null,
+      "is_self": false,
+      "is_gateway": false,
+      "sources": []
+    },
+    {
+      "ip": "192.168.24.162",
+      "mac": "92-8e-19-e1-6d-ea",
+      "vendor": null,
+      "category": null,
+      "randomized_mac": true,
+      "ping_ms": null,
+      "is_self": false,
+      "is_gateway": false,
+      "sources": []
+    },
+    {
+      "ip": "192.168.24.163",
+      "mac": "2c-6d-c1-1a-6f-f3",
+      "vendor": null,
+      "category": null,
+      "randomized_mac": false,
+      "ping_ms": null,
+      "is_self": false,
+      "is_gateway": false,
+      "sources": []
+    },
+    {
+      "ip": "192.168.24.167",
+      "mac": "26-3a-7a-60-11-c9",
+      "vendor": null,
+      "category": null,
+      "randomized_mac": true,
+      "ping_ms": null,
+      "is_self": false,
+      "is_gateway": false,
+      "sources": []
+    },
+    {
+      "ip": "192.168.24.173",
+      "mac": "3e-f5-7c-8d-a7-3f",
+      "vendor": null,
+      "category": null,
+      "randomized_mac": true,
+      "ping_ms": null,
+      "is_self": false,
+      "is_gateway": false,
+      "sources": []
+    },
+    {
+      "ip": "192.168.24.174",
+      "mac": "d2-34-9d-26-b4-6c",
+      "vendor": null,
+      "category": null,
+      "randomized_mac": true,
+      "ping_ms": 153,
+      "is_self": false,
+      "is_gateway": false,
+      "sources": []
+    },
+    {
+      "ip": "192.168.24.175",
+      "mac": "ea-ae-aa-72-bf-c2",
+      "vendor": null,
+      "category": null,
+      "randomized_mac": true,
+      "ping_ms": null,
+      "is_self": false,
+      "is_gateway": false,
+      "sources": []
+    },
+    {
+      "ip": "192.168.24.176",
+      "mac": "a2-18-84-03-5b-4f",
+      "vendor": null,
+      "category": null,
+      "randomized_mac": true,
+      "ping_ms": null,
+      "is_self": false,
+      "is_gateway": false,
+      "sources": []
+    },
+    {
+      "ip": "192.168.24.180",
+      "mac": "9a-5f-a4-10-02-d8",
+      "vendor": null,
+      "category": null,
+      "randomized_mac": true,
+      "ping_ms": null,
+      "is_self": false,
+      "is_gateway": false,
+      "sources": []
+    },
+    {
+      "ip": "192.168.24.183",
+      "mac": "18-cc-18-fc-76-05",
+      "vendor": null,
+      "category": null,
+      "randomized_mac": false,
+      "ping_ms": 43,
+      "is_self": false,
+      "is_gateway": false,
+      "sources": []
+    },
+    {
+      "ip": "192.168.24.185",
+      "mac": "aa-f3-6f-e2-cf-c6",
+      "vendor": null,
+      "category": null,
+      "randomized_mac": true,
+      "ping_ms": null,
+      "is_self": false,
+      "is_gateway": false,
+      "sources": []
+    },
+    {
+      "ip": "192.168.24.187",
+      "mac": "4a-a4-6f-b0-66-13",
+      "vendor": null,
+      "category": null,
+      "randomized_mac": true,
+      "ping_ms": null,
+      "is_self": false,
+      "is_gateway": false,
+      "sources": []
+    },
+    {
+      "ip": "192.168.24.250",
+      "mac": "30-8b-b2-8c-a9-5f",
+      "vendor": null,
+      "category": null,
+      "randomized_mac": false,
+      "ping_ms": 13,
+      "is_self": false,
+      "is_gateway": false,
+      "sources": []
+    }
+  ],
+  "partners": [
+    {
+      "host": "127.0.0.1",
+      "ip": "127.0.0.1",
+      "port": 5201,
+      "origin": "cli",
+      "loopback": true,
+      "direction": "to_this_pc",
+      "tcp": {
+        "mbps": 399.7,
+        "retransmits": null,
+        "seconds": 10,
+        "error": null
+      },
+      "udp": {
+        "target_mbps": 400,
+        "mbps": 399,
+        "packets": 357406,
+        "lost": 702,
+        "loss_pct": 0.196,
+        "jitter_ms": 0.019,
+        "seconds": 10,
+        "error": null
+      },
+      "error": null
+    }
+  ],
+  "test": {
+    "protocol": "OMT",
+    "per_feed_mbps": 200,
+    "target_mbps": 400,
+    "seconds": 10
+  },
+  "errors": []
+}

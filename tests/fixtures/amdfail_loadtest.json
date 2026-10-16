@@ -1,0 +1,140 @@
+{
+    "ffmpeg":  {
+                   "found":  true,
+                   "path":  "bin\\ffmpeg.exe",
+                   "version":  "8.1"
+               },
+    "encoders":  {
+                     "available":  [
+                                       "h264_nvenc",
+                                       "h264_amf",
+                                       "h264_qsv",
+                                       "libx264"
+                                   ],
+                     "tested":  [
+                                    {
+                                        "name":  "h264_nvenc",
+                                        "ok":  false,
+                                        "error":  "[h264_nvenc] Cannot load nvcuda.dll",
+                                        "error_lines":  [
+                                                            "[h264_nvenc] Cannot load nvcuda.dll"
+                                                        ],
+                                        "driver_required":  null
+                                    },
+                                    {
+                                        "name":  "h264_amf",
+                                        "ok":  false,
+                                        "error":  "[h264_amf] AMF failed to initialise context",
+                                        "error_lines":  [
+                                                            "[h264_amf] AMF failed to initialise context"
+                                                        ],
+                                        "driver_required":  null
+                                    },
+                                    {
+                                        "name":  "h264_qsv",
+                                        "ok":  false,
+                                        "error":  "[h264_qsv] Selected device does not support Quick Sync Video",
+                                        "error_lines":  [
+                                                            "[h264_qsv] Selected device does not support Quick Sync Video"
+                                                        ],
+                                        "driver_required":  null
+                                    },
+                                    {
+                                        "name":  "libx264",
+                                        "ok":  true,
+                                        "error":  null,
+                                        "error_lines":  [
+
+                                                        ],
+                                        "driver_required":  null
+                                    }
+                                ],
+                     "chosen":  "libx264"
+                 },
+    "source":  {
+                   "codec":  "speedhq",
+                   "pix_fmt":  "yuv422p",
+                   "width":  1920,
+                   "height":  1080,
+                   "fps":  60,
+                   "seconds":  4,
+                   "file_mb":  60
+               },
+    "seconds":  45,
+    "streams":  [
+                    {
+                        "role":  "in-1",
+                        "kind":  "decode",
+                        "codec":  "speedhq",
+                        "target_kbps":  0,
+                        "speed_min":  1,
+                        "speed_p50":  1,
+                        "fps_p50":  60,
+                        "ok":  true,
+                        "error":  null
+                    },
+                    {
+                        "role":  "in-2",
+                        "kind":  "decode",
+                        "codec":  "speedhq",
+                        "target_kbps":  0,
+                        "speed_min":  1,
+                        "speed_p50":  1,
+                        "fps_p50":  60,
+                        "ok":  true,
+                        "error":  null
+                    },
+                    {
+                        "role":  "out-srt",
+                        "kind":  "encode",
+                        "codec":  "libx264",
+                        "target_kbps":  10000,
+                        "speed_min":  0.58,
+                        "speed_p50":  0.62,
+                        "fps_p50":  36,
+                        "ok":  false,
+                        "error":  null
+                    },
+                    {
+                        "role":  "out-youtube",
+                        "kind":  "encode",
+                        "codec":  "libx264",
+                        "target_kbps":  17000,
+                        "speed_min":  0.6,
+                        "speed_p50":  0.61,
+                        "fps_p50":  36,
+                        "ok":  false,
+                        "error":  null
+                    },
+                    {
+                        "role":  "out-twitch",
+                        "kind":  "encode",
+                        "codec":  "libx264",
+                        "target_kbps":  6000,
+                        "speed_min":  0.61,
+                        "speed_p50":  0.63,
+                        "fps_p50":  37,
+                        "ok":  false,
+                        "error":  null
+                    }
+                ],
+    "system":  {
+                   "cpu_p50":  94,
+                   "cpu_p95":  98,
+                   "cpu_max":  100,
+                   "perf_start":  100,
+                   "perf_min":  96,
+                   "perf_p50":  98,
+                   "gpu_enc_p95":  0,
+                   "gpu_dec_p95":  10,
+                   "gpu_3d_p95":  15,
+                   "mem_used_pct_max":  35,
+                   "samples":  [
+
+                               ]
+               },
+    "note":  "synthetic",
+    "errors":  [
+
+               ]
+}

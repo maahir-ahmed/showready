@@ -1,0 +1,1684 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>ShowReady pre-show report</title>
+<style>
+/* ---------- Colour tokens (light) ---------- */
+:root{
+  color-scheme: light dark;
+  --bg:#eef0f3; --surface:#ffffff; --surface-2:#f6f7f9; --border:#d3d8df; --border-strong:#9aa3af;
+  --text:#14181f; --muted:#454e5b; --faint:#5d6672; --accent:#0a58a8;
+  --go:#14622b;   --go-bg:#e4f3e8;   --go-line:#2f9a4d;   --go-solid:#1d7a38;
+  --warn:#7c4a00; --warn-bg:#fff1d2; --warn-line:#b36b00; --warn-solid:#a85f00;
+  --fail:#a91d17; --fail-bg:#fde9e8; --fail-line:#d63a30; --fail-solid:#c0261d;
+  --info:#1a5388; --info-bg:#e5eff8; --info-line:#4a86c3; --info-solid:#2f6fae;
+  --skip:#505965; --skip-bg:#eceef1; --skip-line:#747d89; --skip-solid:#6b7480;
+  --c1:#1f5fae; --c2:#b8520a; --c3:#0d7468; --c4:#7a4bb3; --c5:#6b7480;
+  --bar:#6f87a3; --bar-soft:#c9d4e0; --band:rgba(80,110,150,.12);
+  --sans: system-ui, -apple-system, "Segoe UI", "Malgun Gothic", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --mono: ui-monospace, "Cascadia Mono", "Cascadia Code", Consolas, "Liberation Mono", Menlo, monospace;
+}
+@media screen and (prefers-color-scheme: dark){
+  :root{
+    --bg:#0e1115; --surface:#171b21; --surface-2:#1e232b; --border:#2d343e; --border-strong:#56606d;
+    --text:#e9edf2; --muted:#b0b8c3; --faint:#96a0ad; --accent:#74b6f4;
+    --go:#7bdc94;   --go-bg:#12261a;   --go-line:#3fae5e;   --go-solid:#2a9a4d;
+    --warn:#f4bd55; --warn-bg:#2a2010; --warn-line:#d99a22; --warn-solid:#b8700a;
+    --fail:#ff9088; --fail-bg:#2f1716; --fail-line:#e5534b; --fail-solid:#d6372d;
+    --info:#86bdef; --info-bg:#122230; --info-line:#4b8fcf; --info-solid:#3a7bbd;
+    --skip:#a2abb7; --skip-bg:#1d2127; --skip-line:#626c79; --skip-solid:#6c7683;
+    --c1:#6aaaf0; --c2:#f0a050; --c3:#4fc9b7; --c4:#b99aee; --c5:#98a1ad;
+    --bar:#7d9bbd; --bar-soft:#34414f; --band:rgba(120,160,210,.14);
+  }
+}
+
+/* ---------- Base ---------- */
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%; text-size-adjust:100%}
+body{margin:0; background:var(--bg); color:var(--text); font:16px/1.5 var(--sans); -webkit-font-smoothing:antialiased}
+.page{max-width:980px; margin:0 auto; padding:14px 16px 80px}
+h1,h2,h3,h4,p{margin:0}
+a{color:var(--accent)}
+code,.mono{font-family:var(--mono); font-variant-numeric:tabular-nums}
+.nm{color:var(--faint); font-style:italic; font-weight:400; font-family:var(--sans); font-size:.9em}
+.sr-only{position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap}
+:focus-visible{outline:3px solid var(--accent); outline-offset:2px; border-radius:3px}
+
+/* status variable sets */
+.s-pass{--x:var(--go);   --xbg:var(--go-bg);   --xl:var(--go-line);   --xs:var(--go-solid)}
+.s-warn{--x:var(--warn); --xbg:var(--warn-bg); --xl:var(--warn-line); --xs:var(--warn-solid)}
+.s-fail{--x:var(--fail); --xbg:var(--fail-bg); --xl:var(--fail-line); --xs:var(--fail-solid)}
+.s-info{--x:var(--info); --xbg:var(--info-bg); --xl:var(--info-line); --xs:var(--info-solid)}
+.s-skip{--x:var(--skip); --xbg:var(--skip-bg); --xl:var(--skip-line); --xs:var(--skip-solid)}
+
+.badge{display:inline-flex; align-items:center; gap:5px; padding:1px 9px 1px 6px; border-radius:5px; border:1.5px solid var(--xl);
+  background:var(--xbg); color:var(--x); font:700 12px/1.7 var(--sans); letter-spacing:.06em; white-space:nowrap; -webkit-print-color-adjust:exact; print-color-adjust:exact}
+.ico{width:16px; height:16px; flex:none}
+
+/* ---------- Top bar ---------- */
+.topbar{display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; padding:6px 0 10px}
+.brand{font:800 15px var(--sans); letter-spacing:.12em; text-transform:uppercase}
+.brand span{font-weight:500; color:var(--muted); letter-spacing:.04em; text-transform:none; margin-left:8px}
+.nav{display:flex; flex-wrap:wrap; gap:4px 6px; margin:0 0 14px; padding:0; list-style:none}
+.nav a{display:inline-block; padding:5px 11px; border:1px solid var(--border); border-radius:999px; background:var(--surface); color:var(--text); text-decoration:none; font-size:13px; font-weight:600}
+.nav a:hover{border-color:var(--border-strong)}
+.nav b{color:var(--muted); margin-right:5px; font-weight:700}
+.meta{display:flex; flex-wrap:wrap; gap:4px 18px; color:var(--muted); font-size:14px; margin:0 0 18px}
+.meta span{min-width:0; overflow-wrap:anywhere}
+.meta span b{color:var(--text); font-weight:600}
+.plan{color:var(--muted); font-size:14px; margin:-8px 0 18px}
+
+.btn{font:600 14px/1.2 var(--sans); min-height:40px; padding:9px 16px; border-radius:7px; border:1.5px solid var(--border-strong); background:var(--surface); color:var(--text); cursor:pointer}
+.btn:hover{background:var(--surface-2)}
+.btn.primary{background:var(--text); color:var(--bg); border-color:var(--text)}
+.btn.primary:hover{opacity:.9}
+.btn.small{min-height:32px; padding:5px 11px; font-size:13px}
+.btn:focus-within{outline:3px solid var(--accent); outline-offset:2px}
+.btn.done{border-color:var(--go-line); color:var(--go)}
+
+/* ---------- Section frame ---------- */
+.sec{margin-top:44px}
+.sec > h2{display:flex; align-items:baseline; gap:12px; font-size:22px; line-height:1.25; font-weight:800; padding-bottom:10px; border-bottom:2px solid var(--text); margin-bottom:6px}
+.sec > h2 .n{font:800 14px var(--mono); color:var(--bg); background:var(--text); border-radius:4px; padding:1px 8px; position:relative; top:-2px}
+.sec .lede{color:var(--muted); margin:6px 0 18px; max-width:70ch}
+.sub{margin-top:30px}
+.sub > h3{font-size:17px; font-weight:800; margin-bottom:4px}
+.sub > .cap{color:var(--muted); font-size:14px; max-width:78ch; margin-bottom:12px}
+.panel{background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:16px 18px}
+.empty{color:var(--muted); padding:14px 16px; border:1px dashed var(--border-strong); border-radius:8px; background:var(--surface)}
+.err{color:var(--fail); background:var(--fail-bg); border:1.5px solid var(--fail-line); padding:10px 14px; border-radius:8px; font-size:14px}
+
+/* ---------- 1. Verdict ---------- */
+.verdict{display:grid; grid-template-columns:auto 1fr; gap:18px 24px; align-items:center; padding:22px 26px; border-radius:12px; border:2px solid var(--xl); background:var(--xbg); -webkit-print-color-adjust:exact; print-color-adjust:exact}
+.vicon{width:76px; height:76px}
+.vword{font:800 clamp(38px,8vw,60px)/1 var(--sans); letter-spacing:.01em; color:var(--x)}
+.headline{font-size:clamp(19px,2.8vw,25px); font-weight:650; line-height:1.28; margin-top:10px; max-width:34em}
+.vfix{margin-top:8px; font-size:17px; line-height:1.4; max-width:44em}
+.vnext{margin-top:10px; color:var(--muted); font-size:15px}
+.vchips{display:flex; flex-wrap:wrap; gap:8px; margin-top:14px; align-items:center}
+.chip{display:inline-flex; align-items:center; gap:6px; padding:2px 10px 2px 8px; border:1px solid var(--border-strong); border-radius:999px; background:var(--surface); font-size:13px; font-weight:600; color:var(--text)}
+.chip .ico{width:14px; height:14px}
+.chip.s-fail .ico,.chip.s-warn .ico,.chip.s-pass .ico,.chip.s-skip .ico{color:var(--x)}
+.weak{margin-top:12px; font-size:15px}
+.partial{margin-top:14px; padding:9px 13px; border:1.5px solid var(--warn-line); background:var(--surface); border-radius:8px; font-size:15px; -webkit-print-color-adjust:exact; print-color-adjust:exact}
+.weak a{font-weight:700}
+
+/* ---------- 2. Settings ---------- */
+.sgroup{margin-top:22px}
+.sgroup > h3{font:800 12px var(--sans); letter-spacing:.1em; text-transform:uppercase; color:var(--muted); margin-bottom:8px}
+.sgrid{display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr)); gap:12px}
+.scard{position:relative; background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:14px 16px 14px; display:flex; flex-direction:column; gap:6px; min-width:0}
+.scard.wide,.scard.hero{grid-column:1/-1}
+.scard.missing{border:2px dashed var(--border-strong); background:transparent}
+.scard.missing .sval{font-size:19px; line-height:1.3; user-select:auto; -webkit-user-select:auto}
+.scard.hero{ border:2px solid var(--text); padding:18px 20px}
+.slabel{font:700 12px var(--sans); letter-spacing:.08em; text-transform:uppercase; color:var(--muted); padding-right:78px}
+.sval{font:700 26px/1.2 var(--mono); overflow-wrap:anywhere; user-select:all; -webkit-user-select:all; cursor:text}
+.sval.xl{font-size:34px}
+.sval.md{font-size:19px; line-height:1.3}
+.hero .sval{font-size:clamp(42px,9vw,68px); line-height:1.05}
+.sval .line{display:block}
+.sval .line + .line{margin-top:8px}
+.sval .lk{display:block; font:700 11px var(--sans); letter-spacing:.09em; text-transform:uppercase; color:var(--muted)}
+.sval .lv{display:block; font-size:18px; line-height:1.3; overflow-wrap:anywhere}
+.swhy{font-size:14px; color:var(--muted); max-width:70ch}
+.shint{font-size:14px; color:var(--text); background:var(--surface-2); border:1px solid var(--border); border-radius:6px; padding:7px 10px; margin-top:4px}
+.shint code{font-weight:700}
+.scard .cp{position:absolute; top:10px; right:10px}
+.obits{display:grid; gap:0; margin-top:4px}
+.obit{display:grid; grid-template-columns:1fr auto; gap:2px 12px; padding:9px 0; border-top:1px solid var(--border)}
+.obit:first-child{border-top:0}
+.obit .on{font-weight:700}
+.obit .ov{font:700 19px var(--mono); text-align:right; user-select:all; -webkit-user-select:all}
+.obit .od{grid-column:1/-1; font-size:13px; color:var(--muted)}
+.copybar{display:flex; flex-wrap:wrap; align-items:center; gap:10px 14px; margin:2px 0 4px}
+.copynote{font-size:14px; color:var(--muted)}
+.fallback{margin-top:10px}
+.fallback textarea{width:100%; min-height:160px; font:13px/1.4 var(--mono); background:var(--surface); color:var(--text); border:1.5px solid var(--border-strong); border-radius:6px; padding:8px}
+.prov{margin:10px 0 0; padding:10px 14px; border-radius:8px; border:1.5px solid var(--warn-line); background:var(--warn-bg); color:var(--text); font-size:15px}
+
+/* ---------- 3. Issues ---------- */
+.issue{background:var(--surface); border:1px solid var(--border); border-left:7px solid var(--xl); border-radius:9px; padding:14px 18px 16px; margin-bottom:14px; break-inside:avoid}
+.issue > header{display:flex; flex-wrap:wrap; align-items:center; gap:6px 12px}
+.issue h3{font-size:18px; font-weight:750; line-height:1.3}
+.secnote{margin-left:auto; font:600 12px var(--sans); text-transform:uppercase; letter-spacing:.08em; color:var(--faint)}
+.vl{display:flex; flex-wrap:wrap; gap:10px 28px; align-items:flex-end; margin:12px 0 8px}
+.vl .k{display:block; font:700 11px var(--sans); letter-spacing:.09em; text-transform:uppercase; color:var(--muted)}
+.vl .v{font:700 22px/1.2 var(--mono); overflow-wrap:anywhere}
+.vl .v.lim{color:var(--muted)}
+.margin{display:flex; flex-direction:column; gap:3px; min-width:170px}
+.mbar{position:relative; height:12px; width:190px; max-width:100%; background:var(--surface-2); border:1px solid var(--border-strong); border-radius:3px}
+.mbar i{position:absolute; left:0; top:0; bottom:0; background:var(--xl); border-radius:2px 0 0 2px; -webkit-print-color-adjust:exact; print-color-adjust:exact}
+.mbar b{position:absolute; top:-4px; bottom:-4px; width:2px; margin-left:-1px; background:var(--text)}
+.mtxt{font-size:12px; color:var(--muted)}
+.mtxt strong{color:var(--x); font-weight:700}
+.detail{font-size:15px; color:var(--text); max-width:78ch}
+.fix{margin-top:10px; padding:10px 14px; border-radius:7px; background:var(--surface-2); border:1px solid var(--border)}
+.fix b{display:block; font:800 11px var(--sans); letter-spacing:.1em; text-transform:uppercase; color:var(--muted); margin-bottom:2px}
+.fix p{font-size:15px; max-width:78ch}
+.allgood{display:flex; align-items:center; gap:14px; padding:16px 18px; border:1.5px solid var(--go-line); background:var(--go-bg); border-radius:10px; -webkit-print-color-adjust:exact; print-color-adjust:exact}
+.allgood svg{width:34px; height:34px; color:var(--go); flex:none}
+.skipnote{margin-top:6px; color:var(--muted); font-size:14px}
+
+/* ---------- 4. All checks ---------- */
+.grp{background:var(--surface); border:1px solid var(--border); border-radius:10px; margin-bottom:12px}
+.grp > summary{list-style:none; cursor:pointer; display:flex; flex-wrap:wrap; align-items:center; gap:6px 12px; padding:12px 16px}
+.grp > summary::-webkit-details-marker{display:none}
+.grp > summary::before{content:""; width:0; height:0; border-left:6px solid var(--text); border-top:5px solid transparent; border-bottom:5px solid transparent; transition:transform .12s; margin-right:2px}
+.grp[open] > summary::before{transform:rotate(90deg)}
+.gname{font-weight:800; font-size:17px}
+.gsum{margin-left:auto; color:var(--muted); font-size:13px}
+.gnote{padding:0 16px 8px 34px; color:var(--muted); font-size:14px}
+.row{display:grid; grid-template-columns:86px 1fr minmax(150px,230px); gap:6px 16px; padding:11px 16px; border-top:1px solid var(--border); align-items:start}
+.row .rt b{font-weight:700; display:block; line-height:1.3}
+.row .rd{display:block; color:var(--muted); font-size:14px; margin-top:2px}
+.row .rv{text-align:right; min-width:0}
+.row .rv .v{font:700 15px var(--mono); overflow-wrap:anywhere}
+.row .rv .l{display:block; font-size:12.5px; color:var(--muted); overflow-wrap:anywhere}
+.row .mbar{height:8px; width:100%; margin-top:6px; margin-left:auto}
+.row.s-skip .rt b{color:var(--muted)}
+
+/* ---------- 5. Checklist ---------- */
+.ticks{list-style:none; margin:0; padding:0; display:grid; gap:8px}
+.tick{display:flex; gap:14px; align-items:flex-start; padding:12px 16px; background:var(--surface); border:1px solid var(--border); border-radius:9px; cursor:pointer; break-inside:avoid}
+.tick:hover{border-color:var(--border-strong)}
+.tick input{width:26px; height:26px; margin:1px 0 0; flex:none; accent-color:var(--accent); cursor:pointer}
+.tick .tx{font-size:16px; line-height:1.4}
+.tick input:checked + .tx{color:var(--muted); text-decoration:line-through; text-decoration-thickness:1.5px}
+.tprog{margin:0 0 10px; color:var(--muted); font-size:14px}
+
+/* ---------- 6. Evidence ---------- */
+.chart{width:100%; min-height:40px}
+.chart svg{display:block; width:100%; height:auto; overflow:visible}
+svg text{font-family:var(--sans); fill:var(--text); font-size:12px}
+svg .mono{font-family:var(--mono)}
+svg .tm{fill:var(--muted)}
+svg .tb{font-weight:700}
+.c-grid{stroke:var(--border); stroke-width:1}
+.c-axis{stroke:var(--border-strong); stroke-width:1}
+.c-band{fill:var(--band)}
+.c-bar{fill:var(--bar)}
+.c-cap{stroke:var(--bar); stroke-width:2}
+.c-p50{stroke:var(--text); stroke-width:3}
+.c-calc{stroke:var(--accent); stroke-width:2; stroke-dasharray:5 3}
+.c-calct{fill:var(--accent); font-weight:700}
+.c-off{fill:var(--text)}
+.c-offt{font-size:10.5px; font-weight:700}
+.c-hatch{stroke:var(--bar); stroke-width:1.5}
+.c-hatchbar{stroke:var(--bar); stroke-width:1.5; fill:none}
+.c-none{stroke:var(--border-strong); stroke-width:1.5; stroke-dasharray:4 4}
+.c-lossbar{fill:var(--bar)}
+.c-losszero{fill:var(--go-line)}
+.c-losshot{fill:var(--fail-solid)}
+.c-thr{stroke:var(--fail-line); stroke-width:1.5; stroke-dasharray:5 3}
+.c-thrt{fill:var(--fail); font-weight:700}
+.halo{paint-order:stroke; stroke:var(--surface); stroke-width:4px; stroke-linejoin:round}
+.c-warnline{stroke:var(--warn-line); stroke-width:1; stroke-dasharray:3 4}
+.c-warnt{fill:var(--warn)}
+.ln{fill:none; stroke-width:2.4; stroke-linejoin:round; stroke-linecap:round}
+.l-cpu{stroke:var(--c1)} .l-genc{stroke:var(--c2)} .l-gdec{stroke:var(--c3)} .l-g3d{stroke:var(--c4)} .l-mem{stroke:var(--c5); stroke-width:1.5}
+.t-cpu{fill:var(--c1)!important} .t-genc{fill:var(--c2)!important} .t-gdec{fill:var(--c3)!important} .t-g3d{fill:var(--c4)!important} .t-mem{fill:var(--c5)!important}
+.lg{display:flex; flex-wrap:wrap; gap:6px 18px; font-size:13px; color:var(--muted); margin-top:8px}
+.lg span{display:inline-flex; align-items:center; gap:6px}
+.lg i{display:inline-block; width:22px; height:10px; border-radius:2px}
+.lg i.sw-bar{background:var(--bar)}
+.lg i.sw-band{background:var(--band); border:1px solid var(--border-strong)}
+.lg i.sw-p50{width:4px; height:14px; background:var(--text)}
+.lg i.sw-hatch{background:repeating-linear-gradient(135deg,var(--bar) 0 2px,transparent 2px 5px); border:1px solid var(--bar)}
+.lg i.sw-calc{height:0; border-top:2px dashed var(--accent)}
+.lg i.sw-off{width:0; height:0; border-radius:0; background:none; border-left:10px solid var(--text); border-top:6px solid transparent; border-bottom:6px solid transparent}
+.lg i.sw-hot{background:var(--fail-solid)}
+.udp{margin-bottom:18px}
+.udp .uh{display:flex; flex-wrap:wrap; gap:2px 14px; align-items:baseline; margin-bottom:4px}
+.udp .uh b{font-size:15px}
+.udp .uh span{font-size:13px; color:var(--muted)}
+table{border-collapse:collapse; width:100%; font-size:14px}
+th{font:700 11px var(--sans); letter-spacing:.08em; text-transform:uppercase; color:var(--muted); text-align:left; padding:6px 10px; border-bottom:2px solid var(--border-strong); white-space:nowrap}
+td{padding:7px 10px; border-bottom:1px solid var(--border); vertical-align:top}
+td.num,th.num{text-align:right; font-family:var(--mono)}
+.tscroll{overflow-x:auto}
+dl.kv{display:grid; grid-template-columns:minmax(120px,190px) 1fr; gap:6px 16px; margin:0; font-size:14px}
+dl.kv dt{color:var(--muted); font-weight:600}
+dl.kv dd{margin:0; overflow-wrap:anywhere}
+.two{display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr)); gap:14px}
+details.fold{background:var(--surface); border:1px solid var(--border); border-radius:9px; margin-top:10px}
+details.fold > summary{cursor:pointer; padding:11px 16px; font-weight:700}
+details.fold > .fb{padding:2px 16px 14px}
+pre.raw{margin:0; max-height:520px; overflow:auto; font:12px/1.45 var(--mono); background:var(--surface-2); border:1px solid var(--border); border-radius:6px; padding:12px; white-space:pre; tab-size:2}
+.foot{margin-top:50px; padding-top:14px; border-top:1px solid var(--border); color:var(--muted); font-size:13px}
+
+/* ---------- Local network (inside 6. Evidence) ---------- */
+.lan-glance{display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr)); gap:12px; margin:2px 0 4px}
+.lgc{background:var(--surface); border:1px solid var(--border); border-left:7px solid var(--xl); border-radius:9px; padding:11px 16px 12px; min-width:0; display:flex; flex-direction:column; gap:3px}
+.lgc > header{display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:4px 10px}
+.lgc .k{font:700 11px var(--sans); letter-spacing:.09em; text-transform:uppercase; color:var(--muted)}
+.lgc .big{font:800 28px/1.15 var(--mono); overflow-wrap:anywhere}
+.lgc .big .nm{font-size:18px}
+.lgc .sm{font-size:14px; color:var(--muted)}
+.lgc .sm a{font-weight:700}
+.lh{margin:26px 0 4px; font-size:16px; font-weight:800}
+.lkv{display:flex; flex-wrap:wrap; gap:8px 30px}
+.lkv .k{display:block; font:700 11px var(--sans); letter-spacing:.09em; text-transform:uppercase; color:var(--muted)}
+.lkv .v{font:700 15px var(--mono); overflow-wrap:anywhere}
+.lkv .v small{display:block; font:400 12.5px var(--sans); color:var(--muted)}
+.lcount{margin:2px 0 10px; font-size:15px; display:flex; flex-wrap:wrap; align-items:center; gap:4px 10px}
+.ptag{display:inline-block; min-width:44px; text-align:center; padding:0 7px; border:1.5px solid currentColor; border-radius:5px; font:800 11.5px/1.6 var(--sans); letter-spacing:.06em}
+.ptag.omt{color:var(--c1)}
+.ptag.ndi{color:var(--c3)}
+.tag{display:inline-block; padding:0 8px; margin:0 4px 2px 0; border:1px solid var(--border-strong); border-radius:10px; background:var(--surface-2); color:var(--muted); font:600 11.5px/1.6 var(--sans)}
+.tag.hl{border-color:var(--xl); background:var(--xbg); color:var(--x)}
+.lanp{background:var(--surface); border:1px solid var(--border); border-left:7px solid var(--xl); border-radius:9px; padding:12px 16px 14px; margin-bottom:12px}
+.lanp > header{display:flex; flex-wrap:wrap; align-items:center; gap:4px 10px}
+.lanp .ph{font:700 16px var(--mono)}
+.lanp .pnote{margin:6px 0 0; font-size:14px; max-width:78ch}
+.thr{display:grid; grid-template-columns:44px minmax(0,1fr) minmax(150px,240px); gap:2px 14px; align-items:center; margin-top:9px}
+.thr .tk{font:700 12px var(--sans); letter-spacing:.08em; text-transform:uppercase; color:var(--muted)}
+.thr .mbar{width:100%; height:14px}
+.thr .tv{font:700 14px var(--mono); min-width:0}
+.thr .tv span{display:block; font:400 12.5px var(--sans); color:var(--muted)}
+table.stack td .cv{min-width:0}
+details.fold.lan-fold > summary{font-weight:600}
+.thr.wl{grid-template-columns:82px minmax(0,1fr) minmax(150px,240px)}
+
+/* ---------- Observer: next step box, error lines ---------- */
+.scard.next{border:2px solid var(--accent); border-left-width:8px; padding:18px 20px; gap:10px}
+.nextlead{font-size:18px; font-weight:700; line-height:1.35; max-width:44em; padding-right:78px}
+.phold{background:var(--warn-bg); color:var(--warn); border-radius:4px; padding:0 5px; font-style:normal; overflow-wrap:anywhere}
+.nextwarn{margin:2px 0 0; padding:10px 14px; border-radius:8px; border:1.5px solid var(--warn-line); background:var(--warn-bg); color:var(--text); font-size:15px; -webkit-print-color-adjust:exact; print-color-adjust:exact}
+.elines{margin:8px 0 0; padding:8px 10px; background:var(--surface-2); border:1px solid var(--border); border-radius:6px; font:12.5px/1.5 var(--mono); white-space:pre-wrap; overflow-wrap:anywhere; color:var(--text)}
+.notice{margin-top:12px; padding:12px 16px; border:1.5px solid var(--warn-line); border-left-width:7px; background:var(--warn-bg); border-radius:8px; font-size:15px; -webkit-print-color-adjust:exact; print-color-adjust:exact}
+.notice p{margin:6px 0 0; max-width:78ch}
+.notice > p:first-child{margin-top:0}
+.notice .elines{background:var(--surface)}
+
+/* ---------- No data ---------- */
+.nodata{margin-top:40px; padding:32px 28px; background:var(--surface); border:2px dashed var(--border-strong); border-radius:14px; max-width:640px}
+.nodata h1{font-size:28px; margin-bottom:10px}
+.nodata p{margin:8px 0; color:var(--muted)}
+.nodata ol{color:var(--muted); padding-left:22px}
+
+/* ---------- Phone ---------- */
+@media (max-width:640px){
+  .page{padding:10px 14px 64px}
+  .verdict{grid-template-columns:1fr; padding:18px 18px; gap:12px}
+  .vicon{width:56px; height:56px}
+  .sec{margin-top:36px}
+  .sec > h2{font-size:20px}
+  .row{grid-template-columns:1fr; gap:4px}
+  .row .rv{text-align:left}
+  .row .mbar{margin-left:0}
+  .issue{padding:12px 14px 14px}
+  .secnote{margin-left:0}
+  .scard .cp{position:static; align-self:flex-start; margin-top:4px}
+  .slabel{padding-right:0}
+  .sval{font-size:22px}
+  .sval.xl{font-size:28px}
+  .gsum{margin-left:0; width:100%}
+  dl.kv{grid-template-columns:1fr; gap:0}
+  dl.kv dt{margin-top:8px}
+  .lgc .big{font-size:24px}
+  .thr, .thr.wl{grid-template-columns:1fr; gap:3px}
+  .thr .tv{margin-bottom:6px}
+  .nextlead{padding-right:0}
+  table.stack thead{position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0)}
+  table.stack, table.stack tbody, table.stack tr{display:block}
+  table.stack tr{padding:9px 0; border-bottom:1px solid var(--border)}
+  table.stack td{display:flex; gap:10px; border:0; padding:2px 0}
+  table.stack td::before{content:attr(data-label); flex:none; width:78px; font:700 11px/1.9 var(--sans); letter-spacing:.08em; text-transform:uppercase; color:var(--muted)}
+  table.stack td.e{display:none}
+  table.stack td.num{text-align:left}
+  table.stack td .cv{overflow-wrap:anywhere}
+}
+
+/* ---------- Print (A4) ---------- */
+@page{size:A4; margin:11mm}
+@media print{
+  html{font-size:13px}
+  body{background:#fff; color:#000}
+  .page{max-width:none; padding:0}
+  .noprint,.nav,.btn,.cp,.fallback,.copybar .copynote{display:none!important}
+  .sec{margin-top:22px}
+  .sec > h2{break-after:avoid}
+  #all,#evidence{break-before:page; margin-top:0}
+  .row.s-pass .rd{display:none}
+  .row{padding:7px 12px}
+  .verdict,.scard,.issue,.grp,.tick,.panel,.udp,.obit,.row,.lgc,.lanp{break-inside:avoid}
+  details.fold.raw-fold{display:none}
+  .grp > summary::before{display:none}
+  .scard.hero .sval{font-size:46px}
+  .sval{user-select:auto}
+  pre.raw{max-height:none}
+}
+</style>
+</head>
+<body>
+<div class="page" id="app"></div>
+<noscript><div class="page"><p>ShowReady needs JavaScript switched on to draw this report. Open this file in a normal browser (Edge, Chrome or Firefox).</p></div></noscript>
+<div id="live" class="sr-only" aria-live="polite"></div>
+
+<script>
+(function(){
+'use strict';
+
+/* The orchestrator replaces the marker below with the results JSON. If it is still null, the page shows a "no data" state. */
+const DATA = {"schema": "showready/1", "meta": {"tool_version": "1.2.0", "role": "prod", "mode": "quick", "started": "2026-10-16T15:12:08+09:00", "finished": "2026-10-16T15:15:55+09:00", "computer": "SHOWPC-01", "duration_s": 227, "srt_host": "", "lan_hosts": [], "skipped": [], "steps": [{"key": "hardware", "title": "Hardware", "status": "ok", "seconds": 6.9, "message": null, "collector_errors": 0}, {"key": "network", "title": "Network", "status": "ok", "seconds": 98.4, "message": null, "collector_errors": 0}, {"key": "lan", "title": "LAN", "status": "ok", "seconds": 36.8, "message": null, "collector_errors": 0}, {"key": "load", "title": "Load test", "status": "ok", "seconds": 78.9, "message": null, "collector_errors": 0}, {"key": "verdict", "title": "Verdict", "status": "ok", "seconds": 0.4, "message": null, "collector_errors": 0}], "lib_errors": []}, "profile": {"name": "Gen.G Academy Seoul -> France", "inputs": {"count": 2, "protocol": "OMT", "resolution": "1920x1080", "fps": 60, "mbps_per_feed": {"OMT": 200, "NDI": 150, "NDI-HX3": 62}}, "outputs": [{"id": "srt", "label": "SRT to France", "protocol": "SRT", "video_kbps": 10000, "audio_kbps": 192}, {"id": "youtube", "label": "YouTube", "protocol": "RTMP", "video_kbps": 17000, "audio_kbps": 128}, {"id": "twitch", "label": "Twitch", "protocol": "RTMP", "video_kbps": 6000, "audio_kbps": 160}], "srt_destination_host": ""}, "hardware": {"os": {"caption": "Microsoft Windows 11 Pro", "version": "10.0.26200", "build": 26200}, "computer": {"name": "SHOWPC-01", "manufacturer": "ASUS", "model": "ProArt Station PD5", "is_laptop": false}, "cpu": {"name": "Intel(R) Core(TM) i7-13700K", "cores": 16, "threads": 24, "max_mhz": 3400}, "ram_gb": 64, "gpus": [{"name": "NVIDIA GeForce RTX 4070", "vendor": "NVIDIA", "integrated": false, "driver_version": "32.0.15.6094", "nvidia_driver": 560.94, "driver_date": "2026-03-02", "vram_gb": 12}, {"name": "Intel(R) UHD Graphics 770", "vendor": "Intel", "integrated": true, "driver_version": "32.0.101.6913", "nvidia_driver": null, "driver_date": "2026-03-04", "vram_gb": 0.1}], "nics": [{"name": "Ethernet 2", "description": "Realtek Gaming 2.5GbE Family Controller", "status": "Up", "link_mbps": 2500, "kind": "wired", "default_route": true, "ipv4": ["192.168.10.20"], "network_category": "Private", "eee": "off"}, {"name": "Wi-Fi", "description": "Intel(R) Wi-Fi 6E AX211 160MHz", "status": "Disconnected", "link_mbps": null, "kind": "wifi", "default_route": false, "ipv4": [], "network_category": null, "eee": "unknown"}, {"name": "vEthernet (Default Switch)", "description": "Hyper-V Virtual Ethernet Adapter", "status": "Up", "link_mbps": 10000, "kind": "virtual", "default_route": false, "ipv4": ["172.28.64.1"], "network_category": "Private", "eee": "unknown"}, {"name": "vEthernet (WSL (Hyper-V firewall))", "description": "Hyper-V Virtual Ethernet Adapter #2", "status": "Up", "link_mbps": 10000, "kind": "virtual", "default_route": false, "ipv4": ["172.30.16.1"], "network_category": "Private", "eee": "unknown"}], "power": {"plan_guid": "8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c", "plan": "high_performance", "on_battery": false, "battery_pct": null}, "disk": {"system_drive": "C:", "free_gb": 412.6, "total_gb": 931.5}, "software": {"vmix": "28.0.0.45", "obs": "31.0.2", "ndi_runtime": "6.1.1", "ndi_tools": "6.1.1", "distroav": "6.1.1", "omt": "1.0.0"}, "windows": {"hags": "on", "game_mode": "on", "pending_reboot": false, "firewall_profiles": [{"name": "Domain", "enabled": true}, {"name": "Private", "enabled": true}, {"name": "Public", "enabled": true}]}, "processes": {"running": ["vMix64", "obs64"]}, "errors": []}, "network": {"public": {"ip": "203.0.113.42", "city": "Seoul", "country": "KR", "org": "AS4766 Korea Telecom"}, "targets": [{"name": "Orange (FR ISP)", "host": "orange.fr", "group": "france", "service": null, "ip": "203.0.113.90", "icmp": {"sent": 30, "received": 30, "loss_pct": 0, "min_ms": 236, "p50_ms": 247, "p95_ms": 268, "p99_ms": 279, "max_ms": 279, "jitter_ms": 13.41, "samples_ms": [265, 258, 240, 248, 237, 245, 239, 247, 238, 261, 249, 263, 236, 268, 238, 250, 248, 247, 236, 241, 242, 253, 243, 279, 244, 256, 255, 237, 252, 246]}, "tcp": {"port": 443, "attempts": 8, "ok": 8, "p50_ms": 253, "p95_ms": 271, "samples_ms": [250.1, 253, 251.6, 247.6, 255.5, 257.7, 271, 263.8]}}, {"name": "Free (FR ISP)", "host": "free.fr", "group": "france", "service": null, "ip": "203.0.113.91", "icmp": {"sent": 30, "received": 29, "loss_pct": 3.3, "min_ms": 241, "p50_ms": 252, "p95_ms": 276, "p99_ms": 283, "max_ms": 283, "jitter_ms": 12.11, "samples_ms": [249, 257, 251, 246, 270, 247, 242, 241, 256, 250, 253, 268, 243, 276, 261, 255, 283, 263, 259, 265, 252, 253, 245, 252, 273, 243, 248, null, 244, 242]}, "tcp": {"port": 443, "attempts": 8, "ok": 8, "p50_ms": 259, "p95_ms": 280, "samples_ms": [271, 260.4, 259, 262.1, 257.9, 280, 256.8, 253.5]}}, {"name": "Moji (Paris DC)", "host": "iperf3.moji.fr", "group": "france", "service": null, "ip": "198.51.100.40", "icmp": {"sent": 30, "received": 30, "loss_pct": 0, "min_ms": 229, "p50_ms": 241, "p95_ms": 265, "p99_ms": 271, "max_ms": 271, "jitter_ms": 12.03, "samples_ms": [236, 237, 248, 229, 231, 246, 257, 232, 234, 240, 242, 252, 259, 265, 244, 235, 229, 262, 254, 232, 230, 239, 230, 271, 242, 233, 245, 241, 250, 241]}, "tcp": {"port": 5201, "attempts": 8, "ok": 8, "p50_ms": 246, "p95_ms": 262, "samples_ms": [242.6, 246, 244.6, 239.7, 256.2, 262, 250.5, 248.2]}}, {"name": "MilkyWan (Paris DC)", "host": "speedtest.milkywan.fr", "group": "france", "service": null, "ip": "198.51.100.41", "icmp": {"sent": 30, "received": 30, "loss_pct": 0, "min_ms": 228, "p50_ms": 239, "p95_ms": 262, "p99_ms": 268, "max_ms": 268, "jitter_ms": 11.76, "samples_ms": [252, 232, 233, 237, 259, 239, 256, 230, 234, 243, 238, 235, 240, 231, 244, 254, 262, 230, 228, 249, 240, 228, 229, 229, 246, 247, 239, 236, 268, 241]}, "tcp": {"port": 443, "attempts": 8, "ok": 8, "p50_ms": 244, "p95_ms": 259, "samples_ms": [237.4, 240.7, 253.1, 248.2, 246, 244, 243, 259]}}, {"name": "Scaleway (Paris DC)", "host": "ping.online.net", "group": "france", "service": null, "ip": "198.51.100.42", "icmp": {"sent": 30, "received": 30, "loss_pct": 0, "min_ms": 233, "p50_ms": 245, "p95_ms": 274, "p99_ms": 280, "max_ms": 280, "jitter_ms": 15.45, "samples_ms": [258, 280, 246, 250, 261, 233, 241, 264, 239, 247, 274, 234, 245, 240, 248, 233, 245, 238, 267, 270, 251, 236, 234, 243, 253, 235, 256, 237, 244, 236]}, "tcp": {"port": 5201, "attempts": 8, "ok": 8, "p50_ms": 250, "p95_ms": 268, "samples_ms": [250, 245.3, 246.6, 248.7, 253.6, 268, 252.1, 260.5]}}, {"name": "Bouygues (Paris)", "host": "paris.bbr.iperf.bytel.fr", "group": "france", "service": null, "ip": "198.51.100.43", "icmp": {"sent": 30, "received": 0, "loss_pct": 100, "min_ms": null, "p50_ms": null, "p95_ms": null, "p99_ms": null, "max_ms": null, "jitter_ms": null, "samples_ms": [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null], "blocked": true}, "tcp": {"port": 9200, "attempts": 8, "ok": 8, "p50_ms": 255, "p95_ms": 291, "samples_ms": [291, 255, 256.7, 254.1, 252.7, 258.8, 274.1, 248.8]}}, {"name": "AWS eu-west-3 (Paris)", "host": "ec2.eu-west-3.amazonaws.com", "group": "france", "service": null, "ip": "198.51.100.44", "icmp": {"sent": 30, "received": 0, "loss_pct": 100, "min_ms": null, "p50_ms": null, "p95_ms": null, "p99_ms": null, "max_ms": null, "jitter_ms": null, "samples_ms": [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null], "blocked": true}, "tcp": {"port": 443, "attempts": 8, "ok": 8, "p50_ms": 244, "p95_ms": 272, "samples_ms": [238.3, 272, 243.2, 241.5, 244, 245.6, 247.2, 259.1]}}, {"name": "Twitch ingest Paris", "host": "euw30.contribute.live-video.net", "group": "france", "service": null, "ip": "198.51.100.45", "icmp": {"sent": 30, "received": 0, "loss_pct": 100, "min_ms": null, "p50_ms": null, "p95_ms": null, "p99_ms": null, "max_ms": null, "jitter_ms": null, "samples_ms": [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null], "blocked": true}, "tcp": {"port": 1935, "attempts": 8, "ok": 8, "p50_ms": 262, "p95_ms": 288, "samples_ms": [259.6, 265.4, 260.9, 276.3, 288, 256.9, 263.4, 262]}}, {"name": "Twitch ingest Seoul", "host": "apn20.contribute.live-video.net", "group": "ingest", "service": "twitch", "ip": "198.51.100.60", "icmp": {"sent": 30, "received": 0, "loss_pct": 100, "min_ms": null, "p50_ms": null, "p95_ms": null, "p99_ms": null, "max_ms": null, "jitter_ms": null, "samples_ms": [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null], "blocked": true}, "tcp": {"port": 1935, "attempts": 8, "ok": 8, "p50_ms": 9, "p95_ms": 14, "samples_ms": [11.6, 13, 3.8, 5.5, 7.3, 9, 13, 14]}}, {"name": "Twitch ingest Tokyo", "host": "apn10.contribute.live-video.net", "group": "ingest", "service": "twitch", "ip": "198.51.100.61", "icmp": {"sent": 30, "received": 0, "loss_pct": 100, "min_ms": null, "p50_ms": null, "p95_ms": null, "p99_ms": null, "max_ms": null, "jitter_ms": null, "samples_ms": [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null], "blocked": true}, "tcp": {"port": 1935, "attempts": 8, "ok": 8, "p50_ms": 38, "p95_ms": 46, "samples_ms": [35.7, 38, 44.6, 40.6, 36.5, 46, 43.7, 33.7]}}, {"name": "YouTube ingest (nearest)", "host": "a.rtmp.youtube.com", "group": "ingest", "service": "youtube", "ip": "203.0.113.120", "icmp": {"sent": 30, "received": 30, "loss_pct": 0, "min_ms": 3, "p50_ms": 4, "p95_ms": 6, "p99_ms": 9, "max_ms": 9, "jitter_ms": 1.24, "samples_ms": [4, 4, 3, 6, 4, 3, 4, 9, 5, 4, 4, 4, 3, 5, 5, 6, 4, 5, 5, 4, 3, 3, 3, 3, 6, 3, 4, 4, 3, 4]}, "tcp": {"port": 1935, "attempts": 8, "ok": 8, "p50_ms": 5, "p95_ms": 11, "samples_ms": [7, -1.7, 2.4, 7.5, 11, 8.7, 5, 3.8]}}], "traces": [{"host": "orange.fr", "hops": [{"hop": 1, "ip": "192.168.10.1", "rtt_ms": [1, 1, 1]}, {"hop": 2, "ip": "10.250.0.1", "rtt_ms": [2, 2, 3]}, {"hop": 3, "ip": "203.0.113.1", "rtt_ms": [3, 3, 3]}, {"hop": 4, "ip": "198.51.100.17", "rtt_ms": [4, 4, 5]}, {"hop": 5, "ip": "198.51.100.58", "rtt_ms": [5, 5, 5]}, {"hop": 6, "ip": null, "rtt_ms": [null, null, null]}, {"hop": 7, "ip": "198.51.100.121", "rtt_ms": [44, 44, 45]}, {"hop": 8, "ip": "198.51.100.122", "rtt_ms": [134, 133, 134]}, {"hop": 9, "ip": "203.0.113.200", "rtt_ms": [134, 135, 134]}, {"hop": 10, "ip": null, "rtt_ms": [null, null, null]}, {"hop": 11, "ip": "198.51.100.210", "rtt_ms": [236, 237, 236]}, {"hop": 12, "ip": "203.0.113.77", "rtt_ms": [241, 242, 241]}, {"hop": 13, "ip": "203.0.113.90", "rtt_ms": [247, 246, 247]}]}], "udp": [{"host": "iperf3.moji.fr", "port": 5204, "target_mbps": 12.5, "seconds": 20, "packet_bytes": 1316, "packets": 23732, "lost": 171, "loss_pct": 0.72, "jitter_ms": 1.03, "intervals": [{"t": 1, "packets": 1183, "lost": 3}, {"t": 2, "packets": 1193, "lost": 8}, {"t": 3, "packets": 1191, "lost": 2}, {"t": 4, "packets": 1185, "lost": 1}, {"t": 5, "packets": 1185, "lost": 21}, {"t": 6, "packets": 1187, "lost": 1}, {"t": 7, "packets": 1184, "lost": 7}, {"t": 8, "packets": 1187, "lost": 15}, {"t": 9, "packets": 1186, "lost": 2}, {"t": 10, "packets": 1188, "lost": 11}, {"t": 11, "packets": 1187, "lost": 7}, {"t": 12, "packets": 1182, "lost": 3}, {"t": 13, "packets": 1188, "lost": 3}, {"t": 14, "packets": 1187, "lost": 22}, {"t": 15, "packets": 1191, "lost": 14}, {"t": 16, "packets": 1184, "lost": 26}, {"t": 17, "packets": 1186, "lost": 7}, {"t": 18, "packets": 1184, "lost": 2}, {"t": 19, "packets": 1186, "lost": 3}, {"t": 20, "packets": 1188, "lost": 13}], "worst_interval_loss_pct": 2.2, "lossy_intervals": 0, "error": null}, {"host": "speedtest.milkywan.fr", "port": 9211, "target_mbps": 12.5, "seconds": 20, "packet_bytes": 1316, "packets": 23759, "lost": 206, "loss_pct": 0.87, "jitter_ms": 0.5, "intervals": [{"t": 1, "packets": 1191, "lost": 22}, {"t": 2, "packets": 1189, "lost": 7}, {"t": 3, "packets": 1188, "lost": 41}, {"t": 4, "packets": 1185, "lost": 9}, {"t": 5, "packets": 1193, "lost": 8}, {"t": 6, "packets": 1189, "lost": 20}, {"t": 7, "packets": 1192, "lost": 2}, {"t": 8, "packets": 1185, "lost": 6}, {"t": 9, "packets": 1190, "lost": 1}, {"t": 10, "packets": 1188, "lost": 3}, {"t": 11, "packets": 1185, "lost": 7}, {"t": 12, "packets": 1192, "lost": 0}, {"t": 13, "packets": 1184, "lost": 9}, {"t": 14, "packets": 1184, "lost": 2}, {"t": 15, "packets": 1185, "lost": 27}, {"t": 16, "packets": 1185, "lost": 0}, {"t": 17, "packets": 1187, "lost": 3}, {"t": 18, "packets": 1190, "lost": 13}, {"t": 19, "packets": 1188, "lost": 4}, {"t": 20, "packets": 1189, "lost": 22}], "worst_interval_loss_pct": 3.45, "lossy_intervals": 0, "error": null}, {"host": "ping.online.net", "port": null, "target_mbps": 12.5, "seconds": 20, "packet_bytes": 1316, "packets": 0, "lost": 0, "loss_pct": null, "jitter_ms": null, "intervals": [], "worst_interval_loss_pct": null, "lossy_intervals": 0, "error": "All 10 iperf3 server ports were busy (12 tries). Try again in a few minutes."}], "upload": {"method": "cloudflare", "mbps": 320.4, "streams": 4, "bytes": 83886080, "seconds": 2.09, "error": null}, "errors": []}, "lan": {"adapter": {"name": "Ethernet 2", "description": "Realtek Gaming 2.5GbE Family Controller", "kind": "wired", "chosen_because": "wired", "ipv4": "192.168.10.20", "prefix_length": 24, "gateway": "192.168.10.1", "link_mbps": 2500, "local_ips": ["192.168.10.20", "172.28.64.1", "172.30.16.1"]}, "mdns": {"query_ok": true, "listen_ms": 3000, "methods": [{"name": "unicast", "ok": true, "answers": 9, "error": null}, {"name": "windows", "ok": true, "answers": 6, "error": null}], "responders": ["192.168.10.20", "192.168.10.31", "192.168.10.32", "192.168.10.33", "192.168.10.40", "192.168.10.70"], "service_types_seen": ["_ndi._tcp", "_omt._tcp", "_workstation._tcp", "_smb._tcp", "_airplay._tcp", "_http._tcp"]}, "sources": [{"protocol": "NDI", "name": "SHOWPC-01 (vMix Output 1)", "machine": "SHOWPC-01", "source": "vMix Output 1", "host": "SHOWPC-01.local", "port": 5961, "ip": "192.168.10.20", "local": true, "found_by": ["windows"]}, {"protocol": "OMT", "name": "GAMEPC-A (Team Blue POV)", "machine": "GAMEPC-A", "source": "Team Blue POV", "host": "GAMEPC-A.local", "port": 6400, "ip": "192.168.10.31", "local": false, "found_by": ["unicast", "windows"]}, {"protocol": "OMT", "name": "GAMEPC-B (Team Red POV)", "machine": "GAMEPC-B", "source": "Team Red POV", "host": "GAMEPC-B.local", "port": 6401, "ip": "192.168.10.32", "local": false, "found_by": ["unicast", "windows"]}], "discovery_servers": {"ndi": [], "omt": [], "ndi_config_path": null, "omt_settings_path": null}, "sweep": {"cidr": "192.168.10.0/24", "scanned": 254, "alive": 12, "seconds": 7.4, "skipped_reason": null}, "hosts": [{"ip": "192.168.10.1", "mac": "78-8a-20-4e-91-0b", "vendor": "Ubiquiti", "category": "network", "randomized_mac": false, "ping_ms": 0.6, "is_self": false, "is_gateway": true, "sources": []}, {"ip": "192.168.10.2", "mac": "f4-cf-e2-7a-31-c0", "vendor": "Cisco", "category": "network", "randomized_mac": false, "ping_ms": 0.9, "is_self": false, "is_gateway": false, "sources": []}, {"ip": "192.168.10.20", "mac": "04-42-1a-5c-0e-77", "vendor": "ASUS", "category": "pc", "randomized_mac": false, "ping_ms": 0.1, "is_self": true, "is_gateway": false, "sources": ["SHOWPC-01 (vMix Output 1)"]}, {"ip": "192.168.10.31", "mac": "b0-83-fe-61-2d-aa", "vendor": "Dell", "category": "pc", "randomized_mac": false, "ping_ms": 0.5, "is_self": false, "is_gateway": false, "sources": ["GAMEPC-A (Team Blue POV)"]}, {"ip": "192.168.10.32", "mac": "3c-52-82-9a-b0-41", "vendor": "HP", "category": "pc", "randomized_mac": false, "ping_ms": 0.6, "is_self": false, "is_gateway": false, "sources": ["GAMEPC-B (Team Red POV)"]}, {"ip": "192.168.10.33", "mac": "f8-bc-12-0d-44-e9", "vendor": "Dell", "category": "pc", "randomized_mac": false, "ping_ms": 0.7, "is_self": false, "is_gateway": false, "sources": []}, {"ip": "192.168.10.40", "mac": "3c-22-fb-81-6a-d2", "vendor": "Apple", "category": "mobile", "randomized_mac": false, "ping_ms": null, "is_self": false, "is_gateway": false, "sources": []}, {"ip": "192.168.10.50", "mac": "b8-d7-af-4c-02-1e", "vendor": "BirdDog", "category": "broadcast", "randomized_mac": false, "ping_ms": 1.2, "is_self": false, "is_gateway": false, "sources": []}, {"ip": "192.168.10.55", "mac": "7c-2e-0d-3d-90-5a", "vendor": "Blackmagic Design", "category": "broadcast", "randomized_mac": false, "ping_ms": 1.0, "is_self": false, "is_gateway": false, "sources": []}, {"ip": "192.168.10.60", "mac": "00-1d-c1-4b-72-e8", "vendor": "Audinate", "category": "broadcast", "randomized_mac": false, "ping_ms": 1.1, "is_self": false, "is_gateway": false, "sources": []}, {"ip": "192.168.10.70", "mac": "00-11-32-a4-18-c3", "vendor": "Synology", "category": "other", "randomized_mac": false, "ping_ms": 1.4, "is_self": false, "is_gateway": false, "sources": []}, {"ip": "192.168.10.88", "mac": "da-a1-19-3c-52-0f", "vendor": null, "category": null, "randomized_mac": true, "ping_ms": null, "is_self": false, "is_gateway": false, "sources": []}, {"ip": "192.168.10.91", "mac": "50-c7-bf-2e-6b-14", "vendor": "TP-Link", "category": "network", "randomized_mac": false, "ping_ms": 2.1, "is_self": false, "is_gateway": false, "sources": []}], "partners": [{"host": "192.168.10.31", "ip": "192.168.10.31", "port": 5201, "origin": "auto", "loopback": false, "direction": "to_this_pc", "tcp": {"mbps": 941, "retransmits": 0, "seconds": 10, "error": null}, "udp": {"target_mbps": 400, "mbps": 399.6, "packets": 357143, "lost": 71, "loss_pct": 0.02, "jitter_ms": 0.04, "seconds": 10, "error": null}, "error": null}, {"host": "192.168.10.32", "ip": "192.168.10.32", "port": 5201, "origin": "auto", "loopback": false, "direction": "to_this_pc", "tcp": {"mbps": 937, "retransmits": 3, "seconds": 10, "error": null}, "udp": {"target_mbps": 400, "mbps": 399.4, "packets": 357143, "lost": 107, "loss_pct": 0.03, "jitter_ms": 0.05, "seconds": 10, "error": null}, "error": null}], "test": {"protocol": "OMT", "per_feed_mbps": 200, "target_mbps": 400, "seconds": 10}, "errors": [], "combined": {"hosts": ["192.168.10.31", "192.168.10.32"], "seconds": 10, "tcp": {"mbps": 1874, "per_host": [{"ip": "192.168.10.31", "mbps": 941}, {"ip": "192.168.10.32", "mbps": 933}], "error": null}, "udp": {"target_mbps": 800, "mbps": 799.1, "packets": 714286, "lost": 143, "loss_pct": 0.02, "jitter_ms": 0.05, "error": null}, "error": null}}, "loadtest": {"ffmpeg": {"found": true, "path": "bin\\ffmpeg.exe", "version": "7.1.1-essentials_build"}, "encoders": {"available": ["h264_nvenc", "h264_qsv", "libx264"], "tested": [{"name": "h264_nvenc", "ok": false, "error": "[h264_nvenc] Driver does not support the required nvenc API version. Required: 13.0 Found: 12.2", "error_lines": ["[h264_nvenc] Driver does not support the required nvenc API version. Required: 13.0 Found: 12.2", "[h264_nvenc] The minimum required Nvidia driver for nvenc is 570.0 or newer"], "driver_required": 570.0}, {"name": "h264_amf", "ok": false, "error": "[h264_amf] DLL amfrt64.dll failed to open", "error_lines": ["[h264_amf] DLL amfrt64.dll failed to open"], "driver_required": null}, {"name": "h264_qsv", "ok": false, "error": "[h264_qsv] Error initializing an MFX session: -9.", "error_lines": ["[h264_qsv] Error initializing an MFX session: -9."], "driver_required": null}, {"name": "libx264", "ok": true, "error": null, "error_lines": [], "driver_required": null}], "chosen": "libx264"}, "source": {"codec": "speedhq", "pix_fmt": "yuv422p", "width": 1920, "height": 1080, "fps": 60, "seconds": 4, "file_mb": 61.3}, "seconds": 45, "streams": [{"role": "in-1", "kind": "decode", "codec": "speedhq", "target_kbps": null, "speed_min": 0.99, "speed_p50": 1, "fps_p50": 60, "ok": true, "error": null}, {"role": "in-2", "kind": "decode", "codec": "speedhq", "target_kbps": null, "speed_min": 0.99, "speed_p50": 1, "fps_p50": 60, "ok": true, "error": null}, {"role": "out-srt", "kind": "encode", "codec": "libx264", "target_kbps": 10000, "speed_min": 0.98, "speed_p50": 1, "fps_p50": 59.9, "ok": true, "error": null}, {"role": "out-youtube", "kind": "encode", "codec": "libx264", "target_kbps": 17000, "speed_min": 0.97, "speed_p50": 1, "fps_p50": 59.9, "ok": true, "error": null}, {"role": "out-twitch", "kind": "encode", "codec": "libx264", "target_kbps": 6000, "speed_min": 0.98, "speed_p50": 1, "fps_p50": 59.9, "ok": true, "error": null}], "system": {"cpu_p50": 80.4, "cpu_p95": 88.8, "cpu_max": 100, "perf_start": 106, "perf_min": 100, "perf_p50": 111, "gpu_enc_p95": 0, "gpu_dec_p95": 1.7, "gpu_3d_p95": 5.8, "mem_used_pct_max": 40.4, "samples": [{"t": 1, "cpu": 18.4, "perf": 100, "gpu_enc": 0, "gpu_dec": 1.6, "gpu_3d": 4.9, "mem": 39.3}, {"t": 2, "cpu": 48.3, "perf": 109, "gpu_enc": 0, "gpu_dec": 1.8, "gpu_3d": 3.3, "mem": 39.7}, {"t": 3, "cpu": 70.1, "perf": 110, "gpu_enc": 0, "gpu_dec": 0.5, "gpu_3d": 3.3, "mem": 39.9}, {"t": 4, "cpu": 86.3, "perf": 110, "gpu_enc": 0, "gpu_dec": 0.6, "gpu_3d": 4.5, "mem": 39.4}, {"t": 5, "cpu": 88.8, "perf": 111, "gpu_enc": 0, "gpu_dec": 1.4, "gpu_3d": 5, "mem": 39.4}, {"t": 6, "cpu": 88.4, "perf": 111, "gpu_enc": 0, "gpu_dec": 0.2, "gpu_3d": 3.8, "mem": 39.7}, {"t": 7, "cpu": 72.0, "perf": 110, "gpu_enc": 0, "gpu_dec": 0.2, "gpu_3d": 4.7, "mem": 39.6}, {"t": 8, "cpu": 79.8, "perf": 113, "gpu_enc": 0, "gpu_dec": 0, "gpu_3d": 4, "mem": 39.8}, {"t": 9, "cpu": 79.6, "perf": 111, "gpu_enc": 0, "gpu_dec": 0.4, "gpu_3d": 3.2, "mem": 40}, {"t": 10, "cpu": 86.1, "perf": 114, "gpu_enc": 0, "gpu_dec": 1.1, "gpu_3d": 3.4, "mem": 39.7}, {"t": 11, "cpu": 81.7, "perf": 111, "gpu_enc": 0, "gpu_dec": 1, "gpu_3d": 4.8, "mem": 39.7}, {"t": 12, "cpu": 77.5, "perf": 106, "gpu_enc": 0, "gpu_dec": 0.4, "gpu_3d": 4.7, "mem": 39.6}, {"t": 13, "cpu": 70.5, "perf": 113, "gpu_enc": 0, "gpu_dec": 0.7, "gpu_3d": 5.3, "mem": 39.5}, {"t": 14, "cpu": 80.8, "perf": 113, "gpu_enc": 0, "gpu_dec": 1.8, "gpu_3d": 5.2, "mem": 39.7}, {"t": 15, "cpu": 75.8, "perf": 106, "gpu_enc": 0, "gpu_dec": 0.8, "gpu_3d": 3.7, "mem": 39.8}, {"t": 16, "cpu": 82.1, "perf": 112, "gpu_enc": 0, "gpu_dec": 1.7, "gpu_3d": 3.4, "mem": 39.8}, {"t": 17, "cpu": 77.9, "perf": 109, "gpu_enc": 0, "gpu_dec": 0.3, "gpu_3d": 4.7, "mem": 39.2}, {"t": 18, "cpu": 75.5, "perf": 112, "gpu_enc": 0, "gpu_dec": 1.3, "gpu_3d": 3.8, "mem": 39.4}, {"t": 19, "cpu": 75.6, "perf": 108, "gpu_enc": 0, "gpu_dec": 0.3, "gpu_3d": 4.5, "mem": 39.8}, {"t": 20, "cpu": 72.4, "perf": 108, "gpu_enc": 0, "gpu_dec": 0.2, "gpu_3d": 4.2, "mem": 39.4}, {"t": 21, "cpu": 77.9, "perf": 114, "gpu_enc": 0, "gpu_dec": 0.5, "gpu_3d": 4.9, "mem": 39.2}, {"t": 22, "cpu": 84.6, "perf": 111, "gpu_enc": 0, "gpu_dec": 0.9, "gpu_3d": 3.5, "mem": 39.5}, {"t": 23, "cpu": 77.5, "perf": 114, "gpu_enc": 0, "gpu_dec": 1.6, "gpu_3d": 3.2, "mem": 39.5}, {"t": 24, "cpu": 84.6, "perf": 113, "gpu_enc": 0, "gpu_dec": 1.3, "gpu_3d": 3.1, "mem": 39.6}, {"t": 25, "cpu": 84.6, "perf": 110, "gpu_enc": 0, "gpu_dec": 1.2, "gpu_3d": 3.1, "mem": 39.3}, {"t": 26, "cpu": 83.8, "perf": 112, "gpu_enc": 0, "gpu_dec": 0.9, "gpu_3d": 4.8, "mem": 39.7}, {"t": 27, "cpu": 78.5, "perf": 115, "gpu_enc": 0, "gpu_dec": 0, "gpu_3d": 6.6, "mem": 39.7}, {"t": 28, "cpu": 85.1, "perf": 110, "gpu_enc": 0, "gpu_dec": 0.5, "gpu_3d": 5.8, "mem": 40}, {"t": 29, "cpu": 74.3, "perf": 107, "gpu_enc": 0, "gpu_dec": 0.6, "gpu_3d": 5.6, "mem": 39.9}, {"t": 30, "cpu": 80.4, "perf": 109, "gpu_enc": 0, "gpu_dec": 0.3, "gpu_3d": 3.3, "mem": 39.7}, {"t": 31, "cpu": 85.5, "perf": 110, "gpu_enc": 0, "gpu_dec": 0.1, "gpu_3d": 4.7, "mem": 39.9}, {"t": 32, "cpu": 85.9, "perf": 105, "gpu_enc": 0, "gpu_dec": 0.1, "gpu_3d": 3.6, "mem": 39.9}, {"t": 33, "cpu": 100, "perf": 106, "gpu_enc": 0, "gpu_dec": 0.4, "gpu_3d": 3.3, "mem": 40.2}, {"t": 34, "cpu": 89.1, "perf": 115, "gpu_enc": 0, "gpu_dec": 0.7, "gpu_3d": 4.8, "mem": 40.1}, {"t": 35, "cpu": 77.0, "perf": 113, "gpu_enc": 0, "gpu_dec": 1.3, "gpu_3d": 4.5, "mem": 40.4}, {"t": 36, "cpu": 84.4, "perf": 109, "gpu_enc": 0, "gpu_dec": 0.4, "gpu_3d": 5.7, "mem": 39.6}, {"t": 37, "cpu": 79.2, "perf": 112, "gpu_enc": 0, "gpu_dec": 1.4, "gpu_3d": 3.4, "mem": 39.9}, {"t": 38, "cpu": 82.1, "perf": 109, "gpu_enc": 0, "gpu_dec": 0.2, "gpu_3d": 4.5, "mem": 39.5}, {"t": 39, "cpu": 83.6, "perf": 112, "gpu_enc": 0, "gpu_dec": 0.7, "gpu_3d": 3.9, "mem": 40}, {"t": 40, "cpu": 81.5, "perf": 110, "gpu_enc": 0, "gpu_dec": 1.3, "gpu_3d": 3.6, "mem": 40.1}, {"t": 41, "cpu": 80.2, "perf": 111, "gpu_enc": 0, "gpu_dec": 0.2, "gpu_3d": 4.4, "mem": 39.8}, {"t": 42, "cpu": 80.2, "perf": 111, "gpu_enc": 0, "gpu_dec": 1.1, "gpu_3d": 5.6, "mem": 40}, {"t": 43, "cpu": 79.4, "perf": 110, "gpu_enc": 0, "gpu_dec": 0.7, "gpu_3d": 5.4, "mem": 39.8}, {"t": 44, "cpu": 85.0, "perf": 110, "gpu_enc": 0, "gpu_dec": 0.4, "gpu_3d": 3.1, "mem": 40}, {"t": 45, "cpu": 84.0, "perf": 112, "gpu_enc": 0, "gpu_dec": 0.2, "gpu_3d": 5.9, "mem": 40}]}, "note": "SpeedHQ is the codec inside full-bandwidth NDI; OMT\u2019s VMX is the same class but not identical. vMix/OBS compositing load is NOT included \u2014 treat results as a lower bound.", "errors": []}, "verdict": {"overall": "CAUTION", "headline": "Weakest link (warning): Virtual network adapters (2 virtual adapter(s) up; needs none) - Disable the virtual adapters for the show, or pin the adapter in NDI Access Manager / vMix. (+1 more warning(s))", "weakest": "lan_virtual_adapters", "partial": false, "not_tested": ["load test (fell back to CPU encoding)"], "checks": [{"id": "fr_reach", "section": "france", "title": "France reachable", "status": "PASS", "value": "8 of 8 France targets answered", "limit": ">= 1 target", "margin": 8, "detail": "Answered: Orange (FR ISP), Free (FR ISP), Moji (Paris DC), MilkyWan (Paris DC), Scaleway (Paris DC), Bouygues (Paris), AWS eu-west-3 (Paris), Twitch ingest Paris.", "fix": ""}, {"id": "fr_rtt", "section": "france", "title": "Round-trip time to France (p95)", "status": "INFO", "value": "273 ms", "limit": "", "margin": null, "detail": "Median of the p95 values of 8 France targets; they range from 262 ms (MilkyWan (Paris DC)) to 291 ms (Bouygues (Paris)). The SRT latency below is computed from this; re-run with -SrtHost <partner IP> for the exact path.", "fix": ""}, {"id": "fr_rtt_spread", "section": "france", "title": "Round-trip stability (p99 - p50)", "status": "PASS", "value": "35 ms", "limit": "< 40 ms", "margin": 1.14, "detail": "Worst spread between the typical (p50) and slowest 1 % (p99) ping: Scaleway (Paris DC). Big spread means jitter that SRT must absorb.", "fix": ""}, {"id": "fr_icmp_loss", "section": "france", "title": "Ping loss to France", "status": "PASS", "value": "0.7 %", "limit": "< 1 %", "margin": 1.5, "detail": "Pooled over 5 target(s): 1 of 150 pings lost. Ignores ping (not a fault): Bouygues (Paris), AWS eu-west-3 (Paris), Twitch ingest Paris.", "fix": ""}, {"id": "fr_udp_loss", "section": "france", "title": "UDP loss at SRT bitrate", "status": "PASS", "value": "0.79 %", "limit": "<= 1 %", "margin": 1.26, "detail": "Receiver-side loss over 2 iperf3 test(s) at 12.5 Mbps for 20 s each: iperf3.moji.fr 0.72 %, speedtest.milkywan.fr 0.87 %.", "fix": ""}, {"id": "fr_udp_bursts", "section": "france", "title": "UDP loss bursts", "status": "PASS", "value": "0 lossy intervals", "limit": "0", "margin": null, "detail": "No 1 s interval lost more than 5 % of its packets.", "fix": ""}, {"id": "uplink_capacity", "section": "uplink", "title": "Upload capacity vs. show needs", "status": "PASS", "value": "320 Mbps", "limit": ">= 2 x 36.0 Mbps", "margin": 4.45, "detail": "Measured upload to a nearby Cloudflare PoP: 320 Mbps. The show needs 36.0 Mbps (SRT video+audio with 25 % overhead, YouTube, Twitch), ratio 8.9 x.", "fix": ""}, {"id": "uplink_wifi", "section": "uplink", "title": "Stream over wired Ethernet", "status": "PASS", "value": "wired", "limit": "wired", "margin": null, "detail": "Internet traffic leaves through Ethernet 2.", "fix": ""}, {"id": "ingest_youtube", "section": "ingest", "title": "YouTube ingest reachable", "status": "PASS", "value": "11 ms", "limit": "<= 120 ms", "margin": 10, "detail": "TCP connect p95 per ingest (port 1935): YouTube ingest (nearest) 11 ms.", "fix": ""}, {"id": "ingest_twitch", "section": "ingest", "title": "Twitch ingest reachable", "status": "PASS", "value": "14 ms", "limit": "<= 120 ms", "margin": 8.57, "detail": "TCP connect p95 per ingest (port 1935): Twitch ingest Seoul 14 ms, Twitch ingest Tokyo 46 ms. Reachability only - Twitch closed its Korean business in Feb 2024; do a 30-second test stream with the real key from this venue.", "fix": ""}, {"id": "lan_wired", "section": "lan", "title": "Wired network connection", "status": "PASS", "value": "Ethernet 2 at 2500 Mbps", "limit": "wired adapter up", "margin": null, "detail": "Wired adapter(s) up: Ethernet 2.", "fix": ""}, {"id": "lan_headroom", "section": "lan", "title": "LAN headroom for incoming feeds", "status": "PASS", "value": "2500 Mbps link", "limit": ">= 2 x 436 Mbps", "margin": 2.87, "detail": "Ethernet 2 links at 2500 Mbps; 2 x OMT feeds need 400 Mbps plus 36.0 Mbps of outgoing streams on the same adapter, ratio 5.7 x.", "fix": ""}, {"id": "lan_virtual_adapters", "section": "lan", "title": "Virtual network adapters", "status": "WARN", "value": "2 virtual adapter(s) up", "limit": "none", "margin": null, "detail": "NDI/OMT discovery may bind to vEthernet (Default Switch), vEthernet (WSL (Hyper-V firewall)).", "fix": "Disable the virtual adapters for the show, or pin the adapter in NDI Access Manager / vMix."}, {"id": "lan_profile", "section": "lan", "title": "Network profile is Private", "status": "PASS", "value": "Private", "limit": "Private", "margin": null, "detail": "The wired network is not on a Public profile.", "fix": ""}, {"id": "lan_eee", "section": "lan", "title": "Energy-Efficient Ethernet off", "status": "PASS", "value": "off", "limit": "off", "margin": null, "detail": "Energy-Efficient Ethernet is off.", "fix": ""}, {"id": "lan_sources_found", "section": "lan", "title": "Incoming feeds found on the network", "status": "PASS", "value": "2 OMT sources", "limit": ">= 2 OMT sources", "margin": 1, "detail": "Found: GAMEPC-A (Team Blue POV) (192.168.10.31:6400), GAMEPC-B (Team Red POV) (192.168.10.32:6401). On this PC (not counted): SHOWPC-01 (vMix Output 1) (192.168.10.20:5961).", "fix": ""}, {"id": "lan_partner_throughput", "section": "lan", "title": "Network throughput from source PCs", "status": "PASS", "value": "937 Mbps TCP, 0.03 % UDP loss", "limit": ">= 300 Mbps, < 0.1 % UDP loss", "margin": 3.12, "detail": "Per feed 200 Mbps (OMT), tested at 400 Mbps for 10 s, source PC to this PC. 192.168.10.31: TCP 941 Mbps, 0 retransmits; UDP 400 Mbps received, 0.02 % loss, jitter 0.04 ms. 192.168.10.32: TCP 937 Mbps, 3 retransmits; UDP 399 Mbps received, 0.03 % loss, jitter 0.05 ms. Both at once (2 source PCs): TCP 1874 Mbps, UDP 799 Mbps received, 0.02 % loss; needs >= 600 Mbps together.", "fix": ""}, {"id": "lan_hosts", "section": "lan", "title": "Devices on the local network", "status": "INFO", "value": "12 devices on 192.168.10.0/24", "limit": "", "margin": null, "detail": "Gateway: 192.168.10.1 (Ubiquiti). Network gear: Cisco (192.168.10.2), TP-Link (192.168.10.91). PCs: 4 (ASUS, Dell, HP). Broadcast gear: BirdDog (192.168.10.50), Blackmagic Design (192.168.10.55), Audinate (192.168.10.60). Source PCs: 192.168.10.20 (1 source), 192.168.10.31 (1 source), 192.168.10.32 (1 source). Unknown vendor: 1 (1 with a private/randomised MAC). Managed switches only appear if they have a management IP on this subnet.", "fix": ""}, {"id": "hw_cpu_threads", "section": "hardware", "title": "CPU threads", "status": "PASS", "value": "24 threads", "limit": ">= 12 threads", "margin": 2, "detail": "Intel(R) Core(TM) i7-13700K (16 cores)", "fix": ""}, {"id": "hw_ram", "section": "hardware", "title": "RAM", "status": "PASS", "value": "64.0 GB", "limit": ">= 32 GB", "margin": 2.11, "detail": "Installed RAM reads a few percent below its nominal size, so 32 GB is matched from 30.4 GB.", "fix": ""}, {"id": "hw_gpu", "section": "hardware", "title": "Dedicated GPU", "status": "PASS", "value": "NVIDIA GeForce RTX 4070 (12 GB)", "limit": "dedicated NVIDIA/AMD GPU", "margin": null, "detail": "A dedicated GPU provides the hardware video encoders for the three outputs.", "fix": ""}, {"id": "hw_nvenc_sessions", "section": "hardware", "title": "NVENC encode sessions", "status": "PASS", "value": "8 sessions (driver 560.94)", "limit": "driver >= 551.76 for 8", "margin": 2.67, "detail": "This driver allows 8 simultaneous NVENC sessions: 3 outputs plus recording or a spare.", "fix": ""}, {"id": "hw_power", "section": "hardware", "title": "Power plan and mains power", "status": "PASS", "value": "High performance, mains", "limit": "High performance or Ultimate", "margin": null, "detail": "Power plan keeps the CPU at full speed.", "fix": ""}, {"id": "hw_gpu_driver_age", "section": "hardware", "title": "GPU driver age", "status": "PASS", "value": "228 days old", "limit": "<= 365 days", "margin": 1.6, "detail": "Newest dedicated GPU driver is dated 2026-05-27.", "fix": ""}, {"id": "hw_disk", "section": "hardware", "title": "System drive free space", "status": "PASS", "value": "413 GB free", "limit": ">= 50 GB", "margin": 8.25, "detail": "System drive C:.", "fix": ""}, {"id": "hw_pending_reboot", "section": "hardware", "title": "No reboot pending", "status": "PASS", "value": "none pending", "limit": "none", "margin": null, "detail": "No restart is waiting.", "fix": ""}, {"id": "load_encoder", "section": "load", "title": "Hardware video encoder", "status": "WARN", "value": "NVIDIA driver 560.94 is older than 570 needed by this test", "limit": "hardware encoder", "margin": null, "detail": "h264_nvenc failed: [h264_nvenc] Driver does not support the required nvenc API version. Required: 13.0 Found: 12.2 / [h264_nvenc] The minimum required Nvidia driver for nvenc is 570.0 or newer. The test fell back to libx264, so the load figures are not representative.", "fix": "vMix/OBS can usually still use NVENC on this driver. To run this test, update to the current NVIDIA Studio driver, or check NVENC in vMix/OBS by hand."}, {"id": "load_realtime", "section": "load", "title": "Real-time 2 in + 3 out", "status": "SKIP", "value": "", "limit": "", "margin": null, "detail": "Not representative: the test fell back to CPU encoding, but vMix/OBS would use the GPU.", "fix": ""}, {"id": "load_cpu", "section": "load", "title": "CPU load during test", "status": "SKIP", "value": "", "limit": "", "margin": null, "detail": "Not representative: the test fell back to CPU encoding, but vMix/OBS would use the GPU.", "fix": ""}, {"id": "load_gpu_encode", "section": "load", "title": "GPU encoder load during test", "status": "SKIP", "value": "", "limit": "", "margin": null, "detail": "Not representative: the test fell back to CPU encoding, but vMix/OBS would use the GPU.", "fix": ""}, {"id": "load_throttle", "section": "load", "title": "CPU clock throttling", "status": "SKIP", "value": "", "limit": "", "margin": null, "detail": "Not representative: the test fell back to CPU encoding, but vMix/OBS would use the GPU.", "fix": ""}, {"id": "sw_mixer", "section": "software", "title": "vMix or OBS installed", "status": "PASS", "value": "vMix 28.0.0.45, OBS 31.0.2", "limit": "vMix or OBS", "margin": null, "detail": "A production mixer is installed.", "fix": ""}, {"id": "sw_ndi", "section": "software", "title": "NDI / OMT software", "status": "INFO", "value": "NDI runtime 6.1.1, NDI Tools 6.1.1, DistroAV 6.1.1, OMT 1.0.0", "limit": "", "margin": null, "detail": "The show uses OMT; make sure the sending PCs and vMix/OBS support it.", "fix": ""}, {"id": "sw_background", "section": "software", "title": "Background apps", "status": "PASS", "value": "none running", "limit": "none", "margin": null, "detail": "No known background apps (OneDrive, Teams, Discord, browsers, game launchers) are running.", "fix": ""}], "settings": [{"id": "srt_latency", "label": "SRT latency (both ends)", "value": "1,100 ms", "why": "~4 x p95 RTT 273 ms = 1092 ms, rounded up to 1,100 ms. Haivision table minimum 850 ms (3 x for loss <= 1 %); raised to 4 x because the path is long-haul (RTT > 150 ms) and short probes miss rare bursts. SRT needs several round trips to resend lost packets; the 120-125 ms encoder default will drop video on this path."}, {"id": "srt_overhead", "label": "SRT bandwidth overhead", "value": "25 %", "why": "Haivision rule: at least the table overhead (1 %) and never below 100 / 4 = 25 %."}, {"id": "srt_bitrate", "label": "SRT video bitrate", "value": "10 Mbps video CBR, keyframe 2 s", "why": "Constant bitrate keeps the SRT overhead calculation valid; a 2 s keyframe interval is what the partner decoder expects."}, {"id": "srt_mode", "label": "SRT mode", "value": "caller, packet size 1316, same latency on both ends (receiver latency wins if higher)", "why": "The Seoul PC calls out to the partner in France; both sides must be set so the higher latency is not a surprise."}, {"id": "ingest_servers", "label": "Ingest servers", "value": "YouTube: rtmp://a.rtmp.youtube.com/live2 (auto-nearest) | Twitch: apn20.contribute.live-video.net", "why": "The Twitch host is the one with the fastest TCP connect from this venue."}, {"id": "input_protocol", "label": "Input protocol", "value": "OMT (Medium) or full NDI", "why": "The wired link has 5.7 x the bandwidth the feeds need."}, {"id": "power_plan", "label": "Windows power plan", "value": "High performance (or Ultimate), on mains power, sleep off", "why": "The default Balanced plan lets the CPU clock drop under bursty live-video load."}, {"id": "encoder", "label": "Video encoder", "value": "NVENC H.264 (h264_nvenc), preset P4, CBR, keyframe 2 s - same for all three outputs", "why": "Based on the NVIDIA GPU; the load test could not confirm it."}], "manual_checks": [{"id": "mc_partner_latency", "text": "Confirm the French partner's receive latency matches the SRT latency above (the higher of the two ends wins)."}, {"id": "mc_twitch_test", "text": "Twitch from Korea: do a 30-second test stream with the real stream key from this venue before show day."}, {"id": "mc_same_time", "text": "Re-run ShowReady at the same time of day as the show (evening congestion differs from daytime)."}, {"id": "mc_rehearsal", "text": "Run a 30-minute rehearsal with the real vMix/OBS scene and both real feeds; watch vMix/OBS dropped frames."}, {"id": "mc_srthost", "text": "When the partner sends their SRT IP, run: Run-ShowReady.cmd -SrtHost <their IP>."}], "calc": {"srt": {"rtt_p95_ms": 273, "rtt_calc_ms": 273, "loss_pct": 0.794, "loss_source": "udp", "udp_measured": true, "lossy_intervals": 0, "mult_table": 3, "mult": 4, "latency_table_ms": 850, "latency_raw_ms": 1092, "latency_ms": 1100, "overhead_pct": 25, "reasons": ["the path is long-haul (RTT > 150 ms) and short probes miss rare bursts"]}, "need_mbps": 36.028, "intake_mbps": 400}, "errors": []}};
+
+/* ================= helpers ================= */
+var D = null;                 // data currently displayed
+var charts = [];              // {el, draw}
+var observers = [];
+var BURST_PCT = 5;            // a single second of UDP loss above this counts as a burst (config.thresholds.srt_burst_interval_loss_pct)
+var SECTION_ORDER = ['france','uplink','ingest','lan','hardware','load','software','sender'];
+var SECTION_TEXT = {
+  sender:  ['Sender test', 'One 1080p60 feed encoded in real time while the game or observer client runs: can this PC send its feed?'],
+  france:  ['France link', 'Does traffic reach France, how long does it take, and does it arrive intact? This decides the SRT latency.'],
+  uplink:  ['Internet upload', 'Is the venue connection big enough for SRT, YouTube and Twitch all at once?'],
+  ingest:  ['YouTube and Twitch servers', 'Can this PC reach the servers that receive your streams?'],
+  lan:     ['Local network', 'The 2 incoming 1080p60 feeds travel over this network into the show PC.'],
+  hardware:['This PC', 'CPU, memory, graphics card, power settings and disk space.'],
+  load:    ['Load test', 'A rehearsal of the show’s workload: 2 feeds in and 3 encodes out, at real-time speed.'],
+  software:['Software', 'Mixer, NDI/OMT parts, and anything running that could steal CPU or network.']
+};
+/* An observer (source) PC sends one feed out; its section wording differs. */
+var OBS_SECTION_TEXT = {
+  lan:      ['Network connection', 'This PC sends its feed to the show PC over the wired production network.'],
+  hardware: ['This PC', 'Power settings and pending restarts.'],
+  software: ['Software', 'Anything running that could steal CPU or network from the game and the sender.']
+};
+function isObs(){ var r = g(D, 'meta.role'); return r === 'observer' || (r == null && g(D, 'verdict.role') === 'observer'); }
+function secText(sec){ return (isObs() && OBS_SECTION_TEXT[sec]) || SECTION_TEXT[sec] || null; }
+
+function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+function isNum(v){ return typeof v === 'number' && isFinite(v); }
+function g(o, path, d){
+  var c = o, ks = path.split('.');
+  for (var i = 0; i < ks.length; i++){ if (c == null) return d === undefined ? null : d; c = c[ks[i]]; }
+  return c == null ? (d === undefined ? null : d) : c;
+}
+function arr(v){ return Array.isArray(v) ? v : []; }
+function r1(v){ return Math.round(v * 10) / 10; }
+function r2(v){ return Math.round(v * 100) / 100; }
+function fnum(v, dp){ if (!isNum(v)) return null; var s = v.toFixed(dp == null ? 0 : dp); return s; }
+function thousands(v){ return isNum(v) ? String(Math.round(v)).replace(/\B(?=(\d{3})+(?!\d))/g, ',') : null; }
+function nm(txt){ return '<span class="nm">' + esc(txt || 'not measured') + '</span>'; }
+function pad2(n){ return (n < 10 ? '0' : '') + n; }
+function fmtDate(s){
+  if (!s) return null;
+  var d = new Date(s); if (isNaN(d.getTime())) return String(s);
+  var M = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  return d.getDate() + ' ' + M[d.getMonth()] + ' ' + d.getFullYear() + ', ' + pad2(d.getHours()) + ':' + pad2(d.getMinutes());
+}
+function fmtDur(s){
+  if (!isNum(s)) return null;
+  s = Math.round(s); if (s < 60) return s + ' s';
+  return Math.floor(s / 60) + ' min ' + pad2(s % 60) + ' s';
+}
+function pctile(sorted, p){ if (!sorted.length) return null; var i = Math.min(sorted.length - 1, Math.max(0, Math.ceil(p / 100 * sorted.length) - 1)); return sorted[i]; }
+function median(a){ var s = a.filter(isNum).sort(function(x,y){return x-y;}); if (!s.length) return null; var m = Math.floor(s.length/2); return s.length % 2 ? s[m] : (s[m-1] + s[m]) / 2; }
+function niceStep(span, target){
+  var raw = span / target, p = Math.pow(10, Math.floor(Math.log10(raw))), f = raw / p;
+  return (f < 1.5 ? 1 : f < 3.5 ? 2 : f < 7.5 ? 5 : 10) * p;
+}
+function trunc(s, n){ s = String(s == null ? '' : s); return s.length > n ? s.slice(0, n - 1) + '…' : s; }
+function plural(n, one, many){ return n + ' ' + (n === 1 ? one : (many || one + 's')); }
+/* The rules engine writes plain ASCII (">=", " x ", "->") so Korean consoles can show it; make it nicer to read here. */
+function pretty(s){
+  if (s == null) return s;
+  return String(s).replace(/>=/g, '≥').replace(/<=/g, '≤').replace(/(\d) x (?=\d)/g, '$1 × ').replace(/(\d) x(?=[\s.,;)]|$)/g, '$1×').replace(/ -> /g, ' → ');
+}
+
+/* ================= status vocabulary ================= */
+function sk(status){ var s = String(status || '').toUpperCase(); return s === 'PASS' ? 'pass' : s === 'WARN' ? 'warn' : s === 'FAIL' ? 'fail' : s === 'SKIP' ? 'skip' : 'info'; }
+var LABEL = {pass:'PASS', warn:'WARN', fail:'FAIL', info:'INFO', skip:'SKIP'};
+var ICON_BODY = {
+  pass: '<circle cx="8" cy="8" r="6.6" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M4.8 8.3l2.2 2.2 4.2-4.7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>',
+  warn: '<path d="M8 1.7L15 14.2H1z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M8 6.1v3.9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="8" cy="12.1" r="1" fill="currentColor"/>',
+  fail: '<path d="M5.3 1.5h5.4l3.8 3.8v5.4l-3.8 3.8H5.3l-3.8-3.8V5.3z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M5.7 5.7l4.6 4.6M10.3 5.7l-4.6 4.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>',
+  info: '<circle cx="8" cy="8" r="6.6" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M8 7.2v4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="8" cy="4.8" r="1" fill="currentColor"/>',
+  skip: '<circle cx="8" cy="8" r="6.6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-dasharray="2.4 2.2"/><path d="M5.2 8h5.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>'
+};
+function icon(k){ return '<svg class="ico" viewBox="0 0 16 16" aria-hidden="true">' + ICON_BODY[k] + '</svg>'; }
+function badge(status){ var k = sk(status); return '<span class="badge s-' + k + '">' + icon(k) + '<span>' + LABEL[k] + '</span></span>'; }
+
+function heroIcon(overall){
+  var o = String(overall || '').toUpperCase(), shape, glyph, cls;
+  if (o === 'GO'){ cls = 's-pass'; shape = '<circle cx="32" cy="32" r="29" fill="var(--xs)"/>'; glyph = '<path d="M18 33l9 9 19-21" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>'; }
+  else if (o === 'CAUTION'){ cls = 's-warn'; shape = '<path d="M32 4L61 56H3z" fill="var(--xs)" stroke="var(--xs)" stroke-width="4" stroke-linejoin="round"/>'; glyph = '<path d="M32 22v17" stroke="#fff" stroke-width="6" stroke-linecap="round"/><circle cx="32" cy="48" r="3.6" fill="#fff"/>'; }
+  else if (o === 'NO-GO'){ cls = 's-fail'; shape = '<path d="M21 3h22l18 18v22L43 61H21L3 43V21z" fill="var(--xs)"/>'; glyph = '<path d="M22 22l20 20M42 22L22 42" stroke="#fff" stroke-width="6" stroke-linecap="round"/>'; }
+  else { cls = 's-skip'; shape = '<circle cx="32" cy="32" r="29" fill="var(--xs)"/>'; glyph = '<path d="M20 32h24" stroke="#fff" stroke-width="6" stroke-linecap="round"/>'; }
+  return '<svg class="vicon ' + cls + '" viewBox="0 0 64 64" role="img" aria-label="' + esc(o || 'No verdict') + '">' + shape + glyph + '</svg>';
+}
+
+/* ================= data access ================= */
+function getChecks(){ return arr(g(D, 'verdict.checks')).filter(function(c){ return c && typeof c === 'object'; }); }
+function secOf(c){ return typeof c.section === 'string' && c.section ? c.section : 'other'; }
+function checkById(id){ var cs = getChecks(); for (var i = 0; i < cs.length; i++) if (cs[i].id === id) return cs[i]; return null; }
+function counts(){
+  var c = {pass:0, warn:0, fail:0, info:0, skip:0}, cs = getChecks();
+  cs.forEach(function(x){ c[sk(x.status)]++; });
+  return c;
+}
+function primaryGpu(){
+  var gp = arr(g(D, 'hardware.gpus'));
+  for (var i = 0; i < gp.length; i++) if (gp[i] && gp[i].integrated === false) return gp[i];
+  return gp[0] || null;
+}
+function shortCpu(n){ return n ? String(n).replace(/\((R|TM)\)/g, '').replace(/\s+CPU.*$/i, '').replace(/\s+\d+-Core Processor/i, '').replace(/\s+/g, ' ').trim() : null; }
+
+/* ================= copy ================= */
+var SETTING_ORDER = ['srt_latency','srt_overhead','srt_bitrate','srt_mode','encoder','ingest_servers','input_protocol','power_plan'];
+var SETTING_GROUPS = [
+  {title:'SRT link to France', ids:['srt_latency','srt_overhead','srt_bitrate','srt_mode']},
+  {title:'Encoder and outputs', ids:['encoder','__outputs','ingest_servers']},
+  {title:'This PC and the incoming feeds', ids:['input_protocol','power_plan']}
+];
+var OBS_SETTING_GROUPS = [ {title:'This PC', ids:['power_plan']} ];
+function settingGroups(){ return isObs() ? OBS_SETTING_GROUPS : SETTING_GROUPS; }
+function getSettings(){ return arr(g(D, 'verdict.settings')).filter(function(s){ return s && s.id; }); }
+function settingById(id){ var s = getSettings(); for (var i = 0; i < s.length; i++) if (s[i].id === id) return s[i]; return null; }
+function outputs(){ return arr(g(D, 'profile.outputs')).filter(function(o){ return o && isNum(o.video_kbps); }); }
+function outLine(o){ return (o.label || o.id) + ': video ' + o.video_kbps + ' kbps' + (isNum(o.audio_kbps) ? ' + audio ' + o.audio_kbps + ' kbps' : '') + (o.protocol ? ' (' + o.protocol + ')' : ''); }
+function valueLines(s){ return String(s.value == null ? '' : s.value).split(/\s+(?:·|\|)\s+/); }
+
+function settingsText(){
+  var L = [];
+  var name = g(D, 'profile.name'), pc = g(D, 'meta.computer') || g(D, 'hardware.computer.name');
+  L.push(isObs() ? 'ShowReady observer PC settings' + (pc ? ' - ' + pc : '') : 'ShowReady settings' + (name ? ' - ' + name : ''));
+  var bits = [];
+  if (pc && !isObs()) bits.push('PC ' + pc);
+  if (g(D, 'meta.started')) bits.push('checked ' + fmtDate(g(D, 'meta.started')));
+  if (g(D, 'verdict.overall')) bits.push('verdict ' + g(D, 'verdict.overall'));
+  if (bits.length) L.push(bits.join(' | '));
+  if (g(D, 'verdict.headline')) L.push(g(D, 'verdict.headline'));
+  L.push('');
+  var done = {}, list = [];
+  settingGroups().forEach(function(gr){ gr.ids.forEach(function(id){ list.push(id); }); });
+  getSettings().forEach(function(s){ if (list.indexOf(s.id) < 0) list.push(s.id); });
+  list.forEach(function(id){
+    if (done[id]) return; done[id] = 1;
+    if (id === '__outputs'){
+      var os = outputs();
+      if (os.length){ L.push('Output bitrates:'); os.forEach(function(o){ L.push('  ' + outLine(o)); }); L.push(''); }
+      return;
+    }
+    var s = settingById(id); if (!s) return;
+    var vl = valueLines(s);
+    L.push((s.label || s.id) + ':' + (vl.length > 1 ? '' : ' ' + vl[0]));
+    if (vl.length > 1) vl.forEach(function(x){ L.push('  ' + x); });
+    if (s.why) L.push('  Why: ' + s.why);
+    L.push('');
+  });
+  return L.join('\n').replace(/\n+$/, '\n');
+}
+
+function flashBtn(btn, ok){
+  if (!btn) return;
+  var old = btn.getAttribute('data-label') || btn.textContent;
+  btn.setAttribute('data-label', old);
+  btn.textContent = ok ? 'Copied ✓' : 'Select and copy manually';
+  btn.classList.toggle('done', !!ok);
+  var live = document.getElementById('live'); if (live) live.textContent = ok ? 'Copied to clipboard' : 'Could not copy automatically';
+  clearTimeout(btn._t);
+  btn._t = setTimeout(function(){ btn.textContent = old; btn.classList.remove('done'); }, ok ? 1800 : 4000);
+}
+function legacyCopy(text){
+  try{
+    var ta = document.createElement('textarea');
+    ta.value = text; ta.setAttribute('readonly', '');
+    ta.style.cssText = 'position:fixed;top:0;left:-9999px;opacity:0';
+    document.body.appendChild(ta); ta.select();
+    var ok = document.execCommand('copy');
+    document.body.removeChild(ta);
+    return !!ok;
+  }catch(e){ return false; }
+}
+function copyText(text, btn, fallbackBox){
+  function fail(){
+    flashBtn(btn, false);
+    if (fallbackBox){
+      fallbackBox.innerHTML = '<p class="copynote">Automatic copy was blocked. The text is selected below: press Ctrl+C.</p><textarea readonly></textarea>';
+      var ta = fallbackBox.querySelector('textarea'); ta.value = text; ta.focus(); ta.select();
+    }
+  }
+  function ok(){ flashBtn(btn, true); if (fallbackBox) fallbackBox.innerHTML = ''; }
+  try{
+    if (navigator.clipboard && navigator.clipboard.writeText && window.isSecureContext){
+      navigator.clipboard.writeText(text).then(ok, function(){ legacyCopy(text) ? ok() : fail(); });
+      return;
+    }
+  }catch(e){}
+  legacyCopy(text) ? ok() : fail();
+}
+
+/* ================= safe wrapper ================= */
+function safe(name, fn){
+  try{ return fn(); }
+  catch(e){ return '<div class="err">Could not draw the ' + esc(name) + ' section (' + esc(e && e.message ? e.message : e) + '). The raw data at the bottom of the page is still complete.</div>'; }
+}
+
+/* ================= margin bar ================= */
+function marginBar(m, status, mini){
+  if (!isNum(m)) return '';
+  var cap = 3, w = Math.max(0, Math.min(m, cap)) / cap * 100, tick = 100 / cap, k = sk(status);
+  var label = r2(m) + '×';
+  var aria = 'Margin ' + r2(m) + ' times the limit; 1 is exactly at the limit, higher is safer';
+  return '<div class="margin s-' + k + '"><div class="mbar" role="img" aria-label="' + esc(aria) + '"><i style="width:' + w.toFixed(1) + '%"></i><b style="left:' + tick.toFixed(2) + '%"></b></div>' +
+    (mini ? '' : '<span class="mtxt"><strong>' + esc(label) + '</strong> margin &middot; the black tick is the limit (1×)</span>') + '</div>';
+}
+
+/* ================= 0. header ================= */
+function renderTop(){
+  var obs = isObs();
+  var h = '<div class="topbar"><div class="brand">ShowReady<span>' + (obs ? 'Observer PC check' : 'pre-show check') + '</span></div><div class="noprint"><button type="button" class="btn small" data-print>Print or save as PDF</button></div></div>';
+  h += '<ul class="nav noprint" aria-label="Report sections">' +
+    '<li><a href="#verdict"><b>1</b>Can we go?</a></li>' + (obs ? '<li><a href="#next"><b>&rarr;</b>Next step</a></li>' : '') + '<li><a href="#settings"><b>2</b>' + (obs ? 'This PC' : 'Settings') + '</a></li><li><a href="#fix"><b>3</b>What to fix</a></li>' +
+    '<li><a href="#all"><b>4</b>All checks</a></li><li><a href="#manual"><b>5</b>Checklist</a></li><li><a href="#evidence"><b>6</b>Evidence</a></li></ul>';
+  var m = [];
+  var pc = g(D, 'meta.computer') || g(D, 'hardware.computer.name');
+  if (pc) m.push('<span>' + (obs ? 'Observer PC ' : 'PC ') + '<b>' + esc(pc) + '</b></span>');
+  var hw = [];
+  var cpu = shortCpu(g(D, 'hardware.cpu.name')); if (cpu) hw.push(cpu);
+  if (isNum(g(D, 'hardware.ram_gb'))) hw.push(r1(g(D, 'hardware.ram_gb')) + ' GB RAM');
+  var gp = primaryGpu(); if (gp && gp.name) hw.push(String(gp.name).replace(/^NVIDIA\s+/, ''));
+  if (hw.length) m.push('<span>' + esc(hw.join(' · ')) + '</span>');
+  if (g(D, 'meta.started')) m.push('<span>Checked <b>' + esc(fmtDate(g(D, 'meta.started'))) + '</b>' + (fmtDur(g(D, 'meta.duration_s')) ? ' (took ' + esc(fmtDur(g(D, 'meta.duration_s'))) + ')' : '') + '</span>');
+  if (g(D, 'meta.mode')) m.push('<span>' + esc(g(D, 'meta.mode')) + ' mode</span>');
+  h += '<p class="meta">' + (m.join('') || nm('No run details')) + '</p>';
+  var pr = g(D, 'profile'), ins = g(D, 'profile.inputs'), os = outputs();
+  if (obs){
+    var oP = ins && ins.protocol ? ' ' + String(ins.protocol) : '';
+    h += '<p class="plan">Role: a source PC. It sends one 1080p60' + esc(oP) + ' feed to the show PC' + (ins && isNum(ins.count) ? ' (the show takes ' + esc(ins.count) + ' such feeds, one from each observer PC)' : '') + '.</p>';
+  } else if (pr && (ins || os.length)){
+    var p = [];
+    if (ins) p.push(esc(ins.count) + ' × ' + esc(String(ins.resolution || '').indexOf('1080') >= 0 ? '1080p' + (ins.fps || '') : (ins.resolution || '')) + ' ' + esc(ins.protocol || '') + ' in');
+    if (os.length) p.push(os.map(function(o){ return esc(o.label || o.id) + ' ' + (o.video_kbps / 1000) + ' Mbps'; }).join(' + ') + ' out');
+    h += '<p class="plan">Show plan: ' + p.join(' → ') + '</p>';
+  }
+  return h;
+}
+
+/* ================= 1. verdict ================= */
+function renderVerdict(){
+  var V = g(D, 'verdict');
+  var overall = g(D, 'verdict.overall');
+  var k = overall === 'GO' ? 'pass' : overall === 'CAUTION' ? 'warn' : overall === 'NO-GO' ? 'fail' : 'skip';
+  var obs = isObs();
+  var next = (obs ? {
+    'GO': 'This PC can send its feed. Now do the next step below.',
+    'CAUTION': 'This PC can probably send its feed, but read the amber items in section 3 first, then do the next step below.',
+    'NO-GO': 'This PC cannot send its feed reliably yet. Fix the red items in section 3, then run Run-Observer.cmd again.'
+  } : {
+    'GO': 'Everything measured is inside its limits. Use the settings in section 2.',
+    'CAUTION': 'You can go, but read the amber items in section 3 first and decide whether you accept them.',
+    'NO-GO': 'Do not go live on this setup yet. Fix the red items in section 3, then run ShowReady again.'
+  })[overall] || (obs ? 'The checks did not produce a verdict. Run Run-Observer.cmd again.' : 'The checks did not produce a verdict. Run ShowReady again.');
+  var c = counts();
+  var chips = ['fail','warn','pass','info','skip'].filter(function(x){ return c[x] > 0; }).map(function(x){
+    var word = {fail:'failed', warn:(c[x] === 1 ? 'warning' : 'warnings'), pass:'passed', info:'info', skip:'skipped'}[x];
+    return '<span class="chip s-' + x + '">' + icon(x) + c[x] + ' ' + word + '</span>';
+  }).join('');
+  var weakest = g(D, 'verdict.weakest'), wc = weakest ? checkById(weakest) : null;
+  var weak = wc ? '<p class="weak">Jump to the weakest link: <a href="#chk-' + esc(wc.id) + '">' + esc(wc.title || wc.id) + '</a></p>' : '';
+  var nt = notTested();
+  if (nt.length && overall !== 'NO-GO') next = obs ? 'Part of the check did not run, so this is not a go-ahead yet. Run Run-Observer.cmd again with everything switched on before you decide.' : 'Part of the check did not run, so this is not a go-ahead yet. Run ShowReady again with everything switched on before you decide.';
+  var part = nt.length
+    ?'<p class="partial"><strong>Not tested in this run:</strong> ' + esc(nt.join('; ')) + '. This answer is incomplete, so do not treat it as a full all-clear. Run ' + (obs ? 'Run-Observer.cmd' : 'ShowReady') + ' again without skipping anything.</p>' : '';
+  return '<section id="verdict" class="sec" aria-labelledby="h-verdict" style="margin-top:6px"><h2 id="h-verdict" class="sr-only">1. Can we go?</h2>' +
+    '<div class="verdict s-' + k + '">' + heroIcon(overall) +
+    '<div><div class="vword">' + esc(overall || 'NO VERDICT') + '</div>' +
+    headlineHtml(g(V, 'headline')) +
+    '<p class="vnext">' + esc(next) + '</p>' +
+    (chips ? '<div class="vchips" aria-label="Check totals">' + chips + '</div>' : '') + part + weak + '</div></div></section>';
+}
+/* The rules engine writes "<what is weakest> - <what to do> (+N more ...)": show the first part big, the rest as a calmer second line. */
+function headlineHtml(raw){
+  if (raw == null || raw === '') return '';
+  var t = pretty(raw), m = String(t).match(/^(.*?)\s+-\s+(.+)$/);
+  return '<p class="headline">' + esc(m ? m[1] : t) + '</p>' + (m ? '<p class="vfix">' + esc(m[2]) + '</p>' : '');
+}
+/* What did not run: the rules engine's own list, plus any collector step that failed. */
+function notTested(){
+  var out = [];
+  arr(g(D, 'verdict.not_tested')).forEach(function(x){ if (typeof x === 'string' && x) out.push(x); });
+  arr(g(D, 'meta.steps')).forEach(function(s){
+    if (!s || typeof s !== 'object' || !s.status || s.status === 'ok' || s.status === 'skipped' || s.key === 'verdict') return;
+    out.push((s.title || s.key || 'a step') + ' did not finish (' + s.status + (s.message ? ': ' + s.message : '') + ')');
+  });
+  if (!out.length && arr(g(D, 'meta.skipped')).length) arr(D.meta.skipped).forEach(function(x){ if (typeof x === 'string') out.push(x); });
+  return out;
+}
+
+/* ---- observer only: what to do next (leave this PC waiting, then run the LAN test on the prod PC) ---- */
+function renderNext(){
+  var ip = g(D, 'meta.observer_ip'), kind = g(D, 'meta.observer_ip_kind'), overall = g(D, 'verdict.overall');
+  ip = typeof ip === 'string' && ip.replace(/\s/g, '') ? ip.replace(/\s/g, '') : null;
+  var me = ip || "<this PC's IP>", other = "<other observer's IP>";
+  var cmdCopy = 'Run-ShowReady.cmd -LanHosts ' + me + ',' + other;
+  var cmdShown = 'Run-ShowReady.cmd <span style="white-space:nowrap">-LanHosts</span> ' + (ip ? esc(ip) : '<span class="phold">' + esc(me) + '</span>') + ',<span class="phold">' + esc(other) + '</span>';
+  var kindName = {wired:'wired Ethernet', wifi:'Wi-Fi', other:'other adapter type'};
+  var warn = '';
+  if (!ip){
+    warn = '<strong>No usable network address was found on this PC</strong>, so the prod PC would have nothing to connect to. Plug this PC into the production switch with an Ethernet cable, then run Run-Observer.cmd again.';
+  } else if (kind === 'wifi'){
+    warn = '<strong>This address is on Wi-Fi, not a wired connection.</strong> The show runs over wired Ethernet, so a test over Wi-Fi would measure the wrong path. Plug this PC into the production switch with an Ethernet cable, then run Run-Observer.cmd again.';
+  } else if (kind !== 'wired'){
+    warn = '<strong>ShowReady could not confirm that this address is on a wired connection</strong>' + (kind === 'other' ? ' (the adapter is not a normal wired Ethernet port)' : '') + '. The prod PC should reach this PC over the wired production network, so check the cable and the address before you test.';
+  }
+  var h = '<section id="next" class="sec" aria-labelledby="h-next" style="margin-top:22px"><h2 id="h-next" class="sr-only">Next step</h2>' +
+    '<div class="scard next"><div class="slabel">Next step</div>' +
+    '<p class="nextlead">Leave this PC waiting, then on the prod PC run:</p>' +
+    '<div class="sval md" id="next-cmd">' + cmdShown + '</div>' +
+    '<button type="button" class="btn small cp" data-copy="' + esc(cmdCopy) + '" aria-label="Copy the prod PC command">Copy</button>' +
+    '<div class="lkv" style="margin-top:2px"><div><span class="k">Address of this PC</span><span class="v" style="font-size:22px">' + (ip ? esc(ip) : nm('not found')) + '<small>' + esc(ip ? (kindName[kind] || 'adapter type unknown') : 'no usable adapter') + '</small></span></div></div>' +
+    (warn ? '<p class="nextwarn" role="note">' + warn + '</p>' : '') +
+    (overall === 'NO-GO' ? '<p class="nextwarn" role="note"><strong>This PC failed its own check.</strong> You can still leave it waiting so the prod PC can test the network, but fix the red items in section 3 before show day.</p>' : '') +
+    '<p class="swhy">Keep this PC on and the Run-Observer.cmd window open. It waits for the prod PC (30 minutes by default; press any key in that window to stop it).</p>' +
+    '<p class="swhy">If Windows asks whether to allow iperf3 through the firewall, allow it on Private networks. Cancel blocks the test.</p>' +
+    '<p class="swhy">Put the address of the other observer PC in place of ' + esc(other) + ' (it shows the same box in its own report). The prod PC then tests each source PC alone and both together.</p>' +
+    '</div></section>';
+  return h;
+}
+
+/* ================= 2. settings ================= */
+function valClass(v){ var n = String(v == null ? '' : v).length; return n <= 16 ? 'xl' : n <= 36 ? '' : 'md'; }
+function latencyHint(s){
+  var m = String(s.value || '').replace(/,/g, '').match(/(\d+(?:\.\d+)?)\s*ms/i);
+  if (!m) return '';
+  var ms = Math.round(parseFloat(m[1]));
+  return '<p class="shint">Type <code>' + ms + '</code> (milliseconds: no comma, no “ms”). In an OBS SRT URL the latency parameter counts in microseconds: <code>latency=' + (ms * 1000) + '</code>. Set the same latency on the France end.</p>';
+}
+function settingCard(s, hero){
+  var vl = valueLines(s), plainValue = vl.join('\n');
+  var kv = vl.length > 1 && vl.every(function(x){ return /^[^:]{2,24}:\s+\S/.test(x); });
+  var shown = vl.map(function(x){
+    var m = kv && x.match(/^([^:]{2,24}):\s+(.+)$/);
+    return m ? '<span class="line"><span class="lk">' + esc(m[1]) + '</span><span class="lv">' + esc(m[2]) + '</span></span>' : '<span class="line">' + esc(x) + '</span>';
+  }).join('');
+  var cls = hero ? '' : (vl.length > 1 ? 'md' : valClass(s.value));
+  return '<div class="scard' + (hero ? ' hero' : ((kv || s.id === 'srt_mode') ? ' wide' : '')) + '" id="set-' + esc(s.id) + '">' +
+    '<div class="slabel">' + esc(s.label || s.id) + '</div>' +
+    '<div class="sval ' + cls + '">' + (s.value == null || s.value === '' ? nm() : shown) + '</div>' +
+    (s.why ? '<p class="swhy">' + esc(pretty(s.why)) + '</p>' : '') +
+    (hero && s.id === 'srt_latency' ? latencyHint(s) : '') +
+    '<button type="button" class="btn small cp" data-copy="' + esc(plainValue) + '" aria-label="Copy ' + esc(s.label || s.id) + '">Copy</button></div>';
+}
+var SETTING_LABELS = {srt_latency:'SRT latency', srt_overhead:'SRT bandwidth overhead', srt_bitrate:'SRT video bitrate', srt_mode:'SRT mode', encoder:'Encoder', ingest_servers:'Ingest servers', input_protocol:'Input protocol', power_plan:'Power plan'};
+var SETTING_NEEDS = {srt_latency:'the network test', srt_overhead:'the network test', srt_bitrate:'the network test', srt_mode:'the network test', encoder:'the load test', ingest_servers:'the network test', input_protocol:'the network test', power_plan:'the hardware check'};
+function missingCard(id){
+  return '<div class="scard missing' + (id === 'srt_latency' ? ' hero' : '') + '"><div class="slabel">' + esc(SETTING_LABELS[id] || id) + '</div><div class="sval md">' + nm('Not available') + '</div>' +
+    '<p class="swhy">This needs ' + esc(SETTING_NEEDS[id] || 'a test') + ', which did not run or did not finish. Run ShowReady again without skipping it.</p></div>';
+}
+function outputsCard(){
+  var os = outputs(); if (!os.length) return '';
+  var rows = os.map(function(o){
+    var det = [];
+    if (o.protocol) det.push(o.protocol); if (isNum(o.audio_kbps)) det.push('audio ' + o.audio_kbps + ' kbps'); det.push('CBR');
+    return '<div class="obit"><span class="on">' + esc(o.label || o.id) + '</span><span class="ov">' + esc(thousands(o.video_kbps)) + ' kbps</span><span class="od">Video bitrate · ' + esc(det.join(' · ')) + '</span></div>';
+  }).join('');
+  return '<div class="scard" id="set-bitrates"><div class="slabel">Bitrates, all three outputs</div><div class="obits">' + rows + '</div>' +
+    '<p class="swhy">Taken from the show plan. The vMix/OBS video bitrate box uses kbps (1 Mbps = 1,000 kbps).</p>' +
+    '<button type="button" class="btn small cp" data-copy="' + esc(os.map(outLine).join('\n')) + '" aria-label="Copy all output bitrates">Copy</button></div>';
+}
+function renderSettings(){
+  var all = getSettings(), h = '', obs = isObs();
+  var overall = g(D, 'verdict.overall');
+  if (obs){
+    h += '<section id="settings" class="sec" aria-labelledby="h-settings"><h2 id="h-settings"><span class="n">2</span>What to set on this PC</h2>';
+    h += '<p class="lede">A source PC needs one setting. Click the value to select it, or use its Copy button.</p>';
+  } else {
+    h += '<section id="settings" class="sec" aria-labelledby="h-settings"><h2 id="h-settings"><span class="n">2</span>What to type into vMix / OBS</h2>';
+    h += '<p class="lede">SRT is the stream that goes to France. OMT and NDI are the video links from the other PCs into this one. Click any value to select it, or use its Copy button.</p>';
+    h += '<div class="copybar noprint"><button type="button" class="btn primary" data-copyall>Copy settings</button><span class="copynote">Copies the whole sheet as plain text, ready to paste into a message.</span></div><div class="fallback" id="copyfallback"></div>';
+    if (overall === 'NO-GO') h += '<p class="prov"><strong>Provisional.</strong> These values were worked out from a setup that failed checks. Fix section 3 and re-run before you trust them.</p>';
+  }
+  if (!all.length && (obs || !outputs().length)){ h += '<p class="empty">' + nm('No settings were produced') + ' The checks did not run far enough to work them out.</p></section>'; return h; }
+  var used = {};
+  settingGroups().forEach(function(gr){
+    var cards = '';
+    gr.ids.forEach(function(id){
+      if (id === '__outputs'){ cards += outputsCard(); return; }
+      var s = settingById(id);
+      if (!s){ if (g(D, 'verdict')) cards += missingCard(id); return; }
+      used[id] = 1;
+      cards += settingCard(s, id === 'srt_latency' && !obs);
+    });
+    if (cards) h += '<div class="sgroup"><h3>' + esc(gr.title) + '</h3><div class="sgrid">' + cards + '</div></div>';
+  });
+  var rest = all.filter(function(s){ return !used[s.id]; });
+  if (rest.length) h += '<div class="sgroup"><h3>Other</h3><div class="sgrid">' + rest.map(function(s){ return settingCard(s, false); }).join('') + '</div></div>';
+  return h + '</section>';
+}
+
+/* ================= 3. what is wrong ================= */
+function valueBlock(c){
+  var out = '';
+  if (c.value != null && c.value !== '') out += '<div><span class="k">Measured</span><span class="v">' + esc(pretty(c.value)) + '</span></div>';
+  if (c.limit != null && c.limit !== '') out += '<div><span class="k">Limit</span><span class="v lim">' + esc(pretty(c.limit)) + '</span></div>';
+  return out;
+}
+function issueCard(c){
+  var k = sk(c.status), vb = valueBlock(c), mb = marginBar(c.margin, c.status, false);
+  return '<article class="issue s-' + k + '" id="chk-' + esc(c.id) + '"><header>' + badge(c.status) + '<h3>' + esc(c.title || c.id) + '</h3><span class="secnote">' + esc((secText(secOf(c)) || [secOf(c)])[0]) + '</span></header>' +
+    ((vb || mb) ? '<div class="vl">' + vb + mb + '</div>' : '') +
+    (c.detail ? '<p class="detail">' + esc(pretty(c.detail)) + '</p>' : '') +
+    (c.fix ? '<div class="fix"><b>How to fix it</b><p>' + esc(pretty(c.fix)) + '</p></div>' : '') + '</article>';
+}
+function renderIssues(){
+  var cs = getChecks(), fails = cs.filter(function(c){ return sk(c.status) === 'fail'; }), warns = cs.filter(function(c){ return sk(c.status) === 'warn'; });
+  var skipped = cs.filter(function(c){ return sk(c.status) === 'skip'; });
+  var h = '<section id="fix" class="sec" aria-labelledby="h-fix"><h2 id="h-fix"><span class="n">3</span>What is wrong and how to fix it</h2>';
+  if (!cs.length){ return h + '<p class="empty">' + nm('No checks were produced') + '</p></section>'; }
+  h += '<p class="lede">Red items block the show. Amber items are risks you can choose to accept. Each one shows what was measured against its limit, and how much room is left.</p>';
+  if (!fails.length && !warns.length){
+    h += '<div class="allgood">' + icon('pass') + '<div><strong>Nothing to fix.</strong> No check failed and none raised a warning.</div></div>';
+  } else {
+    if (fails.length) h += '<h3 class="sr-only">Failed checks</h3>' + fails.map(issueCard).join('');
+    if (warns.length) h += '<h3 class="sr-only">Warnings</h3>' + warns.map(issueCard).join('');
+  }
+  if (skipped.length) h += '<p class="skipnote">' + esc(plural(skipped.length, 'check was', 'checks were')) + ' skipped because the data was not collected (see section 4). A skipped check is not a pass.</p>';
+  return h + '</section>';
+}
+
+/* ================= 4. all other checks ================= */
+function rowHtml(c){
+  var k = sk(c.status);
+  var rv = '';
+  if (c.value != null && c.value !== '') rv += '<span class="v">' + esc(pretty(c.value)) + '</span>';
+  if (c.limit != null && c.limit !== '') rv += '<span class="l">limit: ' + esc(pretty(c.limit)) + '</span>';
+  rv += marginBar(c.margin, c.status, true);
+  return '<div class="row s-' + k + '" id="chk-' + esc(c.id) + '"><div>' + badge(c.status) + '</div><div class="rt"><b>' + esc(c.title || c.id) + '</b>' +
+    (c.detail ? '<span class="rd">' + esc(pretty(c.detail)) + '</span>' : '') +
+    (c.fix && k !== 'pass' ? '<span class="rd"><strong>Fix:</strong> ' + esc(pretty(c.fix)) + '</span>' : '') + '</div><div class="rv">' + rv + '</div></div>';
+}
+function worstOf(list){
+  var order = ['fail','warn','skip','pass','info'];
+  for (var i = 0; i < order.length; i++) for (var j = 0; j < list.length; j++) if (sk(list[j].status) === order[i]) return order[i];
+  return 'info';
+}
+function renderAll(){
+  var cs = getChecks();
+  var h = '<section id="all" class="sec" aria-labelledby="h-all"><h2 id="h-all"><span class="n">4</span>Everything else, by section</h2>';
+  if (!cs.length) return h + '<p class="empty">' + nm('No checks were produced') + '</p></section>';
+  h += '<p class="lede">Checks that passed, are information only, or were skipped. Problems already listed in section 3 are not repeated.</p>';
+  var order = SECTION_ORDER.slice();
+  cs.forEach(function(c){ var s = secOf(c); if (order.indexOf(s) < 0) order.push(s); });
+  order.forEach(function(sec){
+    var inSec = cs.filter(function(c){ return secOf(c) === sec; });
+    if (!inSec.length) return;
+    var rest = inSec.filter(function(c){ var k = sk(c.status); return k !== 'fail' && k !== 'warn'; });
+    var cnt = {fail:0, warn:0, pass:0, info:0, skip:0}; inSec.forEach(function(c){ cnt[sk(c.status)]++; });
+    var sum = ['fail','warn','pass','info','skip'].filter(function(x){ return cnt[x]; }).map(function(x){ return cnt[x] + ' ' + x; }).join(' · ');
+    var txt = secText(sec) || [sec.charAt(0).toUpperCase() + sec.slice(1), ''];
+    h += '<details class="grp" open id="sec-' + esc(sec) + '"><summary>' + badge(worstOf(inSec).toUpperCase()) + '<span class="gname">' + esc(txt[0]) + '</span><span class="gsum">' + esc(sum) + '</span></summary>' +
+      (txt[1] ? '<p class="gnote">' + esc(txt[1]) + (sec === 'lan' && isObj(g(D, 'lan')) ? ' <a href="#ev-lan">Sources, speed and devices: section 6.</a>' : '') + (sec === 'sender' && isObj(g(D, 'sender')) ? ' <a href="#ev-sender">Speed, CPU and clock charts: section 6.</a>' : '') + '</p>' : '') +
+      (rest.length ? rest.map(rowHtml).join('') : '<p class="gnote" style="padding-bottom:12px">Every check in this section is listed in section 3.</p>') + '</details>';
+  });
+  return h + '</section>';
+}
+
+/* ================= 5. manual checklist ================= */
+var canStore = true;
+function storeKey(){ return 'showready:manual:' + (isObs() ? 'observer:' : '') + String(g(D, 'meta.started', 'no-start-time')); }
+function loadTicks(){
+  try{ var v = JSON.parse(localStorage.getItem(storeKey()) || '{}'); canStore = true; return v && typeof v === 'object' ? v : {}; }
+  catch(e){ canStore = false; return {}; }
+}
+function saveTicks(o){ try{ localStorage.setItem(storeKey(), JSON.stringify(o)); canStore = true; }catch(e){ canStore = false; } }
+function renderManual(){
+  var items = arr(g(D, 'verdict.manual_checks')).filter(function(m){ return m && m.text; });
+  var h = '<section id="manual" class="sec" aria-labelledby="h-manual"><h2 id="h-manual"><span class="n">5</span>Checklist for you to do by hand</h2>';
+  if (!items.length) return h + '<p class="empty">' + nm('No manual checks were listed') + '</p></section>';
+  var t = loadTicks();
+  h += '<p class="lede">The software cannot check these. Tick each one when it is done.' + (canStore ? ' Ticks are remembered in this browser on this PC.' : ' Ticks cannot be saved in this browser, so they reset when the page closes.') + '</p>';
+  var n = items.filter(function(m){ return t[m.id]; }).length;
+  h += '<p class="tprog" id="tprog">' + n + ' of ' + items.length + ' done</p><ul class="ticks">';
+  items.forEach(function(m, i){
+    var id = m.id || ('m' + i);
+    h += '<li><label class="tick"><input type="checkbox" data-tick="' + esc(id) + '"' + (t[id] ? ' checked' : '') + '><span class="tx">' + esc(m.text) + '</span></label></li>';
+  });
+  return h + '</ul></section>';
+}
+
+/* ================= 6. evidence ================= */
+function srtCalcRtt(rows){
+  var cp = g(D, 'verdict.calc.srt.rtt_p95_ms');
+  if (isNum(cp)) return cp;
+  var c = checkById('fr_rtt'), m = c && String(c.value || '').replace(/,/g, '').match(/(\d+(?:\.\d+)?)/);
+  if (m) return parseFloat(m[1]);
+  var p = rows.filter(function(r){ return r.kind !== 'none'; }).map(function(r){ return r.p95; });
+  return median(p);
+}
+function rttRows(){
+  return arr(g(D, 'network.targets')).filter(function(t){ return t && t.group === 'france'; }).map(function(t){
+    var ic = t.icmp, tc = t.tcp, name = t.name || t.host || 'target';
+    if (ic && !ic.blocked && isNum(ic.p50_ms) && isNum(ic.p95_ms)){
+      return {name:name, kind:'icmp', min:isNum(ic.min_ms) ? ic.min_ms : ic.p50_ms, p50:ic.p50_ms, p95:ic.p95_ms};
+    }
+    if (tc && isNum(tc.p50_ms)){
+      var s = arr(tc.samples_ms).filter(isNum);
+      return {name:name, kind:'tcp', min:s.length ? Math.min.apply(null, s) : tc.p50_ms, p50:tc.p50_ms, p95:isNum(tc.p95_ms) ? tc.p95_ms : tc.p50_ms, blocked:!!(ic && ic.blocked)};
+    }
+    return {name:name, kind:'none', blocked:!!(ic && ic.blocked)};
+  });
+}
+/* Axis for the RTT chart. It is capped so one slow TCP connect (for example 1,200 ms over Wi-Fi) cannot squash the real 210-290 ms cluster:
+   cap = max(400 ms, 1.25 x the RTT used for SRT latency), rounded up to 100. Anything beyond the cap is drawn clipped and marked "off-scale". */
+function rttDomain(rows, calc){
+  var vals = [];
+  rows.forEach(function(r){ if (r.kind !== 'none'){ vals.push(r.min, r.p95); } });
+  if (isNum(calc)) vals.push(calc);
+  if (!vals.length) return null;
+  var cap = Math.ceil(Math.max(400, 1.25 * (isNum(calc) ? calc : 0)) / 100) * 100;
+  var lo = Math.max(0, Math.floor((Math.min.apply(null, vals) - 15) / 25) * 25), hi = Math.ceil((Math.max.apply(null, vals) + 15) / 25) * 25;
+  if (hi > cap) hi = cap;
+  if (hi - lo < 100) lo = Math.max(0, hi - 100);
+  if (hi - lo < 100) hi = lo + 100;
+  var off = rows.filter(function(r){ return r.kind !== 'none' && r.p95 > hi; });
+  return {lo: lo, hi: hi, cap: cap, off: off};
+}
+function drawRtt(el, rows, calc){
+  var W = Math.floor(el.clientWidth); if (W < 220) return;
+  var narrow = W < 700, padL = narrow ? 6 : 190, padR = narrow ? 6 : 196, topPad = 30, botPad = 26, rowH = narrow ? 52 : 36;
+  var dom = rttDomain(rows, calc);
+  if (!dom){ el.innerHTML = '<p class="empty">' + nm('No France round-trip times were measured') + '</p>'; return; }
+  var lo = dom.lo, hi = dom.hi;
+  var H = topPad + rows.length * rowH + botPad, x0 = padL, x1 = W - padR;
+  var X = function(v){ return x0 + (Math.min(v, hi) - lo) / (hi - lo) * (x1 - x0); };
+  var step = niceStep(hi - lo, narrow ? 4 : 7), s = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Round-trip time to each French network, showing minimum, typical and 95th percentile">';
+  s += '<defs><pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="6" class="c-hatch"/></pattern></defs>';
+  // typical corridor band 210-290 ms
+  var b0 = Math.max(lo, 210), b1 = Math.min(hi, 290);
+  if (b1 > b0) s += '<rect class="c-band" x="' + X(b0).toFixed(1) + '" y="' + topPad + '" width="' + (X(b1) - X(b0)).toFixed(1) + '" height="' + (rows.length * rowH) + '"/>';
+  for (var v = Math.ceil(lo / step) * step; v <= hi + 0.001; v += step){
+    s += '<line class="c-grid" x1="' + X(v).toFixed(1) + '" x2="' + X(v).toFixed(1) + '" y1="' + topPad + '" y2="' + (H - botPad) + '"/>' +
+         '<text class="tm mono" x="' + X(v).toFixed(1) + '" y="' + (H - 8) + '" text-anchor="middle">' + v + '</text>';
+  }
+  rows.forEach(function(r, i){
+    var y = topPad + i * rowH, cy = narrow ? y + 34 : y + rowH / 2;
+    var nameY = narrow ? y + 16 : cy + 4;
+    s += '<text class="tb halo" x="' + (narrow ? 2 : 0) + '" y="' + nameY + '" style="font-size:13px">' + esc(trunc(r.name, narrow ? 22 : 28)) + '</text>';
+    if (r.kind === 'none'){
+      s += '<line class="c-none" x1="' + x0 + '" x2="' + x1 + '" y1="' + cy + '" y2="' + cy + '"/>';
+      s += '<text class="tm" x="' + W + '" y="' + nameY + '" text-anchor="end">' + (r.blocked ? 'no reply (ignores ping, no TCP answer)' : 'no reply') + '</text>';
+      return;
+    }
+    var offAll = r.min >= hi, offBar = r.p95 > hi;          // whole bar past the axis / only the slow end past the axis
+    var xa = X(r.min), xb = X(r.p95), xm = X(r.p50), p50On = r.p50 <= hi;
+    if (offAll){
+      s += '<line class="c-none" x1="' + x0 + '" x2="' + x1 + '" y1="' + cy + '" y2="' + cy + '"/>';
+    } else if (r.kind === 'tcp'){
+      s += '<rect class="c-hatchbar" x="' + xa.toFixed(1) + '" y="' + (cy - 6) + '" width="' + Math.max(2, xb - xa).toFixed(1) + '" height="12" rx="2"/>' +
+           '<rect fill="url(#hatch)" x="' + xa.toFixed(1) + '" y="' + (cy - 6) + '" width="' + Math.max(2, xb - xa).toFixed(1) + '" height="12" rx="2"/>';
+    } else {
+      s += '<rect class="c-bar" x="' + xa.toFixed(1) + '" y="' + (cy - 6) + '" width="' + Math.max(2, xb - xa).toFixed(1) + '" height="12" rx="2"/>';
+    }
+    if (!offAll){
+      s += '<line class="c-cap" x1="' + xa.toFixed(1) + '" x2="' + xa.toFixed(1) + '" y1="' + (cy - 9) + '" y2="' + (cy + 9) + '"/>';
+      if (!offBar) s += '<line class="c-cap" x1="' + xb.toFixed(1) + '" x2="' + xb.toFixed(1) + '" y1="' + (cy - 9) + '" y2="' + (cy + 9) + '"/>';
+      if (p50On) s += '<line class="c-p50" x1="' + xm.toFixed(1) + '" x2="' + xm.toFixed(1) + '" y1="' + (cy - 10) + '" y2="' + (cy + 10) + '"/>';
+    }
+    if (offBar){   // clipped at the right edge: arrowhead plus a label; the true numbers stay in the text on the right
+      s += '<path class="c-off" d="M' + (x1 + 1) + ' ' + (cy - 7) + 'L' + (x1 + 11) + ' ' + cy + 'L' + (x1 + 1) + ' ' + (cy + 7) + 'Z"/>' +
+           '<text class="c-offt halo" x="' + (x1 - 3) + '" y="' + (narrow ? cy + 21 : cy - 11) + '" text-anchor="end">off-scale →</text>';
+    }
+    var num = Math.round(r.min) + ' · ' + Math.round(r.p50) + ' · ' + Math.round(r.p95) + (r.kind === 'tcp' ? ' (TCP)' : '');
+    s += '<text class="mono tb halo" x="' + W + '" y="' + nameY + '" text-anchor="end" style="font-size:' + (narrow ? 11 : 12) + 'px">' + esc(num) + '</text>';
+  });
+  if (isNum(calc)){
+    var xc = X(calc);
+    s += '<line class="c-calc" x1="' + xc.toFixed(1) + '" x2="' + xc.toFixed(1) + '" y1="' + (topPad - 6) + '" y2="' + (H - botPad) + '"/>';
+    var lab = narrow ? 'SRT uses ' + Math.round(calc) + ' ms' : Math.round(calc) + ' ms used for SRT latency', lw = lab.length * 7;
+    var anchor = (xc + 5 + lw > W) ? 'end' : 'start', tx = anchor === 'end' ? xc - 5 : xc + 5;
+    s += '<text class="c-calct" x="' + tx.toFixed(1) + '" y="' + (topPad - 12) + '" text-anchor="' + anchor + '">' + esc(lab) + '</text>';
+  }
+  s += '</svg>';
+  el.innerHTML = s;
+}
+function renderRtt(){
+  var rows = rttRows();
+  var h = '<div class="sub" id="ev-rtt"><h3>Round-trip time to France</h3>' +
+    '<p class="cap">How long a small packet takes to go from this PC to a French network and back (RTT). The bar runs from the fastest reply (min) to the slow end (p95: 19 in 20 replies were faster). The black tick is the typical reply (p50). SRT latency is sized from p95, because SRT has to survive the slow replies, not the average ones.</p>';
+  if (!rows.length) return h + '<p class="empty">' + nm('No France targets were measured') + '</p></div>';
+  var srt = String(g(D, 'profile.srt_destination_host') || '');
+  if (!srt) h += '<p class="cap"><strong>Heads-up:</strong> no partner IP was given, so these are general French networks, not the exact path to your partner. Re-run with <code>-SrtHost &lt;partner IP&gt;</code> for the exact path.</p>';
+  var dom = rttDomain(rows, srtCalcRtt(rows)), offNote = dom && dom.off.length ? '<span><i class="sw-off"></i>off-scale: the axis stops at ' + dom.hi + ' ms; the true numbers are on the right</span>' : '';
+  h += '<div class="panel"><div class="chart" data-chart="rtt"></div><div class="lg"><span><i class="sw-bar"></i>min to p95 (ping)</span><span><i class="sw-hatch"></i>min to p95 (TCP connect, used when a host ignores ping)</span><span><i class="sw-p50"></i>p50</span><span><i class="sw-band"></i>210–290 ms: normal for Seoul to France</span><span><i class="sw-calc"></i>value used for SRT latency</span>' + offNote + '</div>' +
+    '<p class="mtxt" style="margin-top:6px">Everything here is in milliseconds. Numbers at the right of each row: min · p50 · p95.</p></div></div>';
+  charts.push({el:null, sel:'rtt', draw:function(el){ drawRtt(el, rows, srtCalcRtt(rows)); }});
+  return h;
+}
+
+/* ---- UDP ---- */
+function udpTests(){ return arr(g(D, 'network.udp')).filter(function(u){ return u && typeof u === 'object'; }); }
+function drawUdp(el, u, yMax){
+  var W = Math.floor(el.clientWidth); if (W < 200) return;
+  var iv = arr(u.intervals).filter(function(x){ return x && isNum(x.packets) && x.packets > 0; });
+  if (!iv.length){ el.innerHTML = '<p class="mtxt">' + nm('No per-second data for this test') + '</p>'; return; }
+  var H = 150, pl = 40, pr = 8, pt = 10, pb = 26, pw = W - pl - pr, ph = H - pt - pb;
+  var Y = function(v){ return pt + ph - Math.min(v, yMax) / yMax * ph; };
+  var s = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Packet loss per second for ' + esc(u.host || 'target') + '">';
+  [0, BURST_PCT, yMax].filter(function(v, i, a){ return a.indexOf(v) === i; }).forEach(function(v){
+    s += '<line class="' + (v === BURST_PCT ? 'c-thr' : 'c-grid') + '" x1="' + pl + '" x2="' + (W - pr) + '" y1="' + Y(v).toFixed(1) + '" y2="' + Y(v).toFixed(1) + '"/>' +
+         '<text class="mono ' + (v === BURST_PCT ? 'c-thrt' : 'tm') + '" x="' + (pl - 5) + '" y="' + (Y(v) + 4).toFixed(1) + '" text-anchor="end">' + v + '%</text>';
+  });
+  var n = iv.length, bw = pw / n, bwi = Math.max(2, bw - (bw > 8 ? 3 : 1));
+  iv.forEach(function(x, i){
+    var lostN = isNum(x.lost) ? x.lost : 0, loss = lostN / x.packets * 100, bx = pl + i * bw + (bw - bwi) / 2;
+    if (loss <= 0){ s += '<rect class="c-losszero" x="' + bx.toFixed(1) + '" y="' + (Y(0) - 2.5).toFixed(1) + '" width="' + bwi.toFixed(1) + '" height="2.5"/>'; }
+    else {
+      var hot = loss > BURST_PCT, y = Y(loss);
+      s += '<rect class="' + (hot ? 'c-losshot' : 'c-lossbar') + '" x="' + bx.toFixed(1) + '" y="' + y.toFixed(1) + '" width="' + bwi.toFixed(1) + '" height="' + Math.max(2, Y(0) - y).toFixed(1) + '"><title>second ' + esc(x.t) + ': ' + r2(loss) + '% lost (' + lostN + ' of ' + x.packets + ')</title></rect>';
+      if (hot && bwi >= 14) s += '<text class="c-thrt mono" x="' + (bx + bwi / 2).toFixed(1) + '" y="' + (y - 3).toFixed(1) + '" text-anchor="middle" style="font-size:11px">' + Math.round(loss) + '</text>';
+    }
+  });
+  s += '<text class="halo c-thrt" x="' + (pl + 4) + '" y="' + (Y(BURST_PCT) - 5).toFixed(1) + '" style="font-size:11px">burst limit ' + BURST_PCT + '%</text>';
+  var every = Math.max(1, Math.ceil(n / Math.max(2, Math.floor(pw / 46))));
+  iv.forEach(function(x, i){
+    if (i % every === 0 || i === n - 1){
+      var tx = pl + i * bw + bw / 2;
+      s += '<text class="tm mono" x="' + tx.toFixed(1) + '" y="' + (H - 8) + '" text-anchor="middle" style="font-size:11px">' + esc(x.t) + '</text>';
+    }
+  });
+  s += '</svg>';
+  el.innerHTML = s;
+}
+function renderUdp(){
+  var tests = udpTests();
+  var h = '<div class="sub" id="ev-udp"><h3>Packet loss at the SRT bitrate (UDP test)</h3>' +
+    '<p class="cap">We sent test traffic to servers in France at the same speed and packet size as your SRT stream, and counted what did not arrive. Each bar is one second; the number on the axis is the share of packets lost in that second. SRT can repair small, spread-out loss. Short bursts above ' + BURST_PCT + '% are what damage the picture.</p>';
+  if (!tests.length) return h + '<p class="empty">' + nm('UDP loss was not measured. Only ping results are available.') + '</p></div>';
+  var worst = 0; tests.forEach(function(u){ if (isNum(u.worst_interval_loss_pct)) worst = Math.max(worst, u.worst_interval_loss_pct); arr(u.intervals).forEach(function(x){ if (x && x.packets > 0) worst = Math.max(worst, (isNum(x.lost) ? x.lost : 0) / x.packets * 100); }); });
+  var yMax = Math.ceil(Math.max(BURST_PCT * 1.4, worst * 1.15));
+  tests.forEach(function(u, i){
+    var ok = !u.error && isNum(u.packets) && u.packets > 0;
+    h += '<div class="panel udp"><div class="uh"><b>' + esc(u.host || 'UDP target') + (u.port ? ':' + esc(u.port) : '') + '</b>';
+    if (ok){
+      h += '<span>' + (isNum(u.loss_pct) ? '<strong>' + r2(u.loss_pct) + '% lost</strong>' : '') + ' (' + esc(thousands(u.lost) || '?') + ' of ' + esc(thousands(u.packets)) + ' packets)</span>' +
+        (isNum(u.jitter_ms) ? '<span>jitter ' + r2(u.jitter_ms) + ' ms</span>' : '') +
+        (isNum(u.worst_interval_loss_pct) ? '<span>worst second ' + r2(u.worst_interval_loss_pct) + '%</span>' : '') +
+        '<span>' + (isNum(u.lossy_intervals) ? plural(u.lossy_intervals, 'burst second') : '') + (isNum(u.seconds) ? ' · ' + u.seconds + ' s at ' + (isNum(u.target_mbps) ? r1(u.target_mbps) + ' Mbps' : '?') : '') + '</span></div>';
+      if (arr(u.intervals).length) h += '<div class="chart" data-chart="udp' + i + '"></div>';
+      else h += '<p class="mtxt">' + nm('No per-second data for this test') + '</p>';
+    } else {
+      h += '</div><p class="mtxt">' + nm('Not measured') + ' ' + esc(u.error ? '— ' + u.error : '') + '</p>';
+    }
+    h += '</div>';
+    if (ok && arr(u.intervals).length) charts.push({sel:'udp' + i, draw:function(el){ drawUdp(el, u, yMax); }});
+  });
+  h += '<div class="lg"><span><i class="sw-bar"></i>some loss</span><span><i class="sw-hot"></i>burst (number = % lost that second)</span><span><i class="sw-calc" style="border-color:var(--fail-line)"></i>burst limit</span></div></div>';
+  return h;
+}
+
+/* ---- Local network (LAN step) ---- */
+/* results.json does not carry config.thresholds, so the pass/warn limits below are the defaults from config.json (lan_partner_ratio, lan_partner_udp_loss_pct).
+   The pass limits are read from the lan_partner_throughput check's own limit text when it is there, so they follow config changes. */
+var LAN_PARTNER_RATIO = 1.5, LAN_PARTNER_WARN_RATIO = 1.0, LAN_LOSS_PASS = 0.1, LAN_LOSS_WARN = 1;
+function isObj(v){ return v != null && typeof v === 'object' && !Array.isArray(v); }
+function ipKey(ip){ var p = String(ip == null ? '' : ip).split('.'); return p.length === 4 ? ((+p[0]) * 16777216 + (+p[1]) * 65536 + (+p[2]) * 256 + (+p[3])) : 1e13; }
+function fmtMbps(v){ return isNum(v) ? (v >= 1000 ? thousands(v) : String(r1(v))) : null; }
+function lanProto(){ var p = g(D, 'profile.inputs.protocol') || g(D, 'lan.test.protocol'); return p ? (/^OMT/i.test(String(p)) ? 'OMT' : 'NDI') : null; }
+function lanExpected(){ var n = g(D, 'profile.inputs.count'); return isNum(n) ? n : null; }
+function lanPerFeed(){
+  var v = g(D, 'lan.test.per_feed_mbps'); if (isNum(v)) return v;
+  var p = g(D, 'profile.inputs.protocol'), m = g(D, 'profile.inputs.mbps_per_feed');
+  if (p && isObj(m)){ var x = isNum(m[p]) ? m[p] : (/^NDI/i.test(String(p)) ? m.NDI : null); if (isNum(x)) return x; }
+  return null;
+}
+function lanLimits(per){
+  var c = checkById('lan_partner_throughput'), lim = c ? String(c.limit == null ? '' : c.limit).replace(/,/g, '') : '';
+  var m1 = lim.match(/(?:>=|≥)\s*(\d+(?:\.\d+)?)\s*Mbps/), m2 = lim.match(/<\s*(\d+(?:\.\d+)?)\s*%/);
+  return {need: m1 ? parseFloat(m1[1]) : (isNum(per) ? per * LAN_PARTNER_RATIO : null), lossPass: m2 ? parseFloat(m2[1]) : LAN_LOSS_PASS};
+}
+function lanSources(){ return arr(g(D, 'lan.sources')).filter(isObj); }
+function lanCounted(P){ return lanSources().filter(function(s){ return (!P || s.protocol === P) && s.local !== true; }); }
+function lanPartners(){ return arr(g(D, 'lan.partners')).filter(isObj); }
+function lanTcp(p){ return isObj(p.tcp) && isNum(p.tcp.mbps) ? p.tcp.mbps : null; }
+function lanMeasured(p){ return !p.error && lanTcp(p) != null; }
+/* grade of one source PC, same rules as lan_partner_throughput: null = not measured */
+function lanGrade(p, per, lim){
+  var tcp = lanTcp(p); if (p.error || tcp == null) return null;
+  if (!isNum(per) || per <= 0 || !isNum(lim.need)) return 'info';
+  var loss = g(p, 'udp.loss_pct');
+  if (tcp >= lim.need && isNum(loss) && loss < lim.lossPass) return 'pass';
+  if (tcp >= per * LAN_PARTNER_WARN_RATIO && (!isNum(loss) || loss < LAN_LOSS_WARN)) return 'warn';
+  return 'fail';
+}
+function chkStatusKey(id, fallback){ var c = checkById(id); return c ? sk(c.status) : fallback; }
+function chkBadge(id){ var c = checkById(id); return c ? badge(c.status) : ''; }
+function chkLink(id){ var k = chkStatusKey(id, ''); return (k === 'warn' || k === 'fail') ? ' <a href="#chk-' + id + '">What to do</a>' : ''; }
+/* table cell that turns into a labelled line on a phone; an empty cell is hidden there */
+function lanTd(label, html, cls, dash){
+  var empty = html == null || html === '';
+  return '<td data-label="' + esc(label) + '" class="' + ((cls || '') + (empty && !dash ? ' e' : '')).trim() + '"><span class="cv">' + (empty ? (dash ? '–' : '') : html) + '</span></td>';
+}
+function ptag(proto){ var p = String(proto || '?'); return '<span class="ptag ' + (/^OMT/i.test(p) ? 'omt' : /^NDI/i.test(p) ? 'ndi' : '') + '">' + esc(p) + '</span>'; }
+
+/* "Both at once" test (lan.combined): every source PC sends to this PC at the same time. null / missing = not run. */
+function lanCombinedInfo(per, lim){
+  var C = g(D, 'lan.combined'); if (!isObj(C)) return null;
+  var hosts = arr(C.hosts).filter(function(x){ return x != null && x !== ''; }), n = hosts.length;
+  var tcp = isObj(C.tcp) && isNum(C.tcp.mbps) ? C.tcp.mbps : null, u = isObj(C.udp) ? C.udp : null, loss = u && isNum(u.loss_pct) ? u.loss_pct : null;
+  var cper = n > 0 && isNum(per) ? n * per : null;
+  var chk = checkById('lan_partner_throughput'), det = chk ? String(chk.detail == null ? '' : chk.detail).replace(/,/g, '') : '';
+  var m = det.match(/Both at once[^]*?needs\s*(?:>=|≥)\s*(\d+(?:\.\d+)?)\s*Mbps together/);
+  var need = m ? parseFloat(m[1]) : (n > 0 && isNum(lim.need) ? n * lim.need : null);
+  var grade = null;                                   // null = not measured
+  if (tcp != null){
+    if (!isNum(need) || !isNum(cper) || cper <= 0) grade = 'info';
+    else if (tcp >= need && loss != null && loss < lim.lossPass) grade = 'pass';
+    else if (tcp >= cper * LAN_PARTNER_WARN_RATIO && (loss == null || loss < LAN_LOSS_WARN)) grade = 'warn';
+    else grade = 'fail';
+  }
+  return {C:C, hosts:hosts, n:n, tcp:tcp, udp:u, loss:loss, cper:cper, need:need, grade:grade};
+}
+var GRADE_RANK = {pass:0, info:0, warn:1, fail:2};
+/* first sentence of a rules-engine sentence block ("No OMT senders yet, ... source PCs. No device ..." -> the first part) */
+function firstSentence(t){ t = String(t == null ? '' : t).trim(); var m = t.match(/^[^]*?[.!?](?=\s|$)/); return m ? m[0] : t; }
+
+/* three at-a-glance cards: feeds / speed / devices */
+function lanGlanceHtml(){
+  var L = g(D, 'lan'), P = lanProto(), exp = lanExpected(), c1, c2, c3;
+  // feeds
+  var queryOk = g(L, 'mdns.query_ok') === true, cnt = lanCounted(P).length, srcs = lanSources();
+  var sub = [], srcChk = checkById('lan_sources_found'), srcInfo = !!srcChk && sk(srcChk.status) === 'info';
+  if (queryOk){
+    var onPc = srcs.filter(function(s){ return s.local === true; }).length;
+    var other = srcs.filter(function(s){ return s.local !== true && P && s.protocol !== P; }).length;
+    if (onPc) sub.push(onPc + ' on this PC (not counted)');
+    if (other) sub.push(other + ' ' + (P === 'OMT' ? 'NDI' : 'OMT') + ' on the network (not counted)');
+  }
+  // INFO = "not required yet": say what the check itself says, not "found 0" as if it were a fault
+  var feedSm = queryOk ? esc((P ? P + ' ' : '') + (cnt === 1 ? 'source' : 'sources') + ' found' + (sub.length ? '. Also: ' + sub.join(', ') : '')) : 'Could not look for NDI/OMT sources.';
+  if (queryOk && srcInfo) feedSm = cnt === 0 && srcChk.detail ? esc(pretty(firstSentence(srcChk.detail))) : feedSm + ' ' + esc('Information only: this does not count yet.');
+  c1 = '<div class="lgc s-' + chkStatusKey('lan_sources_found', 'info') + '"><header><span class="k">Incoming feeds</span>' + chkBadge('lan_sources_found') + '</header>' +
+    '<div class="big">' + (queryOk ? esc(cnt + (exp != null ? ' of ' + exp : '')) : nm('Not checked')) + '</div>' +
+    '<div class="sm">' + feedSm + chkLink('lan_sources_found') + '</div></div>';
+  // speed
+  var parts = lanPartners(), per = lanPerFeed(), lim = lanLimits(per), meas = parts.filter(lanMeasured), big, small;
+  if (!parts.length){ big = nm('Not tested'); small = 'Optional. Needs a test on a source PC (see below).'; }
+  else if (!meas.length){ big = nm('Could not test'); small = esc(String(parts[0].error || g(parts[0], 'tcp.error') || 'No result.')); }
+  else {
+    var worst = meas.slice().sort(function(a, b){ return lanTcp(a) - lanTcp(b); })[0], loss = g(worst, 'udp.loss_pct');
+    big = esc(fmtMbps(lanTcp(worst)) + ' Mbps');
+    small = esc('TCP' + (isNum(loss) ? ', ' + r2(loss) + ' % UDP loss' : ', UDP not measured') + (meas.length > 1 ? ' (slowest of ' + meas.length + ' source PCs)' : '') + (isNum(lim.need) ? '. Needs ' + fmtMbps(lim.need) + ' Mbps.' : '.') + (worst.loopback === true ? ' This was a test on this PC itself, not the network.' : ''));
+    var ci = lanCombinedInfo(per, lim);
+    if (ci && ci.tcp != null){
+      var wr = 0; meas.forEach(function(p){ if (p.loopback !== true) wr = Math.max(wr, GRADE_RANK[lanGrade(p, per, lim)] || 0); });
+      var cLoss = ci.loss != null ? ', ' + r2(ci.loss) + ' % UDP loss' : ', UDP not measured';
+      if ((GRADE_RANK[ci.grade] || 0) > wr){   // same rule as the check: the combined figure is the worst one, so it leads
+        big = esc(fmtMbps(ci.tcp) + ' Mbps');
+        small = esc('TCP with all source PCs at once' + cLoss + (isNum(ci.need) ? '. Needs ' + fmtMbps(ci.need) + ' Mbps together.' : '.'));
+      } else {
+        small += esc(' Both at once: ' + fmtMbps(ci.tcp) + ' Mbps' + cLoss + '.');
+      }
+    }
+  }
+  c2 = '<div class="lgc s-' + chkStatusKey('lan_partner_throughput', 'skip') + '"><header><span class="k">Speed from source PCs</span>' + chkBadge('lan_partner_throughput') + '</header><div class="big">' + big + '</div><div class="sm">' + small + chkLink('lan_partner_throughput') + '</div></div>';
+  // devices
+  var sw = g(L, 'sweep'), hosts = arr(g(L, 'hosts')).filter(isObj), skipped = isObj(sw) && sw.skipped_reason;
+  if (!isObj(sw) || skipped){ big = nm('Not scanned'); small = esc(skipped ? String(skipped) : 'The device scan did not run.'); }
+  else { big = esc(isNum(sw.alive) ? sw.alive : hosts.filter(function(x){ return x.is_self !== true; }).length); small = (big === '1' ? 'device' : 'devices') + ' on ' + esc(sw.cidr || 'this network'); }
+  c3 = '<div class="lgc s-' + chkStatusKey('lan_hosts', 'info') + '"><header><span class="k">Devices on the network</span>' + chkBadge('lan_hosts') + '</header><div class="big">' + big + '</div><div class="sm">' + small + '</div></div>';
+  return '<div class="lan-glance">' + c1 + c2 + c3 + '</div>';
+}
+
+function lanAdapterHtml(){
+  var a = g(D, 'lan.adapter');
+  if (!isObj(a)) return '<h4 class="lh">Adapter used</h4><p class="empty">' + nm('No usable network adapter was found') + '. Nothing could be looked up or scanned. Connect this PC to the show network and run ShowReady again.</p>';
+  var kindName = {wired:'Wired', wifi:'Wi-Fi', other:'Other'}, kind = a.kind;
+  var addr = a.ipv4 ? esc(a.ipv4) + (isNum(a.prefix_length) ? '/' + esc(a.prefix_length) : '') : null;
+  function kv(k, v){ return '<div><span class="k">' + esc(k) + '</span><span class="v">' + (v == null || v === '' ? nm('unknown') : v) + '</span></div>'; }
+  var h = '<h4 class="lh">Adapter used</h4><p class="cap">ShowReady listened and scanned on this adapter.' + (a.chosen_because === 'wired' ? ' It picks the wired one with the fastest link.' : a.chosen_because === 'default_route' ? ' No wired adapter was up, so it used the one that carries internet traffic.' : '') + '</p>' +
+    '<div class="panel"><div class="lkv">' +
+    kv('Adapter', a.name ? esc(a.name) + (a.description ? '<small>' + esc(a.description) + '</small>' : '') : null) +
+    kv('Type', kind ? esc(kindName[kind] || kind) : null) + kv('Address of this PC', addr) + kv('Gateway', a.gateway ? esc(a.gateway) : null) +
+    kv('Link speed', isNum(a.link_mbps) ? esc(thousands(a.link_mbps)) + ' Mbps' : null) + '</div></div>';
+  if (kind !== 'wired'){
+    h += '<p class="partial"><strong>Not a wired connection.</strong> ' + (kind === 'wifi'
+      ? 'This scan ran over Wi-Fi, which cannot carry 2 × 1080p60 feeds reliably, and it only sees the Wi-Fi network.'
+      : 'This adapter is not a wired Ethernet port, so the results may not match the show network.') + ' On show day, run this on the wired production network.</p>';
+  }
+  return h;
+}
+
+function lanSourcesHtml(){
+  var L = g(D, 'lan'), P = lanProto(), exp = lanExpected(), srcs = lanSources();
+  var queryOk = g(L, 'mdns.query_ok') === true, cnt = lanCounted(P).length;
+  var h = '<h4 class="lh">Incoming feeds found</h4><p class="cap">This PC asked the network which NDI and OMT senders exist (mDNS, the lookup vMix and OBS use).' + (exp != null && P ? ' The show needs ' + exp + ' incoming ' + esc(P) + ' feeds.' : '') + '</p>';
+  var srcChk = checkById('lan_sources_found'), srcInfo = !!srcChk && sk(srcChk.status) === 'info' && !!srcChk.detail;
+  if (queryOk){
+    h += '<p class="lcount s-' + chkStatusKey('lan_sources_found', 'info') + '">' + chkBadge('lan_sources_found') + '<span><strong>' + esc(cnt + (exp != null ? ' of ' + exp : '')) + '</strong> ' + esc((P ? P + ' ' : '') + (cnt === 1 ? 'source' : 'sources')) + ' found</span></p>';
+  }
+  if (!srcs.length){
+    h += '<p class="empty">' + (queryOk
+      ? (srcInfo ? '<strong>Information only.</strong> ' + esc(pretty(srcChk.detail))     // INFO = not required yet: the check\'s own words, no troubleshooting tone
+        : 'No NDI or OMT source answered. Check that the source PCs are sending' + (P ? ' ' + esc(P) : '') + ' and are on the same switch and subnet as this PC.' + chkLink('lan_sources_found'))
+      : nm('Not checked') + '. The network lookup did not work, so it is not known whether the feeds are there.' + chkLink('lan_sources_found')) + '</p>';
+  } else {
+    if (srcInfo) h += '<p class="cap"><strong>Information only.</strong> ' + esc(pretty(srcChk.detail)) + '</p>';
+    h += '<div class="tscroll"><table class="stack"><thead><tr><th>Type</th><th>Source</th><th>Machine</th><th>Address</th><th>Notes</th></tr></thead><tbody>' + srcs.map(function(s){
+      var tags = '';
+      if (s.local === true) tags += '<span class="tag">this PC, not counted</span>';
+      else if (P && s.protocol !== P) tags += '<span class="tag">not counted: the show uses ' + esc(P) + '</span>';
+      var addr = s.ip ? esc(s.ip) + (s.port ? ':' + esc(s.port) : '') : (s.host ? esc(s.host) + (s.port ? ':' + esc(s.port) : '') : '');
+      return '<tr>' + lanTd('Type', ptag(s.protocol)) + lanTd('Source', '<strong>' + esc(s.source || s.name || '?') + '</strong>') + lanTd('Machine', s.machine ? esc(s.machine) : '', '', true) +
+        lanTd('Address', addr, 'mono', true) + lanTd('Notes', tags) + '</tr>';
+    }).join('') + '</tbody></table></div>';
+  }
+  // how the lookup went
+  var m = g(L, 'mdns'), names = {unicast:'direct mDNS query', windows:'Windows lookup'}, ms = arr(g(m, 'methods')).filter(isObj), bits = [];
+  var local = arr(g(L, 'adapter.local_ips')), others = arr(g(m, 'responders')).filter(function(ip){ return local.indexOf(ip) < 0; });
+  if (ms.length) bits.push('Lookups: ' + ms.map(function(x){ return (names[x.name] || x.name || '?') + (x.ok ? ' OK (' + plural(isNum(x.answers) ? x.answers : 0, 'answer') + ')' : ' failed'); }).join(', ') + (isNum(g(m, 'listen_ms')) ? ', listened ' + r1(m.listen_ms / 1000) + ' s' : '') + '.');
+  if (isObj(m) && m.query_ok === true) bits.push(plural(others.length, 'other device') + ' answered' + (others.length ? ', so discovery itself works' : ' (the switch or Wi-Fi may block multicast)') + '.');
+  var st = arr(g(m, 'service_types_seen')).filter(function(x){ return typeof x === 'string'; });
+  if (st.length) bits.push('Also announcing on this network: ' + st.slice(0, 6).join(', ') + (st.length > 6 ? ' and ' + (st.length - 6) + ' more' : '') + '.');
+  var ds = g(L, 'discovery_servers'), dn = arr(g(ds, 'ndi')), dm = arr(g(ds, 'omt'));
+  bits.push(dn.length || dm.length
+    ? '<strong>Discovery Server set on this PC:</strong> ' + esc([].concat(dn.map(function(x){ return 'NDI ' + x; }), dm.map(function(x){ return 'OMT ' + x; })).join('; ')) + '. Senders registered there do not answer mDNS, so check them in vMix/OBS too.'
+    : 'No NDI or OMT Discovery Server is set on this PC.');
+  h += '<p class="mtxt" style="margin-top:8px">' + bits.map(function(b){ return /^<strong>/.test(b) ? b : esc(b); }).join(' ') + '</p>';
+  ms.filter(function(x){ return x.ok === false; }).forEach(function(x){ h += '<p class="err" style="margin-top:8px">The ' + esc(names[x.name] || x.name || 'lookup') + ' failed' + (x.error ? ': ' + esc(x.error) : '') + '.</p>'; });
+  return h;
+}
+
+function thrBar(v, scale, need, label){
+  var w = Math.max(0, Math.min(v, scale)) / scale * 100;
+  return '<div class="mbar" role="img" aria-label="' + esc(label) + '"><i style="width:' + w.toFixed(1) + '%"></i>' + (isNum(need) ? '<b style="left:' + (need / scale * 100).toFixed(1) + '%"></b>' : '') + '</div>';
+}
+/* The "Both at once" card: shown next to the per-source cards, only when lan.combined exists. */
+function lanCombinedHtml(per, lim, parts){
+  var ci = lanCombinedInfo(per, lim); if (!ci) return '';
+  var C = ci.C, u = ci.udp, grade = ci.grade, tcp = ci.tcp, loss = ci.loss;
+  var title = 'Both at once' + (ci.n > 0 ? ' (' + plural(ci.n, 'source PC') + ')' : '');
+  var h = '<div class="lanp s-' + (grade || 'warn') + '" id="lan-combined"><header><span class="ph">' + esc(title) + '</span>' +
+    (grade ? (grade === 'info' ? '' : badge(grade.toUpperCase())) : '<span class="badge s-warn">' + icon('warn') + '<span>NOT TESTED</span></span>') +
+    '<span class="tag">all source PCs sending together</span></header>';
+  h += '<p class="pnote">The prod PC&rsquo;s network port receives the feeds of every source PC at the same time, so this is the test that matches show day.</p>';
+  var errs = [];
+  [C.error, g(C, 'tcp.error'), g(C, 'udp.error')].forEach(function(e){ if (e != null && e !== '' && errs.indexOf(String(e)) < 0) errs.push(String(e)); });
+  if (tcp == null){
+    h += '<p class="err" style="margin-top:8px">Could not test both at once' + (errs.length ? ': ' + esc(errs.join('; ')) : '') + '.</p></div>';
+    return h;
+  }
+  if (grade && grade !== 'info' && isNum(ci.cper) && ci.cper > 0){
+    var ratio = tcp / ci.cper, why = [];
+    if (isNum(ci.need) && tcp < ci.need) why.push('speed is ' + r1(ratio) + ' × the feeds together (wants ' + fmtMbps(ci.need) + ' Mbps)');
+    if (loss != null && loss >= lim.lossPass) why.push('UDP loss is ' + r2(loss) + ' % (limit ' + lim.lossPass + ' %)');
+    if (loss == null) why.push('UDP loss was not measured');
+    var alone = parts.filter(lanMeasured).filter(function(p){ return p.loopback !== true; }), allAlonePass = alone.length > 0 && alone.every(function(p){ return lanGrade(p, per, lim) === 'pass'; });
+    h += '<p class="pnote">' + esc(grade === 'pass' ? 'Enough room: ' + r1(ratio) + ' × the feeds together, and UDP loss is under the limit.' : 'Falls short: ' + why.join('; ') + '.' + (allAlonePass ? ' Each source PC passes on its own but not together, so the link into this PC (or the switch uplink) is the bottleneck.' : '')) + '</p>';
+  }
+  var vals = [isNum(ci.need) ? ci.need * 2 : 0, tcp * 1.1];
+  if (u) [u.mbps, u.target_mbps].forEach(function(v){ if (isNum(v)) vals.push(v * 1.1); });
+  var scale = Math.max.apply(null, vals); if (!(scale > 0)) scale = 1;
+  var shares = arr(g(C, 'tcp.per_host')).filter(isObj).filter(function(x){ return isNum(x.mbps); }).map(function(x){ return (x.ip ? x.ip + ': ' : '') + fmtMbps(x.mbps); });
+  h += '<div class="thr"><span class="tk">TCP</span>' + thrBar(tcp, scale, ci.need, 'TCP together ' + fmtMbps(tcp) + ' Mbps' + (isNum(ci.need) ? ', needs ' + fmtMbps(ci.need) + ' Mbps' : '')) +
+    '<div class="tv">' + esc(fmtMbps(tcp)) + ' Mbps<span>' + (shares.length ? esc('sum of ' + shares.join(' + ') + ' Mbps') : 'sum of all source PCs') + '</span></div></div>';
+  h += '<div class="thr"><span class="tk">UDP</span>';
+  if (u && isNum(u.mbps)){
+    h += thrBar(u.mbps, scale, ci.need, 'UDP received together ' + fmtMbps(u.mbps) + ' Mbps' + (isNum(u.target_mbps) ? ' of ' + fmtMbps(u.target_mbps) + ' sent' : '')) +
+      '<div class="tv">' + esc(fmtMbps(u.mbps)) + ' Mbps received<span>' + (loss != null ? esc(r2(loss) + ' % lost') : 'loss not reported') + (isNum(u.jitter_ms) ? esc(' · jitter ' + r2(u.jitter_ms) + ' ms') : '') + (isNum(u.target_mbps) ? esc(' · sent ' + fmtMbps(u.target_mbps) + ' Mbps') : '') + '</span></div>';
+  } else h += '<span></span><div class="tv">' + nm('not measured') + (u && u.error ? '<span>' + esc(u.error) + '</span>' : '') + '</div>';
+  h += '</div>';
+  if (errs.length) h += '<p class="err" style="margin-top:8px">Problem during the both-at-once test: ' + esc(errs.join('; ')) + '. The numbers cover the source PCs that did answer.</p>';
+  return h + '</div>';
+}
+function lanPartnersHtml(){
+  var P = lanProto(), per = lanPerFeed(), lim = lanLimits(per), parts = lanPartners(), t = g(D, 'lan.test');
+  var h = '<h4 class="lh">Speed from the source PCs</h4>';
+  if (!parts.length){
+    return h + '<p class="empty"><strong>Not measured.</strong> Optional: run <code>Run-Observer.cmd</code> on each source PC, then run <code>Run-ShowReady.cmd -LanHosts &lt;IP 1&gt;,&lt;IP 2&gt;</code> here.</p>';
+  }
+  var cap = 'Each source PC sent test traffic to this PC, the direction the feeds travel (iperf3).';
+  if (isNum(per) && P) cap += ' One ' + P + ' feed is about ' + fmtMbps(per) + ' Mbps.';
+  if (isNum(lim.need)) cap += ' The test wants at least ' + fmtMbps(lim.need) + ' Mbps and under ' + lim.lossPass + ' % UDP loss.';
+  if (isObj(t) && isNum(t.target_mbps) && isNum(t.seconds)) cap += ' Tested at ' + fmtMbps(t.target_mbps) + ' Mbps for ' + t.seconds + ' s.';
+  h += '<p class="cap">' + esc(cap) + '</p>';
+  var vals = [isNum(lim.need) ? lim.need * 2 : 0];
+  parts.forEach(function(p){ [lanTcp(p), g(p, 'udp.mbps'), g(p, 'udp.target_mbps')].forEach(function(v){ if (isNum(v)) vals.push(v * 1.1); }); });
+  var scale = Math.max.apply(null, vals); if (!(scale > 0)) scale = 1;
+  var origin = {auto:'found automatically', cli:'added with -LanHosts', config:'from config.json'};
+  parts.forEach(function(p){
+    var grade = lanGrade(p, per, lim), tcp = lanTcp(p), u = isObj(p.udp) ? p.udp : null, loss = u ? u.loss_pct : null;
+    if (p.loopback === true && grade) grade = 'info';   // a test against this PC itself says nothing about the network: no grade
+    var name = esc(p.host || p.ip || '?') + (p.ip && p.host && p.ip !== p.host ? ' (' + esc(p.ip) + ')' : '');
+    h += '<div class="lanp s-' + (grade || 'warn') + '"><header><span class="ph">' + name + '</span>' +
+      (grade ? (grade === 'info' ? '' : badge(grade.toUpperCase())) : '<span class="badge s-warn">' + icon('warn') + '<span>NOT TESTED</span></span>') +
+      (p.loopback ? '<span class="tag">loopback - this PC only</span>' : '') + (origin[p.origin] ? '<span class="tag">' + esc(origin[p.origin]) + '</span>' : '') + '</header>';
+    if (p.error) h += '<p class="err" style="margin-top:8px">Could not test ' + esc(p.host || p.ip || 'this PC') + ': ' + esc(p.error) + '</p>';
+    if (p.loopback) h += '<p class="pnote nm">This is a test against this PC itself. It shows the PC works, not that the network does.</p>';
+    if (grade && grade !== 'info' && isNum(per) && per > 0){
+      var ratio = tcp / per, why = [];
+      if (isNum(lim.need) && tcp < lim.need) why.push('speed is ' + r1(ratio) + ' × one feed (wants ' + fmtMbps(lim.need) + ' Mbps)');
+      if (isNum(loss) && loss >= lim.lossPass) why.push('UDP loss is ' + r2(loss) + ' % (limit ' + lim.lossPass + ' %)');
+      if (!isNum(loss)) why.push('UDP loss was not measured');
+      h += '<p class="pnote">' + esc(grade === 'pass' ? 'Enough room: ' + r1(ratio) + ' × one feed, and UDP loss is under the limit.' : 'Falls short: ' + why.join('; ') + '.') + '</p>';
+    }
+    if (!p.error){
+      // TCP row
+      h += '<div class="thr"><span class="tk">TCP</span>';
+      if (tcp != null){
+        h += thrBar(tcp, scale, lim.need, 'TCP ' + fmtMbps(tcp) + ' Mbps' + (isNum(lim.need) ? ', needs ' + fmtMbps(lim.need) + ' Mbps' : '')) +
+          '<div class="tv">' + esc(fmtMbps(tcp)) + ' Mbps<span>' + (isNum(g(p, 'tcp.retransmits')) ? esc(plural(p.tcp.retransmits, 'retransmit')) : 'retransmits not reported') + '</span></div>';
+      } else h += '<span></span><div class="tv">' + nm('not measured') + (g(p, 'tcp.error') ? '<span>' + esc(p.tcp.error) + '</span>' : '') + '</div>';
+      h += '</div>';
+      // UDP row
+      h += '<div class="thr"><span class="tk">UDP</span>';
+      if (u && isNum(u.mbps)){
+        h += thrBar(u.mbps, scale, lim.need, 'UDP received ' + fmtMbps(u.mbps) + ' Mbps' + (isNum(u.target_mbps) ? ' of ' + fmtMbps(u.target_mbps) + ' sent' : '')) +
+          '<div class="tv">' + esc(fmtMbps(u.mbps)) + ' Mbps received<span>' + (isNum(loss) ? esc(r2(loss) + ' % lost') : 'loss not reported') + (isNum(u.jitter_ms) ? esc(' · jitter ' + r2(u.jitter_ms) + ' ms') : '') + (isNum(u.target_mbps) ? esc(' · sent ' + fmtMbps(u.target_mbps) + ' Mbps') : '') + '</span></div>';
+      } else h += '<span></span><div class="tv">' + nm('not measured') + (u && u.error ? '<span>' + esc(u.error) + '</span>' : '') + '</div>';
+      h += '</div>';
+    }
+    h += '</div>';
+  });
+  h += safe('both at once', function(){ return lanCombinedHtml(per, lim, parts); });
+  var cNeed = (lanCombinedInfo(per, lim) || {}).need;
+  h += '<p class="mtxt">The black tick on each bar is the speed the test wants' + (isNum(lim.need) ? ' (' + esc(fmtMbps(lim.need)) + ' Mbps' + (isNum(cNeed) ? ' for one source PC, ' + esc(fmtMbps(cNeed)) + ' Mbps for all together' : '') + ')' : '') + '. TCP shows the most the link can carry; UDP shows what arrives at the rate of the feeds, and how much is lost.</p>';
+  return h;
+}
+
+var LAN_CAT = {network:'Network gear', pc:'PC', broadcast:'Broadcast gear', mobile:'Phone or tablet', other:'Other'};
+function lanDevicesHtml(){
+  var L = g(D, 'lan'), sw = g(L, 'sweep'), hosts = arr(g(L, 'hosts')).filter(isObj).slice().sort(function(a, b){ return ipKey(a.ip) - ipKey(b.ip); });
+  var h = '<h4 class="lh">Devices on the network</h4>';
+  if (!isObj(sw)) return h + '<p class="empty">' + nm('Not scanned') + '. The device scan did not run.</p>';
+  if (sw.skipped_reason) return h + '<p class="empty">' + nm('Not scanned') + ': ' + esc(sw.skipped_reason) + '</p>';
+  h += '<p class="cap">Scanned ' + esc(sw.cidr || 'the local network') + (isNum(sw.scanned) ? ' (' + esc(sw.scanned) + ' addresses' + (isNum(sw.seconds) ? ' in ' + esc(r1(sw.seconds)) + ' s' : '') + ')' : '') + '. A device is listed if it answered a ping or is in this PC’s list of recent neighbours. Managed switches only appear if they have an address on this subnet.</p>';
+  if (!hosts.length) return h + '<p class="empty">' + nm('No devices answered') + '</p>';
+  var table = '<div class="tscroll"><table class="stack"><thead><tr><th>Address</th><th>Device</th><th>Type</th><th>MAC</th><th class="num">Ping</th><th>Notes</th></tr></thead><tbody>' + hosts.map(function(x){
+    var tags = '';
+    if (x.is_gateway === true) tags += '<span class="tag hl s-info">gateway</span>';
+    if (x.is_self === true) tags += '<span class="tag">this PC</span>';
+    arr(x.sources).forEach(function(n){ tags += '<span class="tag hl s-info">source: ' + esc(n) + '</span>'; });
+    if (x.randomized_mac === true) tags += '<span class="tag" title="Phones and laptops use a private MAC address, so the maker cannot be told.">random MAC</span>';
+    return '<tr>' + lanTd('Address', esc(x.ip || '?'), 'mono', true) + lanTd('Device', x.vendor ? esc(x.vendor) : nm('unknown'), '', true) + lanTd('Type', LAN_CAT[x.category] ? esc(LAN_CAT[x.category]) : '', '', true) +
+      lanTd('MAC', x.mac ? '<span class="mtxt mono">' + esc(x.mac) + '</span>' : '', '', true) + lanTd('Ping', isNum(x.ping_ms) ? esc(r1(x.ping_ms)) + ' ms' : '', 'num', true) + lanTd('Notes', tags) + '</tr>';
+  }).join('') + '</tbody></table></div>';
+  if (hosts.length <= 8) return h + '<div class="panel">' + table + '</div>';
+  var c = {network:0, pc:0, broadcast:0, mobile:0, other:0}, others = hosts.filter(function(x){ return x.is_self !== true; }), hasSelf = others.length < hosts.length;
+  others.forEach(function(x){ c[LAN_CAT[x.category] ? x.category : 'other']++; });
+  var words = {network:'network', pc:'PC', broadcast:'broadcast', mobile:'phone or tablet', other:'other or unknown'};
+  var sum = Object.keys(c).filter(function(k){ return c[k]; }).map(function(k){ return c[k] + ' ' + (k === 'pc' && c[k] !== 1 ? 'PCs' : words[k]); }).join(', ');
+  return h + '<details class="fold lan-fold open-print"><summary>Show all ' + others.length + ' devices' + (hasSelf ? ' and this PC' : '') + ' (' + esc(sum) + ')</summary><div class="fb">' + table + '</div></details>';
+}
+function renderLan(){
+  var h = '<div class="sub" id="ev-lan"><h3>Local network: incoming feeds, speed and devices</h3>' +
+    '<p class="cap">The 2 incoming feeds travel over this network into the show PC. This shows whether both senders are visible, whether the network can carry them, and what else is on it.</p>';
+  var L = g(D, 'lan');
+  if (!isObj(L)) return h + '<p class="empty">' + nm('The local network step did not run') + '. Run ShowReady again without skipping it to look for the feeds and scan the network.</p></div>';
+  h += safe('local network summary', lanGlanceHtml) + safe('network adapter', lanAdapterHtml) + safe('NDI and OMT sources', lanSourcesHtml) + safe('source PC speed', lanPartnersHtml) + safe('network devices', lanDevicesHtml);
+  arr(g(L, 'errors')).filter(function(e){ return e != null && e !== ''; }).forEach(function(e){ h += '<p class="err" style="margin-top:10px">' + esc(e) + '</p>'; });
+  return h + '</div>';
+}
+
+/* ---- Load test ---- */
+var SERIES = [
+  {k:'cpu',     label:'CPU',        cls:'l-cpu',  tcls:'t-cpu',  dash:''},
+  {k:'gpu_enc', label:'GPU encode', cls:'l-genc', tcls:'t-genc', dash:'8 4'},
+  {k:'gpu_dec', label:'GPU decode', cls:'l-gdec', tcls:'t-gdec', dash:'2 4'},
+  {k:'gpu_3d',  label:'GPU 3D',     cls:'l-g3d',  tcls:'t-g3d',  dash:'10 3 2 3'}
+];
+function loadSamples(){ return arr(g(D, 'loadtest.system.samples')).filter(function(s){ return s && isNum(s.t); }); }
+function lineChart(el, samples, series, o){
+  var W = Math.floor(el.clientWidth); if (W < 240) return;
+  var narrow = W < 560, pl = 38, pr = narrow ? 78 : 96, pt = 12, pb = 26, H = o.h;
+  var t0 = samples[0].t, t1 = samples[samples.length - 1].t; if (t1 <= t0) t1 = t0 + 1;
+  var X = function(t){ return pl + (t - t0) / (t1 - t0) * (W - pl - pr); };
+  var Y = function(v){ return pt + (H - pt - pb) * (1 - (v - o.lo) / (o.hi - o.lo)); };
+  var s = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="' + esc(o.aria) + '">';
+  var step = niceStep(o.hi - o.lo, 4);
+  for (var v = Math.ceil(o.lo / step) * step; v <= o.hi + 0.001; v += step){
+    s += '<line class="c-grid" x1="' + pl + '" x2="' + (W - pr) + '" y1="' + Y(v).toFixed(1) + '" y2="' + Y(v).toFixed(1) + '"/><text class="tm mono" x="' + (pl - 5) + '" y="' + (Y(v) + 4).toFixed(1) + '" text-anchor="end">' + Math.round(v) + '</text>';
+  }
+  (o.refs || []).forEach(function(r){
+    s += '<line class="' + r.cls + '" x1="' + pl + '" x2="' + (W - pr) + '" y1="' + Y(r.v).toFixed(1) + '" y2="' + Y(r.v).toFixed(1) + '"/>' +
+         '<text class="halo ' + r.tcls + '" x="' + (pl + 4) + '" y="' + (Y(r.v) - 4).toFixed(1) + '" style="font-size:11px">' + esc(r.label) + '</text>';
+  });
+  var step5 = niceStep(t1 - t0, Math.max(3, Math.floor((W - pl - pr) / 70)));
+  for (var tt = Math.ceil(t0 / step5) * step5; tt <= t1 + 0.001; tt += step5){
+    s += '<text class="tm mono" x="' + X(tt).toFixed(1) + '" y="' + (H - 8) + '" text-anchor="middle" style="font-size:11px">' + Math.round(tt) + '</text>';
+  }
+  var ends = [];
+  series.forEach(function(se){
+    var pts = samples.filter(function(p){ return isNum(p[se.k]); });
+    if (pts.length < 2) return;
+    var d = pts.map(function(p, i){ return (i ? 'L' : 'M') + X(p.t).toFixed(1) + ' ' + Y(Math.max(o.lo, Math.min(o.hi, p[se.k]))).toFixed(1); }).join(' ');
+    s += '<path class="ln ' + se.cls + '" d="' + d + '"' + (se.dash ? ' stroke-dasharray="' + se.dash + '"' : '') + '/>';
+    var last = pts[pts.length - 1];
+    ends.push({y:Y(Math.max(o.lo, Math.min(o.hi, last[se.k]))), label:se.label, tcls:se.tcls, v:last[se.k]});
+  });
+  ends.sort(function(a, b){ return a.y - b.y; });
+  for (var i = 1; i < ends.length; i++) if (ends[i].y - ends[i-1].y < 14) ends[i].y = ends[i-1].y + 14;
+  ends.forEach(function(e){ s += '<text class="halo tb ' + e.tcls + '" x="' + (W - pr + 6) + '" y="' + (e.y + 4).toFixed(1) + '" style="font-size:' + (narrow ? 11 : 12) + 'px">' + esc(e.label) + '</text>'; });
+  s += '</svg>';
+  el.innerHTML = s;
+}
+/* CPU/GPU line chart + CPU clock chart, shared by the load test and the observer sender test.
+   o = {id, pid, samples, aria, noun, warn, fail, start}; chart ids go into data-chart="..." */
+function usageCharts(o){
+  var samples = o.samples;
+  var perf = samples.filter(function(p){ return isNum(p.perf); }), hasPerf = perf.length > 1;
+  var h = '<div class="chart" data-chart="' + o.id + '"></div><p class="mtxt" style="margin-top:6px">Percent used, once per second; the scale along the bottom is seconds since the test started. Dashed lines: CPU warning (' + o.warn + '%) and limit (' + o.fail + '%).</p>';
+  if (hasPerf) h += '<div style="margin-top:14px"><div class="slabel" style="padding:0">CPU clock speed (% of base speed). A fall means the CPU is slowing itself down</div><div class="chart" data-chart="' + o.pid + '"></div></div>';
+  charts.push({sel:o.id, draw:function(el){
+    var ser = SERIES.filter(function(se){ return samples.filter(function(p){ return isNum(p[se.k]); }).length > 1; });
+    lineChart(el, samples, ser, {h:230, lo:0, hi:100, aria:'CPU and GPU use during ' + o.noun, refs:[{v:o.warn, cls:'c-warnline', tcls:'c-warnt', label:'CPU warn ' + o.warn + '%'}, {v:o.fail, cls:'c-thr', tcls:'c-thrt', label:'CPU limit ' + o.fail + '%'}]});
+  }});
+  if (hasPerf){
+    var ps = perf.map(function(p){ return p.perf; }), start = o.start;
+    var lo = Math.floor((Math.min.apply(null, ps) - 8) / 10) * 10, hi = Math.ceil((Math.max.apply(null, ps) + 6) / 10) * 10;
+    if (hi - lo < 40) hi = lo + 40;
+    var refs = isNum(start) ? [{v:start * 0.85, cls:'c-thr', tcls:'c-thrt', label:'throttling: 15% below start'}] : [];
+    if (refs.length && (refs[0].v < lo)) lo = Math.floor((refs[0].v - 5) / 10) * 10;
+    charts.push({sel:o.pid, draw:function(el){ lineChart(el, samples, [{k:'perf', label:'CPU clock', cls:'l-cpu', tcls:'t-cpu', dash:''}], {h:130, lo:lo, hi:hi, aria:'CPU clock speed during ' + o.noun, refs:refs}); }});
+  }
+  return h;
+}
+/* a number inside a check's limit text ("< 60 %", ">= 0.97 x"), else the default */
+function limitNum(id, dflt){
+  var c = checkById(id), m = c && String(c.limit == null ? '' : c.limit).replace(/,/g, '').match(/(\d+(?:\.\d+)?)/);
+  return m ? parseFloat(m[1]) : dflt;
+}
+/* The load test fell back to CPU encoding while the PC has a GPU encoder: the rules engine SKIPs the four figures and says "Not representative". */
+function loadFellBack(){
+  return ['load_realtime', 'load_cpu', 'load_gpu_encode', 'load_throttle'].some(function(id){
+    var c = checkById(id); return !!c && sk(c.status) === 'skip' && /^\s*Not representative/i.test(String(c.detail == null ? '' : c.detail));
+  });
+}
+/* lines(E) as in the rules: error_lines, else the single error text */
+function encLines(t){
+  var l = arr(t && t.error_lines).filter(function(x){ return typeof x === 'string' && x; });
+  return l.length ? l : (t && t.error ? [String(t.error)] : []);
+}
+function failedEncoders(){
+  return arr(g(D, 'loadtest.encoders.tested')).filter(function(t){ return isObj(t) && t.ok !== true; });
+}
+function loadFallbackNotice(){
+  var enc = checkById('load_encoder'), failed = failedEncoders();
+  var lines = [];
+  var blamed = failed.filter(function(t){ return enc && enc.detail && String(enc.detail).indexOf(String(t.name)) >= 0; });
+  (blamed.length ? blamed : failed).forEach(function(t){ var l = encLines(t); if (l.length) lines.push(String(t.name || '?') + ':\n' + l.map(function(x){ return '  ' + x; }).join('\n')); });
+  var h = '<div class="notice" id="load-notice" role="note"><p><strong>Not representative: this test fell back to CPU encoding.</strong></p>' +
+    '<p>The GPU video encoder (NVENC on NVIDIA, AMF on AMD) did not work in this test, so the three outputs were encoded on the CPU instead. vMix and OBS would use the GPU, so the CPU, GPU and speed figures below do not describe show day. The four checks that depend on them (real time, CPU load, GPU encoder load, clock throttling) were skipped, not passed.</p>';
+  if (enc){
+    h += '<p><strong>Why the GPU encoder was not used:</strong> ' + (enc.value ? esc(pretty(enc.value)) : nm('no reason given')) + '</p>';
+    if (lines.length) h += '<div class="elines">' + esc(lines.join('\n')) + '</div>';
+    else if (enc.detail) h += '<p>' + esc(pretty(enc.detail)) + '</p>';
+    if (enc.fix) h += '<p><strong>What to do:</strong> ' + esc(pretty(enc.fix)) + '</p>';
+  }
+  return h + '</div>';
+}
+function renderLoad(){
+  var samples = loadSamples(), lt = g(D, 'loadtest'), fell = loadFellBack();
+  var h = '<div class="sub" id="ev-load"><h3>Load test: CPU and GPU while the show&rsquo;s work runs</h3>' + (fell ? loadFallbackNotice() : '') +
+    '<p class="cap"' + (fell ? ' style="margin-top:12px"' : '') + '>The PC decoded 2 test feeds and encoded 3 outputs at real-time speed' + (isNum(g(D, 'loadtest.seconds')) ? ' for ' + g(D, 'loadtest.seconds') + ' seconds' : '') + ' while we watched CPU and GPU use. This leaves out vMix/OBS drawing your scene, so treat it as a best case: real use will be a bit heavier.</p>';
+  if (!lt) return h + '<p class="empty">' + nm('The load test did not run') + '</p></div>';
+  if (samples.length < 2){ h += '<p class="empty">' + nm('No CPU/GPU samples were recorded') + '</p>'; }
+  else {
+    h += '<div class="panel">' + (fell ? '<p class="mtxt" style="margin:0 0 10px"><span class="badge s-warn">' + icon('warn') + '<span>NOT REPRESENTATIVE</span></span> The CPU was doing the encoding that the GPU would do on show day.</p>' : '') +
+      usageCharts({id:'load', pid:'perf', samples:samples, noun:'the load test', warn:limitNum('load_cpu', 60), fail:80, start:g(D, 'loadtest.system.perf_start')}) + '</div>';
+  }
+  // stats
+  var sy = g(D, 'loadtest.system');
+  if (sy){
+    var st = [['CPU use, typical / slow end / peak', [sy.cpu_p50, sy.cpu_p95, sy.cpu_max].map(function(v){ return isNum(v) ? Math.round(v) + '%' : '?'; }).join(' / ')],
+      ['GPU encoder, slow end', isNum(sy.gpu_enc_p95) ? Math.round(sy.gpu_enc_p95) + '%' : null],
+      ['Memory in use, peak', isNum(sy.mem_used_pct_max) ? Math.round(sy.mem_used_pct_max) + '%' : null],
+      ['CPU clock, start / lowest', isNum(sy.perf_start) && isNum(sy.perf_min) ? Math.round(sy.perf_start) + '% / ' + Math.round(sy.perf_min) + '%' : null]];
+    h += '<dl class="kv" style="margin-top:12px">' + st.map(function(x){ return '<dt>' + esc(x[0]) + '</dt><dd>' + (x[1] ? esc(x[1]) : nm()) + '</dd>'; }).join('') + '</dl>';
+  }
+  // streams
+  var streams = arr(g(D, 'loadtest.streams')).filter(Boolean);
+  if (streams.length){
+    h += '<div class="tscroll" style="margin-top:14px"><table><thead><tr><th>Stream</th><th>Job</th><th>Codec</th><th class="num">Target kbps</th><th class="num">Speed worst</th><th class="num">Speed typical</th><th class="num">fps typical</th><th>Result</th></tr></thead><tbody>' +
+      streams.map(function(x){
+        var ok = x.ok === true, bad = x.ok === false;
+        return '<tr><td><strong>' + esc(x.role || '?') + '</strong></td><td>' + esc(x.kind || '') + '</td><td>' + esc(x.codec || '') + '</td><td class="num">' + (isNum(x.target_kbps) ? esc(thousands(x.target_kbps)) : '–') + '</td>' +
+          '<td class="num">' + (isNum(x.speed_min) ? x.speed_min.toFixed(2) + '×' : '–') + '</td><td class="num">' + (isNum(x.speed_p50) ? x.speed_p50.toFixed(2) + '×' : '–') + '</td><td class="num">' + (isNum(x.fps_p50) ? r1(x.fps_p50) : '–') + '</td>' +
+          '<td>' + badge(ok ? 'PASS' : bad ? 'FAIL' : 'SKIP') + (x.error ? '<div class="mtxt">' + esc(x.error) + '</div>' : '') + '</td></tr>';
+      }).join('') + '</tbody></table></div><p class="mtxt" style="margin-top:6px">Speed 1.00× means the stream kept up with real time. Anything under 0.97× means the PC fell behind.' + (fell ? ' These streams were encoded on the CPU, so they say nothing about the GPU encoder.' : '') + '</p>';
+  }
+  var enc = g(D, 'loadtest.encoders');
+  if (enc){
+    var tested = arr(enc.tested).filter(Boolean).map(function(t){ return esc(t.name) + (t.ok ? ' (works)' : ' (not available)'); }).join(' · ');
+    var why = failedEncoders().map(function(t){ var l = encLines(t); return l.length ? '<strong>' + esc(t.name || '?') + '</strong>' + (isNum(t.driver_required) ? ' <span class="mtxt">(needs NVIDIA driver ' + esc(String(r2(t.driver_required))) + ' or newer)</span>' : '') + '<div class="elines">' + esc(l.join('\n')) + '</div>' : ''; }).filter(Boolean).join('');
+    h += '<dl class="kv" style="margin-top:12px"><dt>Encoder chosen</dt><dd>' + (enc.chosen ? '<strong>' + esc(enc.chosen) + '</strong>' + (fell ? ' <span class="mtxt">(CPU: not what vMix/OBS would use)</span>' : '') : nm('none worked')) + '</dd>' +
+      (tested ? '<dt>Encoders tried</dt><dd>' + tested + '</dd>' : '') +
+      (why ? '<dt>Why some did not work</dt><dd>' + why + '</dd>' : '') +
+      (g(D, 'loadtest.ffmpeg.version') ? '<dt>Test tool</dt><dd>ffmpeg ' + esc(g(D, 'loadtest.ffmpeg.version')) + '</dd>' : '') + '</dl>';
+  }
+  if (g(D, 'loadtest.note')) h += '<p class="mtxt" style="margin-top:8px">' + esc(g(D, 'loadtest.note')) + '</p>';
+  arr(g(D, 'loadtest.errors')).forEach(function(e){ h += '<p class="err" style="margin-top:8px">' + esc(e) + '</p>'; });
+  return h + '</div>';
+}
+
+/* ---- Observer: sender test (one 1080p60 feed out) ---- */
+function senderSamples(){ return arr(g(D, 'sender.system.samples')).filter(function(s){ return s && isNum(s.t); }); }
+function renderSender(){
+  var S = g(D, 'sender');
+  var h = '<div class="sub" id="ev-sender"><h3>Sender test: one 1080p60 feed, in real time</h3>' +
+    '<p class="cap">This PC encoded one 1080p60 video feed' + (isNum(g(S, 'seconds')) ? ' for ' + esc(g(S, 'seconds')) + ' seconds' : '') + ' at real-time speed while we watched CPU use. That is the job an NDI or OMT sender does for the show PC. Run it with the game or observer client open, as on show day, so the numbers include its load.</p>';
+  if (!isObj(S)) return h + '<p class="empty">' + nm('The sender test did not run') + '</p></div>';
+  if (g(S, 'ffmpeg.found') === false) return h + '<p class="empty">' + nm('Not tested') + '. ffmpeg was not found in the bin folder, so the sender test could not run.</p></div>';
+  if (S.note) h += '<p class="shint"><strong>About the codec.</strong> ' + esc(S.note) + '</p>';
+  var rt = checkById('sender_realtime'), k = rt ? sk(rt.status) : 'info', lim = limitNum('sender_realtime', 0.97);
+  var smin = g(S, 'stream.speed_min'), sp50 = g(S, 'stream.speed_p50'), mx = g(S, 'max_speed');
+  var vals = [lim * 1.25, 1.25];
+  [smin, sp50].forEach(function(v){ if (isNum(v)) vals.push(v * 1.15); }); if (isNum(mx)) vals.push(mx * 1.1);
+  var scale = Math.ceil(Math.max.apply(null, vals) * 4) / 4;
+  function row(label, v, cls, line1, line2){
+    var r = '<div class="thr wl ' + cls + '"><span class="tk">' + esc(label) + '</span>';
+    if (isNum(v)) r += thrBar(v, scale, lim, label + ' ' + r2(v) + ' times real time, limit ' + lim) + '<div class="tv">' + esc(r2(v).toFixed(2)) + '× ' + esc(line1) + '<span>' + esc(line2) + '</span></div>';
+    else r += '<span></span><div class="tv">' + nm('not measured') + '</div>';
+    return r + '</div>';
+  }
+  h += '<div class="lanp s-' + k + '"><header><span class="ph">Real-time speed</span>' + (rt ? badge(rt.status) : '') + '</header>' +
+    (rt && rt.detail ? '<p class="pnote">' + esc(pretty(rt.detail)) + '</p>' : '') +
+    row('Slowest', smin, 's-' + k, 'worst second', 'must stay at ' + lim.toFixed(2) + '× or more to count as real time') +
+    row('Typical', sp50, 's-' + k, 'median second', '1.00× is exactly real time') +
+    row('Unpaced', mx, 's-info', 'flat out', 'the same encode run as fast as it can: the headroom this PC has') +
+    '<p class="mtxt" style="margin-top:8px">Speed is how many seconds of video are encoded per second of clock. The black tick is the real-time limit (' + lim.toFixed(2) + '×). Slowest and typical are paced to real time while the test runs; unpaced is a separate 10-second run with no pacing.</p>';
+  if (g(S, 'stream.error')) h += '<p class="err" style="margin-top:8px">' + esc(g(S, 'stream.error')) + '</p>';
+  h += '</div>';
+  // CPU and clock
+  var samples = senderSamples();
+  h += '<h4 class="lh">CPU while it ran</h4>';
+  if (samples.length < 2) h += '<p class="empty">' + nm('No CPU samples were recorded') + '</p>';
+  else h += '<div class="panel">' + usageCharts({id:'sender', pid:'senderperf', samples:samples, noun:'the sender test', warn:limitNum('sender_cpu', 70), fail:90, start:g(S, 'system.perf_start')}) + '</div>';
+  var sy = g(S, 'system');
+  if (isObj(sy)){
+    var st = [['CPU use, typical / slow end / peak', [sy.cpu_p50, sy.cpu_p95, sy.cpu_max].map(function(v){ return isNum(v) ? Math.round(v) + '%' : '?'; }).join(' / ')],
+      ['GPU 3D (the game), slow end', isNum(sy.gpu_3d_p95) ? Math.round(sy.gpu_3d_p95) + '%' : null],
+      ['Memory in use, peak', isNum(sy.mem_used_pct_max) ? Math.round(sy.mem_used_pct_max) + '%' : null],
+      ['CPU clock, start / lowest', isNum(sy.perf_start) && isNum(sy.perf_min) ? Math.round(sy.perf_start) + '% / ' + Math.round(sy.perf_min) + '%' : null]];
+    h += '<dl class="kv" style="margin-top:12px">' + st.map(function(x){ return '<dt>' + esc(x[0]) + '</dt><dd>' + (x[1] ? esc(x[1]) : nm()) + '</dd>'; }).join('') + '</dl>';
+  }
+  var fmt = [];
+  if (isNum(S.width) && isNum(S.height)) fmt.push(S.width + '×' + S.height + (isNum(S.fps) ? ' at ' + S.fps + ' fps' : ''));
+  if (S.codec) fmt.push(String(S.codec) + (S.pix_fmt ? ' (' + S.pix_fmt + ')' : ''));
+  if (fmt.length || g(S, 'ffmpeg.version')){
+    h += '<dl class="kv" style="margin-top:12px">' + (fmt.length ? '<dt>Test feed</dt><dd>' + esc(fmt.join(', ')) + '</dd>' : '') + (g(S, 'ffmpeg.version') ? '<dt>Test tool</dt><dd>ffmpeg ' + esc(g(S, 'ffmpeg.version')) + '</dd>' : '') + '</dl>';
+  }
+  arr(g(S, 'errors')).filter(function(e){ return e != null && e !== ''; }).forEach(function(e){ h += '<p class="err" style="margin-top:8px">' + esc(e) + '</p>'; });
+  return h + '</div>';
+}
+
+/* ---- details: PC, network ---- */
+function kvRow(k, v){ return '<dt>' + esc(k) + '</dt><dd>' + (v == null || v === '' ? nm() : v) + '</dd>'; }
+function renderDetails(){
+  var hw = g(D, 'hardware'), nw = g(D, 'network'), obs = isObs();
+  var h = '<div class="sub" id="ev-pc"><h3>' + (obs ? 'This PC and its network adapters' : 'This PC and its network') + '</h3><p class="cap">Facts the checks above were based on.</p><div class="two">';
+  // PC
+  h += '<div class="panel"><div class="slabel" style="padding:0;margin-bottom:8px">This PC</div>';
+  if (!hw) h += nm('Hardware was not inspected');
+  else {
+    var gp = arr(hw.gpus).filter(Boolean).map(function(x){ return esc(x.name) + (x.integrated ? ' (built into the CPU)' : '') + (isNum(x.vram_gb) ? ', ' + x.vram_gb + ' GB' : '') + (x.driver_version ? ', driver ' + esc(x.driver_version) : '') + (x.driver_date ? ' of ' + esc(x.driver_date) : ''); }).join('<br>');
+    var sw = g(hw, 'software') || {};
+    var swl = [['vMix', sw.vmix], ['OBS', sw.obs], ['NDI runtime', sw.ndi_runtime], ['NDI tools', sw.ndi_tools], ['DistroAV (NDI for OBS)', sw.distroav], ['OMT', sw.omt]].map(function(x){ return esc(x[0]) + ': ' + (x[1] ? esc(x[1]) : '<span class="nm">not found</span>'); }).join('<br>');
+    var pw = hw.power || {};
+    var planName = {balanced:'Balanced', high_performance:'High performance', ultimate:'Ultimate performance', power_saver:'Power saver', custom:'Custom'}[pw.plan] || pw.plan;
+    var win = hw.windows || {};
+    h += '<dl class="kv">' +
+      kvRow('Computer', hw.computer ? esc([hw.computer.manufacturer, hw.computer.model].filter(Boolean).join(' ')) + (hw.computer.is_laptop ? ' (laptop)' : '') : null) +
+      kvRow('Windows', hw.os ? esc((hw.os.caption || '') + ' ' + (hw.os.version || '')) : null) +
+      kvRow('CPU', hw.cpu ? esc(hw.cpu.name) + '<br>' + esc(hw.cpu.cores) + ' cores, ' + esc(hw.cpu.threads) + ' threads' : null) +
+      kvRow('Memory', isNum(hw.ram_gb) ? hw.ram_gb + ' GB' : null) +
+      kvRow('Graphics', gp) +
+      kvRow('Power', hw.power ? esc(planName || 'unknown') + (pw.on_battery === true ? ', ON BATTERY' + (isNum(pw.battery_pct) ? ' (' + pw.battery_pct + '%)' : '') : pw.on_battery === false ? ', mains power' : '') : null) +
+      kvRow('Disk', hw.disk ? esc(hw.disk.system_drive || '') + ' ' + (isNum(hw.disk.free_gb) ? r1(hw.disk.free_gb) + ' GB free' : 'free space unknown') + (isNum(hw.disk.total_gb) ? ' of ' + r1(hw.disk.total_gb) + ' GB' : '') : null) +
+      kvRow('Software', swl) +
+      kvRow('Windows options', 'Hardware GPU scheduling: ' + esc(win.hags || 'unknown') + '<br>Game Mode: ' + esc(win.game_mode || 'unknown') + '<br>Restart pending: ' + (win.pending_reboot === true ? 'yes' : win.pending_reboot === false ? 'no' : 'unknown')) +
+      kvRow('Running now', arr(g(hw, 'processes.running')).length ? esc(arr(hw.processes.running).join(', ')) : 'nothing on the watch list') + '</dl>';
+  }
+  h += '</div>';
+  // network (an observer PC has no internet or France measurements)
+  if (!obs) h += '<div class="panel"><div class="slabel" style="padding:0;margin-bottom:8px">Internet connection</div>';
+  if (obs){}
+  else if (!nw) h += nm('The network was not measured');
+  else {
+    var pub = nw.public, up = nw.upload;
+    h += '<dl class="kv">' +
+      kvRow('Public address', pub && pub.ip ? esc(pub.ip) + (pub.org ? '<br>' + esc(pub.org) : '') + (pub.city || pub.country ? '<br>' + esc([pub.city, pub.country].filter(Boolean).join(', ')) : '') : null) +
+      kvRow('Upload speed', up && isNum(up.mbps) ? '<strong>' + Math.round(up.mbps) + ' Mbps</strong> (' + esc(up.streams) + ' parallel uploads to a nearby Cloudflare server)' + (up.error ? '<br>' + esc(up.error) : '') : (up && up.error ? esc(up.error) : null)) + '</dl>';
+  }
+  h += obs ? '</div>' : '</div></div>';
+  // NICs
+  var nics = arr(g(hw, 'nics')).filter(Boolean);
+  if (nics.length){
+    var kindName = {wired:'Wired', wifi:'Wi-Fi', virtual:'Virtual', other:'Other'};
+    h += '<h4 style="margin:18px 0 6px">Network adapters</h4><p class="mtxt" style="margin-bottom:6px">Virtual adapters are software adapters (Hyper-V, VPN, WSL). They can steal NDI/OMT traffic if left switched on.</p><div class="tscroll"><table><thead><tr><th>Adapter</th><th>Type</th><th>State</th><th class="num">Link Mbps</th><th>Carries internet</th><th>Windows network profile</th><th>Energy-saving Ethernet</th></tr></thead><tbody>' +
+      nics.map(function(n){
+        return '<tr><td><strong>' + esc(n.name || '?') + '</strong>' + (n.description ? '<div class="mtxt">' + esc(n.description) + '</div>' : '') + (arr(n.ipv4).length ? '<div class="mtxt mono">' + esc(n.ipv4.join(', ')) + '</div>' : '') + '</td><td>' + esc(kindName[n.kind] || n.kind || '?') + '</td><td>' + esc(n.status || '?') + '</td><td class="num">' + (isNum(n.link_mbps) ? esc(thousands(n.link_mbps)) : '–') + '</td><td>' + (n.default_route ? 'yes' : '') + '</td><td>' + esc(n.network_category || '–') + '</td><td>' + esc(n.eee || '–') + '</td></tr>';
+      }).join('') + '</tbody></table></div>';
+  }
+  // traces
+  var traces = arr(g(nw, 'traces')).filter(function(t){ return t && arr(t.hops).length; }).map(function(t){ return {host:t.host, hops:t.hops.filter(function(p){ return p && typeof p === 'object'; })}; });
+  if (traces.length){
+    h += '<details class="fold"><summary>Route to France (traceroute)</summary><div class="fb">' + traces.map(function(t){
+      return '<p class="mtxt" style="margin:10px 0 4px"><strong>' + esc(t.host) + '</strong>. Each line is one router on the way. A line with no address is a router that does not answer; that is normal.</p><div class="tscroll"><table><thead><tr><th class="num">Hop</th><th>Address</th><th class="num">Replies (ms)</th></tr></thead><tbody>' +
+        t.hops.map(function(p){ return '<tr><td class="num">' + esc(p.hop) + '</td><td class="mono">' + (p.ip ? esc(p.ip) : '<span class="nm">no answer</span>') + '</td><td class="num">' + arr(p.rtt_ms).map(function(v){ return isNum(v) ? Math.round(v) : '*'; }).join(' / ') + '</td></tr>'; }).join('') + '</tbody></table></div>';
+    }).join('') + '</div></details>';
+  }
+  // how the run went
+  var steps = arr(g(D, 'meta.steps')).filter(function(s){ return s && typeof s === 'object'; });
+  if (steps.length){
+    h += '<details class="fold"><summary>How this run went (' + steps.length + ' steps)</summary><div class="fb"><div class="tscroll"><table><thead><tr><th>Step</th><th>Result</th><th class="num">Seconds</th><th>Note</th></tr></thead><tbody>' +
+      steps.map(function(s){
+        var st = String(s.status || '?'), k = st === 'ok' ? 'PASS' : st === 'skipped' ? 'SKIP' : 'FAIL';
+        return '<tr><td><strong>' + esc(s.title || s.key || '?') + '</strong></td><td><span class="badge s-' + sk(k) + '">' + icon(sk(k)) + '<span>' + esc(st === 'ok' ? 'OK' : st.toUpperCase()) + '</span></span></td><td class="num">' + (isNum(s.seconds) ? r1(s.seconds) : '–') + '</td><td>' +
+          (s.message ? esc(s.message) : '') + (isNum(s.collector_errors) && s.collector_errors > 0 ? ' ' + esc(plural(s.collector_errors, 'collector problem')) : '') + '</td></tr>';
+      }).join('') + '</tbody></table></div></div></details>';
+  }
+  // collection errors
+  var errs = [].concat(arr(g(hw, 'errors')), arr(g(nw, 'errors')), arr(g(D, 'lan.errors')), arr(g(D, 'loadtest.errors')), arr(g(D, 'sender.errors')), arr(g(D, 'verdict.errors')), arr(g(D, 'meta.lib_errors'))).filter(function(e){ return e != null && e !== ''; });
+  if (errs.length) h +='<details class="fold"><summary>Problems while collecting data (' + errs.length + ')</summary><div class="fb"><ul>' + errs.map(function(e){ return '<li class="mtxt" style="color:var(--text)">' + esc(e) + '</li>'; }).join('') + '</ul></div></details>';
+  return h + '</div>';
+}
+
+function renderRaw(){
+  return '<div class="sub" id="ev-raw"><details class="fold raw-fold" id="rawfold"><summary>Raw results (JSON)</summary><div class="fb"><div class="copybar"><button type="button" class="btn small" data-copyjson>Copy JSON</button><span class="copynote">Send this to whoever maintains the kit if something looks wrong.</span></div><pre class="raw" id="rawpre" tabindex="0"></pre></div></details></div>';
+}
+function renderEvidence(){
+  var h = '<section id="evidence" class="sec" aria-labelledby="h-ev"><h2 id="h-ev"><span class="n">6</span>Evidence</h2><p class="lede">The measurements behind the verdict. You do not need this to run the show, but it is what to send to someone if you need a second opinion.</p>';
+  if (isObs()) h += safe('sender test', renderSender) + safe('PC details', renderDetails) + renderRaw();
+  else h += safe('France round-trip', renderRtt) + safe('UDP loss', renderUdp) + safe('local network', renderLan) + safe('load test', renderLoad) + safe('PC and network details', renderDetails) + renderRaw();
+  return h + '</section>';
+}
+function renderFooter(){
+  var v = g(D, 'meta.tool_version');
+  return '<p class="foot">Made by ShowReady' + (v ? ' ' + esc(v) : '') + (D.schema ? ' · data format ' + esc(D.schema) : '') + '. This is a snapshot of one moment on one PC: run it again at the same time of day as the show, and again after you change anything.</p>';
+}
+
+/* ================= no data ================= */
+function renderNoData(){
+  return '<div class="topbar"><div class="brand">ShowReady<span>pre-show check</span></div></div>' +
+    '<div class="nodata"><h1>No results to show yet</h1><p>This page is the ShowReady report, but it has not been given any results. Nothing is wrong with it.</p>' +
+    '<ol><li>Double-click <code>Run-ShowReady.cmd</code> on the show PC.</li><li>Wait for it to finish (it takes a few minutes).</li><li>It opens the finished report automatically.</li></ol>' +
+    '<p>Already have a <code>results.json</code>? Open it here:</p><p><label class="btn" style="display:inline-block">Choose results.json<input type="file" accept=".json,application/json" id="filepick" style="position:absolute;left:-9999px"></label></p><div id="loaderr"></div></div>';
+}
+
+/* ================= main render ================= */
+function layoutCharts(){
+  charts.forEach(function(c){
+    if (!c.el) c.el = document.querySelector('[data-chart="' + c.sel + '"]');
+    if (!c.el) return;
+    try{ c.draw(c.el); }catch(e){ c.el.innerHTML = '<div class="err">Chart could not be drawn (' + esc(e.message) + ').</div>'; }
+  });
+}
+function watchCharts(){
+  observers.forEach(function(o){ try{ o.disconnect(); }catch(e){} }); observers = [];
+  if (typeof ResizeObserver === 'function'){
+    var pending = false;
+    var ro = new ResizeObserver(function(){ if (pending) return; pending = true; requestAnimationFrame(function(){ pending = false; layoutCharts(); }); });
+    charts.forEach(function(c){ if (c.el) ro.observe(c.el); });
+    observers.push(ro);
+  }
+}
+function renderApp(data){
+  D = data; charts = []; rawDone = false;
+  var root = document.getElementById('app');
+  if (!D || typeof D !== 'object'){ root.innerHTML = renderNoData(); wireNoData(); return; }
+  var h = safe('header', renderTop);
+  if (D.schema && D.schema !== 'showready/1') h += '<p class="err">This report was made by a different version of ShowReady (data format ' + esc(D.schema) + '). Some parts may be missing.</p>';
+  h += safe('verdict', renderVerdict) + (isObs() ? safe('next step', renderNext) : '') + safe('settings', renderSettings) + safe('issues', renderIssues) + safe('all checks', renderAll) + safe('checklist', renderManual) + safe('evidence', renderEvidence) + safe('footer', renderFooter);
+  root.innerHTML = h;
+  layoutCharts(); watchCharts();
+  try{
+    if (isObs()) document.title = 'ShowReady Observer: ' + (g(D, 'verdict.overall') || 'report') + (g(D, 'meta.computer') || g(D, 'hardware.computer.name') ? ' · ' + (g(D, 'meta.computer') || g(D, 'hardware.computer.name')) : '');
+    else document.title = 'ShowReady: ' + (g(D, 'verdict.overall') || 'report') + (g(D, 'profile.name') ? ' · ' + g(D, 'profile.name') : '');
+  }catch(e){}
+}
+function wireNoData(){
+  var f = document.getElementById('filepick'); if (!f) return;
+  f.addEventListener('change', function(){
+    var file = f.files && f.files[0]; if (!file) return;
+    var fr = new FileReader();
+    fr.onload = function(){ try{ renderApp(JSON.parse(String(fr.result))); }catch(e){ document.getElementById('loaderr').innerHTML = '<p class="err">That file is not valid results JSON (' + esc(e.message) + ').</p>'; } };
+    fr.readAsText(file);
+  });
+}
+
+/* ================= events ================= */
+var rawDone = false;
+function prettyJson(o){
+  var s = JSON.stringify(o, null, 2);
+  return s.replace(/\[\s+([^\[\]{}]*?)\s+\]/g, function(m, inner){ return '[' + inner.replace(/\s*\n\s*/g, ' ') + ']'; });
+}
+document.addEventListener('click', function(e){
+  var t = e.target; if (!t || !t.closest) return;
+  var b;
+  if ((b = t.closest('[data-copyall]'))){ copyText(settingsText(), b, document.getElementById('copyfallback')); return; }
+  if ((b = t.closest('[data-copy]'))){ copyText(b.getAttribute('data-copy'), b, null); return; }
+  if ((b = t.closest('[data-copyjson]'))){ copyText(JSON.stringify(D, null, 2), b, null); return; }
+  if (t.closest('[data-print]')){ window.print(); return; }
+});
+document.addEventListener('change', function(e){
+  var t = e.target; if (!t || !t.getAttribute) return;
+  var id = t.getAttribute('data-tick'); if (id == null) return;
+  var ticks = loadTicks(); if (t.checked) ticks[id] = true; else delete ticks[id];
+  saveTicks(ticks);
+  var items = document.querySelectorAll('[data-tick]'), n = 0; for (var i = 0; i < items.length; i++) if (items[i].checked) n++;
+  var p = document.getElementById('tprog'); if (p) p.textContent = n + ' of ' + items.length + ' done';
+});
+document.addEventListener('toggle', function(e){
+  var t = e.target;
+  if (t && t.id === 'rawfold' && t.open && !rawDone){
+    rawDone = true;
+    var pre = document.getElementById('rawpre'); if (pre) pre.textContent = prettyJson(D);
+  }
+}, true);
+var resizeTimer = null;
+window.addEventListener('resize', function(){ clearTimeout(resizeTimer); resizeTimer = setTimeout(layoutCharts, 80); });
+/* print: open the section groups and redraw charts at the page width */
+window.addEventListener('beforeprint', function(){ var d = document.querySelectorAll('details.grp, details.open-print'); for (var i = 0; i < d.length; i++) d[i].setAttribute('open', ''); });
+
+window.__render = renderApp;
+renderApp(DATA);
+})();
+</script>
+</body>
+</html>

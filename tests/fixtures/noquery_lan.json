@@ -1,0 +1,60 @@
+{
+  "adapter": {
+    "name": "Ethernet",
+    "description": "Intel(R) Ethernet Connection I219-V",
+    "kind": "wired",
+    "chosen_because": "wired",
+    "ipv4": "192.168.0.50",
+    "prefix_length": 24,
+    "gateway": "192.168.0.1",
+    "link_mbps": 1000,
+    "local_ips": [
+      "192.168.0.50"
+    ]
+  },
+  "mdns": {
+    "query_ok": false,
+    "listen_ms": 3000,
+    "methods": [
+      {
+        "name": "unicast",
+        "ok": false,
+        "answers": 0,
+        "error": "UDP socket send failed: network unreachable"
+      },
+      {
+        "name": "windows",
+        "ok": false,
+        "answers": 0,
+        "error": "DnsServiceBrowse error 0x80070490"
+      }
+    ],
+    "responders": [],
+    "service_types_seen": []
+  },
+  "sources": [],
+  "discovery_servers": {
+    "ndi": [],
+    "omt": [],
+    "ndi_config_path": null,
+    "omt_settings_path": null
+  },
+  "sweep": {
+    "cidr": "192.168.0.0/24",
+    "scanned": 0,
+    "alive": 0,
+    "seconds": 0,
+    "skipped_reason": "Adapter is not connected"
+  },
+  "hosts": [],
+  "partners": [],
+  "test": {
+    "protocol": "OMT",
+    "per_feed_mbps": 200,
+    "target_mbps": 400,
+    "seconds": 10
+  },
+  "errors": [
+    "UDP socket send failed: network unreachable"
+  ]
+}

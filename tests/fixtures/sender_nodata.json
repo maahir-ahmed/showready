@@ -1,0 +1,27 @@
+{
+  "ffmpeg": {
+    "found": true,
+    "path": "C:\\ShowReady\\bin\\ffmpeg.exe",
+    "version": "n8.1-1-g0090ffc5b9-20250228"
+  },
+  "codec": "speedhq",
+  "pix_fmt": "yuv422p",
+  "width": 1920,
+  "height": 1080,
+  "fps": 60,
+  "seconds": 45,
+  "source": null,
+  "max_speed": null,
+  "stream": {
+    "speed_min": null,
+    "speed_p50": null,
+    "fps_p50": null,
+    "ok": false,
+    "error": "Process failed with exit code 1"
+  },
+  "system": null,
+  "note": "SpeedHQ is the codec full NDI uses. OMT's VMX codec has no ffmpeg encoder, so SpeedHQ stands in for both. ffmpeg's SpeedHQ encoder is less optimised than the NDI SDK's, so this errs on the safe side.",
+  "errors": [
+    "Process failed with exit code 1"
+  ]
+}

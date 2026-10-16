@@ -1,0 +1,107 @@
+{
+    "ffmpeg":  {
+                   "found":  true,
+                   "path":  "bin\\ffmpeg.exe",
+                   "version":  "7.1"
+               },
+    "encoders":  {
+                     "available":  [
+                                       "h264_nvenc",
+                                       "libx264"
+                                   ],
+                     "tested":  [
+                                    {
+                                        "name":  "h264_nvenc",
+                                        "ok":  true,
+                                        "error":  null
+                                    }
+                                ],
+                     "chosen":  "h264_nvenc"
+                 },
+    "source":  {
+                   "codec":  "speedhq",
+                   "pix_fmt":  "yuv422p",
+                   "width":  1920,
+                   "height":  1080,
+                   "fps":  60,
+                   "seconds":  4,
+                   "file_mb":  60
+               },
+    "seconds":  45,
+    "streams":  [
+                    {
+                        "role":  "in-1",
+                        "kind":  "decode",
+                        "codec":  "speedhq",
+                        "target_kbps":  0,
+                        "speed_min":  1,
+                        "speed_p50":  1,
+                        "fps_p50":  60,
+                        "ok":  true,
+                        "error":  null
+                    },
+                    {
+                        "role":  "in-2",
+                        "kind":  "decode",
+                        "codec":  "speedhq",
+                        "target_kbps":  0,
+                        "speed_min":  1,
+                        "speed_p50":  1,
+                        "fps_p50":  60,
+                        "ok":  true,
+                        "error":  null
+                    },
+                    {
+                        "role":  "out-srt",
+                        "kind":  "encode",
+                        "codec":  "h264_nvenc",
+                        "target_kbps":  10000,
+                        "speed_min":  0.99,
+                        "speed_p50":  1,
+                        "fps_p50":  60,
+                        "ok":  true,
+                        "error":  null
+                    },
+                    {
+                        "role":  "out-youtube",
+                        "kind":  "encode",
+                        "codec":  "h264_nvenc",
+                        "target_kbps":  17000,
+                        "speed_min":  0.99,
+                        "speed_p50":  1,
+                        "fps_p50":  60,
+                        "ok":  true,
+                        "error":  null
+                    },
+                    {
+                        "role":  "out-twitch",
+                        "kind":  "encode",
+                        "codec":  "h264_nvenc",
+                        "target_kbps":  6000,
+                        "speed_min":  0.99,
+                        "speed_p50":  1,
+                        "fps_p50":  60,
+                        "ok":  true,
+                        "error":  null
+                    }
+                ],
+    "system":  {
+                   "cpu_p50":  31,
+                   "cpu_p95":  38,
+                   "cpu_max":  44,
+                   "perf_start":  100,
+                   "perf_min":  96,
+                   "perf_p50":  98,
+                   "gpu_enc_p95":  35,
+                   "gpu_dec_p95":  12,
+                   "gpu_3d_p95":  18,
+                   "mem_used_pct_max":  30,
+                   "samples":  [
+
+                               ]
+               },
+    "note":  "synthetic",
+    "errors":  [
+
+               ]
+}
